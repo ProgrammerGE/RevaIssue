@@ -13,7 +13,7 @@ import java.util.UUID;
 public class Users_Projects {
 
     @Id
-    @Column(name = "UserProjectsID")
+    @Column(name = "UserProjectsID", nullable = false)
     private int ID;
 
     @ManyToOne(optional = false)
