@@ -13,12 +13,14 @@ import java.util.UUID;
 public class Users_Projects {
 
     @Id
-    @Column(name = "UserProjectsID", nullable = false)
+    @Column(name = "UserProjectsID")
     private int ID;
-    @ManyToOne
-    @Column(name = "UserID")
-    private UUID userID;
-    @ManyToOne
-    @Column(name = "ProjectID")
-    private int projectID;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "UserID")
+    private User user;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "ProjectID")
+    private Project project;
 }
