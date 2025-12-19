@@ -9,9 +9,12 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "User Projects")
+@Table(name = "User_Projects")
 public class Users_Projects {
 
+    @Id
+    @Column(name = "UserProjectsID", nullable = false)
+    private int ID;
     @ManyToOne
     @Column(name = "UserID")
     private UUID userID;
