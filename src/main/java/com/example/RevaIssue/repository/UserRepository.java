@@ -1,10 +1,11 @@
 package com.example.RevaIssue.repository;
 
+import com.example.RevaIssue.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.example.RevaIssue.entity.Issue;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface IssueRepository extends JpaRepository<Issue, Long> {
+import java.util.UUID;
 
+@Repository
+public interface UserRepository extends JpaRepository<User, UUID> {
 }
