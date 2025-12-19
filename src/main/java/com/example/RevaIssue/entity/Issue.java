@@ -14,8 +14,9 @@ private Long issueID;
 @Column(name = "issue_description")
 private String description;
 
-@Column(name = "project_id", nullable = false)
-private Integer projectId;
+@ManyToOne
+@JoinColumn(name = "project_id")
+private Project project;
 
 @Column(name = "severity")
 private Integer severity;
