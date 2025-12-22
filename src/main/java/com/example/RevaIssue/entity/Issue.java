@@ -1,5 +1,6 @@
 package com.example.RevaIssue.entity;
 
+import com.example.RevaIssue.helper.Comment;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,13 +19,16 @@ public class Issue {
     @Column(name = "issue_description")
     private String description;
 
-@ManyToOne
-@JoinColumn(name = "project_id")
-private Project project;
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
 
     @Column(name = "severity")
     private Integer severity;
 
     @Column(name = "priority")
     private Integer priority;
+
+    //Comment Chain
+    private Comment comment;
 }
