@@ -30,5 +30,6 @@ public class Issue {
     private Integer priority;
 
     //Comment Chain
+    @Column(name = "comment_chain")
     private Comment comment;
 }
