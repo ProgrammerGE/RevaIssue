@@ -26,5 +26,9 @@ private Project project;
     private Integer severity;
 
     @Column(name = "priority")
-    private Integer priority;
+    private Integer priority
+
+    //Comment Chain
+    @Column(name = "comment_chain")
+    private Comment comment;
 }
