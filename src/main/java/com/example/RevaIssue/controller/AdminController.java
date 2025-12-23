@@ -25,9 +25,4 @@ public class AdminController {
 //    @Autowired
 //    private ProjectService projectService;
 
-//    example endpoint
-//    @PostMapping("/admin")
-//    public Project addProject(@RequestBody Project project) {
-//        return projectRepository.save(project);
-//    }
 }
