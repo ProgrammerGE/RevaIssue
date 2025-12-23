@@ -32,4 +32,7 @@ public class Issue {
     //Comment Chain
     @Column(name = "comment_chain")
     private Comment comment;
+
+    @Column(name = "status")
+    private String status; // "Open", "In Progress", "Resolved", "Close"
 }
