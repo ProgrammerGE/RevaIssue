@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@Transactional //causes every public method to be transactional
+@Transactional //causes every public method to be transactional, meaning that it only succeeds or fails
 
 /*
 The user service provides logic for editing the users SQL table, viewing information about users through the
