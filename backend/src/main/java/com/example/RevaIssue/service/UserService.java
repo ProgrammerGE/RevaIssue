@@ -44,7 +44,8 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
-    public List<Project> getUserProjects(UUID id) {
+    // returns a list of all projects a given user id is associated with
+    public List<Project> getProjectsById(UUID id) {
         // get the user object
         User user = getUserById(id);
         // query the user_projects repository to get a list of user_projects tables
