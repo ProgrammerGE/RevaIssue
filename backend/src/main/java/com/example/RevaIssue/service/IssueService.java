@@ -20,12 +20,18 @@ public class IssueService {
         return issueRepo.getReferenceById(issueId);
     }
 
-    // TODO : implement
-    public Issue getSeverity() {
-        return null;
+    public int getSeverityById(Long issueId) {
+        Issue targetIssue = issueRepo.getReferenceById(issueId);
+        return targetIssue.getSeverity();
     }
+
+    public int getPriorityById(Long issueId) {
+        Issue targetIssue = issueRepo.getReferenceById(issueId);
+        return targetIssue.getPriority();
+    }
+
     // TODO : implement
-    public Issue getProgress() {
+    public Issue getProgress(Long issueId) {
         return null;
     }
     // TODO : implement
