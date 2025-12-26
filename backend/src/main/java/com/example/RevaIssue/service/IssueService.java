@@ -20,6 +20,19 @@ public class IssueService {
         return issueRepo.getReferenceById(issueId);
     }
 
+    // TODO : implement
+    public Issue getSeverity() {
+        return null;
+    }
+    // TODO : implement
+    public Issue getProgress() {
+        return null;
+    }
+    // TODO : implement
+    public List<Issue> getIssuesByProject() {
+        return null;
+    }
+
     // TODO: updating the issue's description, comment, severity, and priority, status
     public Issue updateIssueDescription(Long issueId, String desc){
         Issue targetIssue = issueRepo.getReferenceById(issueId);
