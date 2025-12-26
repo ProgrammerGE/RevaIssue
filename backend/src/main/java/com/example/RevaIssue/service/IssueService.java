@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class IssueService {
@@ -20,6 +22,29 @@ public class IssueService {
 
     public Issue getIssue(Long issueId){
         return issueRepo.getReferenceById(issueId);
+    }
+
+    public int getSeverityById(Long issueId) {
+        Issue targetIssue = issueRepo.getReferenceById(issueId);
+        return targetIssue.getSeverity();
+    }
+
+    public int getPriorityById(Long issueId) {
+        Issue targetIssue = issueRepo.getReferenceById(issueId);
+        return targetIssue.getPriority();
+    }
+
+    // issue status as per Epic 3, bullet 1 in the User storeis MVP
+    public String getProgressById(Long issueId) {
+        Issue targetIssue = issueRepo.getReferenceById(issueId);
+        return targetIssue.getStatus();
+    }
+
+    public List<Issue> getIssuesByProject(Long projectId) {
+        // create a list object and assign the data using a call to the repo
+        List<Issue> issues = issueRepo.findByProjectProjectID(projectId);
+        // return the list
+        return issues;
     }
 
     // TODO: updating the issue's description, comment, severity, and priority, status

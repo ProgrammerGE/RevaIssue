@@ -22,7 +22,7 @@ public class Issue {
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
-
+    // TODO: since these are exhaustive, we should consider using enums. Same for severity and status
     @Column(name = "severity")
     private Integer severity;
 
