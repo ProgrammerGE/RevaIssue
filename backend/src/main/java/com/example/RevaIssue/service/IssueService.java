@@ -6,6 +6,8 @@ import com.example.RevaIssue.repository.IssueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class IssueService {
 
@@ -33,11 +35,14 @@ public class IssueService {
     // issue status as per Epic 3, bullet 1 in the User storeis MVP
     public String getProgressById(Long issueId) {
         Issue targetIssue = issueRepo.getReferenceById(issueId);
-        return targetIssue.getPriority();
+        return targetIssue.getStatus();
     }
-    // TODO : implement (chris)
-    public List<Issue> getIssuesByProject() {
-        return null;
+
+    public List<Issue> getIssuesByProject(Long projectId) {
+        // create a list object and assign the data using a call to the repo
+        List<Issue> issues = issueRepo.findByProjectProjectID(projectId);
+        // return the list
+        return issues;
     }
 
     // TODO: updating the issue's description, comment, severity, and priority, status
