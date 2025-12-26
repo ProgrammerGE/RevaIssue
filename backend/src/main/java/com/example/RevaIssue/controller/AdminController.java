@@ -1,12 +1,14 @@
 package com.example.RevaIssue.controller;
 
 import com.example.RevaIssue.entity.Project;
+import com.example.RevaIssue.entity.User;
 import com.example.RevaIssue.repository.IssueRepository;
 import com.example.RevaIssue.repository.ProjectRepository;
 import com.example.RevaIssue.repository.UserRepository;
 import com.example.RevaIssue.service.IssueService;
 import com.example.RevaIssue.service.ProjectService;
 import com.example.RevaIssue.service.UserService;
+import com.example.RevaIssue.util.JwtUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,10 +23,18 @@ public class AdminController {
      */
     // One or some of these may not be necessary TODO : Remove if not necessary after MVP
     @Autowired
+    private JwtUtility jwtUtility;
+    @Autowired
     private IssueService issueService;
     @Autowired
     private UserService userService;
     @Autowired
     private ProjectService projectService;
+
+    @PostMapping("/login")
+    public String adminLogin(@RequestBody User admin){
+        User user = userService.getUserById(admin.getUser_ID());
+        return jwtUtility.generateAccessToken(user.getUsername(), user.getUser_Role());
+    }
 
 }
