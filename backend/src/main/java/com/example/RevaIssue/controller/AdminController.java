@@ -10,11 +10,13 @@ import com.example.RevaIssue.service.ProjectService;
 import com.example.RevaIssue.service.UserService;
 import com.example.RevaIssue.util.JwtUtility;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+//@CrossOrigin // used for Angular
+
+// feel free to change this mapping to something more suiting if you'd like
+@RequestMapping("/admin")
 public class AdminController {
 
     /*
