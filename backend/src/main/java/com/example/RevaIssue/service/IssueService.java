@@ -30,11 +30,12 @@ public class IssueService {
         return targetIssue.getPriority();
     }
 
-    // TODO : implement
-    public Issue getProgress(Long issueId) {
-        return null;
+    // issue status as per Epic 3, bullet 1 in the User storeis MVP
+    public String getProgressById(Long issueId) {
+        Issue targetIssue = issueRepo.getReferenceById(issueId);
+        return targetIssue.getPriority();
     }
-    // TODO : implement
+    // TODO : implement (chris)
     public List<Issue> getIssuesByProject() {
         return null;
     }
