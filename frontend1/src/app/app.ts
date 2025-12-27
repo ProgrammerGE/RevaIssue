@@ -1,5 +1,5 @@
 import { Component, signal, WritableSignal } from '@angular/core';
-import { Router, RouterLinkWithHref, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { Login } from './components/login/login';
 import { Issues } from './components/issues/issues';
 import { Projects } from './components/projects/projects';
@@ -8,7 +8,7 @@ import { SignoutButton } from './components/signout-button/signout-button';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Login, Issues, Projects, SignoutButton],
+  imports: [RouterOutlet, RouterLink, Login, Issues, Projects, SignoutButton],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
@@ -28,6 +28,6 @@ export class App {
   }
 
   ngOnInit(): void {
-    this.router.navigate([""]);
+
   }
 }

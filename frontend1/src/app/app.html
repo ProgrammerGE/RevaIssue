@@ -1,8 +1,11 @@
-<app-login></app-login>
-<!--
-    Once the user is logged in:
-    They will be taken to a dashboard containing a list of projects and recent issues.
--->
+<nav>
+    <ul>
+        <li><a routerLink="/login">Login</a></li>
+        <li><a routerLink="/projects">Projects</a></li>
+        <li><a routerLink="/issues">Issues</a></li>
+    </ul>
+</nav>
+
 @if (userLoggedIn()) {
     
     <div class="parent">
@@ -37,7 +40,5 @@
     </div>
     
 }
-<app-issues></app-issues>
-<app-projects></app-projects>
 
-<router-outlet />
+<router-outlet></router-outlet>
