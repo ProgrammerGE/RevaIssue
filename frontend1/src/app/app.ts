@@ -1,14 +1,11 @@
 import { Component, signal, WritableSignal } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
-import { Login } from './components/login/login';
-import { Issues } from './components/issues/issues';
-import { Projects } from './components/projects/projects';
 import { LoginService } from './services/login-service';
 import { SignoutButton } from './components/signout-button/signout-button';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, Login, Issues, Projects, SignoutButton],
+  imports: [RouterOutlet, RouterLink, SignoutButton],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
