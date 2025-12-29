@@ -1,15 +1,14 @@
 package com.example.RevaIssue.controller;
 
+import com.example.RevaIssue.entity.Issue;
 import com.example.RevaIssue.entity.User;
 import com.example.RevaIssue.service.IssueService;
 import com.example.RevaIssue.service.ProjectService;
 import com.example.RevaIssue.service.UserService;
 import com.example.RevaIssue.util.JwtUtility;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/login")
@@ -28,9 +27,32 @@ public class TesterController {
     @Autowired
     private ProjectService projectService;
 
-    @PostMapping("/tester")
-    public String developerLogin(@RequestBody User admin){
-        User user = userService.getUserById(admin.getUser_ID());
+    // helper method to extract the role from the JWT
+    private String getRoleFromHeader(String authHeader){
+        String token = authHeader.split(" ")[1];
+        return jwtUtility.extractRole(token);
+    }
+
+    @PostMapping("/login/tester")
+    public String testerLogin(@RequestBody User tester){
+        User user = userService.getUserById(tester.getUser_ID());
         return jwtUtility.generateAccessToken(user.getUsername(), user.getUser_Role());
+    }
+
+    @PostMapping("/project/{project_id}/issues")
+    public Issue createIssue(@RequestBody Issue issue){
+        return issueService.createIssue(issue);
+    }
+
+    @PatchMapping("/project/{project_id}/issues/{issue_id}/close")
+    public Issue closeIssue(@RequestHeader (name = "Authorization") String authHeader, @PathVariable("issue_id") Long issueId){
+        String role = getRoleFromHeader(authHeader);
+        return issueService.updateIssueStatus(issueId, "CLOSED", role);
+    }
+
+    @PatchMapping("/project/{project_id}/issues/{issue_id}/open")
+    public Issue reopenIssue(@RequestHeader (name = "Authorization") String authHeader, @PathVariable("issue_id") Long issueId){
+        String role = getRoleFromHeader(authHeader);
+        return issueService.updateIssueStatus(issueId, "OPEN", role);
     }
 }

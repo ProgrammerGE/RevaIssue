@@ -20,7 +20,6 @@ public class User {
     private String username;
     @Column
     private String password_hash;
-    // TODO : consider using an enum instead of a string
     @Column(name = "User_Role", nullable = false)
     private String user_Role;
 }

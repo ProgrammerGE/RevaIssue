@@ -4,6 +4,7 @@ import com.example.RevaIssue.entity.AuditLog;
 import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.entity.User;
 import com.example.RevaIssue.entity.User_Projects;
+import com.example.RevaIssue.repository.ProjectRepository;
 import com.example.RevaIssue.repository.UserRepository;
 import com.example.RevaIssue.repository.User_ProjectsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,12 @@ public class UserService {
     private final User_ProjectsRepository userProjectsRepository;
     @Autowired
     private AuditLogService auditLogService;
+    private final ProjectRepository projectRepository;
 
-    public UserService(UserRepository userRepository, User_ProjectsRepository userProjectsRepository) {
+    public UserService(UserRepository userRepository, User_ProjectsRepository userProjectsRepository, ProjectRepository projectRepository) {
         this.userRepository = userRepository;
         this.userProjectsRepository = userProjectsRepository;
+        this.projectRepository = projectRepository;
     }
 
     public User createUser(User user) {
@@ -59,5 +62,17 @@ public class UserService {
 
         // TODO : using the user_projects list, query the projects repository to get a list of projects
         return null;
+    }
+
+    public User_Projects assignProject(int projectId, UUID uuid){
+        User user = getUserById(uuid);
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new RuntimeException("Project not found with id: " + projectId));
+
+        // set up the user_projects object
+        User_Projects user_projects = new User_Projects();
+        user_projects.setUser(user);
+        user_projects.setProject(project);
+        return userProjectsRepository.save(user_projects);
     }
 }
