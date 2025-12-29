@@ -19,8 +19,8 @@ public class Issue {
     @Column(name = "issue_description")
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "project_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "project_id", nullable = false)
     private Project project;
     // TODO: since these are exhaustive, we should consider using enums. Same for severity and status
     @Column(name = "severity")
