@@ -31,8 +31,8 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        // TODO : Make sure the user's id and username are both unique before returning
-        // TODO : Make sure the user has a role before allowing creation
+        // user must have a unique uuid, username.
+        // user must have a role set.
         return userRepository.save(user);
     }
 
