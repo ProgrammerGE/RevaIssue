@@ -9,6 +9,7 @@ import com.example.RevaIssue.repository.User_ProjectsRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -58,8 +59,13 @@ public class UserService {
         // query the user_projects repository to get a list of user_projects tables
         List<User_Projects> user_projects = userProjectsRepository.findByUser(user);
 
-        // TODO : using the user_projects list, query the projects repository to get a list of projects
-        return null;
+        // iterate over user_projects, getting the project object and putting it in the project list to be returned
+        List<Project> projects = new ArrayList<>();
+        for (User_Projects user_project: user_projects) {
+            projects.add(user_project.getProject());
+        }
+
+        return projects;
     }
 
     public User_Projects assignProject(int projectId, UUID uuid){
