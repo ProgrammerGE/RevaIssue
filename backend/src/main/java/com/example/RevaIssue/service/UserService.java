@@ -37,9 +37,13 @@ public class UserService {
     }
 
     public void deleteUser(User user) {
-        // TODO : Ensure admins cannot be deleted
-        // TODO : Ensure only admins can delete other users
-        userRepository.delete(user);
+        // protection for admins
+        if (user.getUser_Role() == "admin") {
+            // TODO: throw an error
+        } else {
+            // delete the user
+            userRepository.delete(user);
+        }
     }
 
     public User getUserById(UUID id) {
