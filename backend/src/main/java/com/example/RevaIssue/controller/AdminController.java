@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 //@CrossOrigin // used for Angular
 
 // feel free to change this mapping to something more suiting if you'd like
-@RequestMapping("/admin")
+@RequestMapping("/login")
 public class AdminController {
 
     /*
@@ -33,7 +33,7 @@ public class AdminController {
     @Autowired
     private ProjectService projectService;
 
-    @PostMapping("/login")
+    @PostMapping("/admin")
     public String adminLogin(@RequestBody User admin){
         User user = userService.getUserById(admin.getUser_ID());
         return jwtUtility.generateAccessToken(user.getUsername(), user.getUser_Role());
