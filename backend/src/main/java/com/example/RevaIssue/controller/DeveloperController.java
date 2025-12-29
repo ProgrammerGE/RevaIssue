@@ -1,7 +1,9 @@
 package com.example.RevaIssue.controller;
 
+import com.example.RevaIssue.entity.AuditLog;
 import com.example.RevaIssue.entity.Issue;
 import com.example.RevaIssue.entity.User;
+import com.example.RevaIssue.service.AuditLogService;
 import com.example.RevaIssue.service.IssueService;
 import com.example.RevaIssue.service.ProjectService;
 import com.example.RevaIssue.service.UserService;
@@ -25,10 +27,17 @@ public class DeveloperController {
     private UserService userService;
     @Autowired
     private ProjectService projectService;
+    @Autowired
+    private AuditLogService auditLogService;
 
     private String getRoleFromHeader(String authHeader){
         String token = authHeader.split(" ")[1];
         return jwtUtility.extractRole(token);
+    }
+
+    private String getUsernameFromHeader(String authHeader){
+        String token = authHeader.split(" ")[1];
+        return jwtUtility.extractUsername(token);
     }
 
     @PostMapping("/login/developer")
@@ -43,6 +52,8 @@ public class DeveloperController {
             @PathVariable("issue_id") Long issueId
     ) {
         String role = getRoleFromHeader(authHeader);
+        String username = getUsernameFromHeader(authHeader);
+        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("MOVED ISSUE TO IN_PROGRESS", username, role));
         return issueService.updateIssueStatus(issueId, "IN_PROGRESS", role);
     }
 
@@ -52,6 +63,8 @@ public class DeveloperController {
             @PathVariable("issue_id") Long issueId
     ) {
         String role = getRoleFromHeader(authHeader);
+        String username = getUsernameFromHeader(authHeader);
+        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("MOVED ISSUE TO RESOLVED", username, role));
         return issueService.updateIssueStatus(issueId, "RESOLVED", role);
     }
 }
