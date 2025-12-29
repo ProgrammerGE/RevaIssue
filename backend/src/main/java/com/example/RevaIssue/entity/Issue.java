@@ -34,5 +34,5 @@ public class Issue {
     private Comment comment;
 
     @Column(name = "status")
-    private String status; // "Open", "In Progress", "Resolved", "Close"
+    private String status = "Open"; // "Open", "In Progress", "Resolved", "Close"
 }

@@ -72,6 +72,7 @@ public class IssueService {
         return issueRepo.getReferenceById(issueId);
     }
 
+    // Updated between "Open", "In Progress", "Resolved", and "Closed"
     public Issue updateIssueStatus(Long issueId, String status){
         Issue targetIssue = issueRepo.getReferenceById(issueId);
         targetIssue.setStatus(status);
