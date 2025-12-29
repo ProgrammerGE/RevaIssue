@@ -26,6 +26,11 @@ public class IssueService {
         return issueRepo.getReferenceById(issueId);
     }
 
+    public List<Issue> getIssueByKeyword(String keyword){
+        List<Issue> issueList = issueRepo.findByKeyword(keyword);
+        return issueList;
+    }
+
     public int getSeverityById(Long issueId) {
         Issue targetIssue = issueRepo.getReferenceById(issueId);
         return targetIssue.getSeverity();
