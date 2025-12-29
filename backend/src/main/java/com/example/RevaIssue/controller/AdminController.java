@@ -38,15 +38,13 @@ public class AdminController {
     @Autowired
     private ProjectService projectService;
 
-    // TODO : implement
     @GetMapping("/projects")
     public List<Project> getProjects(){
-        return null;
+        return projectService.getAllProjects();
     }
-    // TODO : implement
     @GetMapping("/projects/{id}")
-    public Project getProject(@PathVariable String id){
-        return null;
+    public Project getProject(@PathVariable int id){
+        return projectService.getAllProjectsById(id);
     }
     @PostMapping("/admin")
     public String adminLogin(@RequestBody User admin){

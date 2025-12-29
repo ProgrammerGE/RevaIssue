@@ -28,6 +28,10 @@ public class ProjectService {
         return projectRepo.save(project);
     }
 
+    public List<Project> getAllProjects(){ return projectRepo.findAll(); }
+
+    public Project getProjectById(int id){ return projectRepo.getReferenceById(id); }
+
     public boolean deleteProject(int projId){
         Optional<Project> projectOptional = Optional.of(projectRepo.getReferenceById(projId));
         if(!projectOptional.isPresent()){

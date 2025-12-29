@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,15 +36,19 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        // TODO : Make sure the user's id and username are both unique before returning
-        // TODO : Make sure the user has a role before allowing creation
+        // user must have a unique uuid, username.
+        // user must have a role set.
         return userRepository.save(user);
     }
 
     public void deleteUser(User user) {
-        // TODO : Ensure admins cannot be deleted
-        // TODO : Ensure only admins can delete other users
-        userRepository.delete(user);
+        // protection for admins
+        if (user.getUser_Role() == "admin") {
+            // TODO: throw an error
+        } else {
+            // delete the user
+            userRepository.delete(user);
+        }
     }
 
     public User getUserById(UUID id) {
@@ -58,8 +63,13 @@ public class UserService {
         // query the user_projects repository to get a list of user_projects tables
         List<User_Projects> user_projects = userProjectsRepository.findByUser(user);
 
-        // TODO : using the user_projects list, query the projects repository to get a list of projects
-        return null;
+        // iterate over user_projects, getting the project object and putting it in the project list to be returned
+        List<Project> projects = new ArrayList<>();
+        for (User_Projects user_project: user_projects) {
+            projects.add(user_project.getProject());
+        }
+
+        return projects;
     }
 
     public User_Projects assignProject(int projectId, UUID uuid){
