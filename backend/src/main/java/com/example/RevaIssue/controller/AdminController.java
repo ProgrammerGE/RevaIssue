@@ -73,7 +73,7 @@ public class AdminController {
     ){
         String role = getRoleFromHeader(authHeader);
         String username = getUsernameFromHeader(authHeader);
-        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("MOVED ISSUE TO IN_PROGRESS", username, role));
+        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("CREATED " + project.getProjectName() + " PROJECT", username, role));
         return projectService.createProject(project);
     }
 
