@@ -13,10 +13,10 @@ import java.util.UUID;
 public class User {
 
     @Id
-    @Column(name = "User_ID", nullable = false)
+    @Column(name = "User_ID", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID user_ID;
-    @Column
+    @Column(unique = true)
     private String username;
     @Column
     private String password_hash;
