@@ -8,9 +8,11 @@ import com.example.RevaIssue.util.JwtUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/login")
 public class TesterController {
     /*
     Eric's example controller imports and uses repositories, but since we are using services, they should be imported
@@ -26,7 +28,7 @@ public class TesterController {
     @Autowired
     private ProjectService projectService;
 
-    @PostMapping("/login")
+    @PostMapping("/tester")
     public String developerLogin(@RequestBody User admin){
         User user = userService.getUserById(admin.getUser_ID());
         return jwtUtility.generateAccessToken(user.getUsername(), user.getUser_Role());
