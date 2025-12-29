@@ -34,7 +34,7 @@ public class IssueService {
         return targetIssue.getPriority();
     }
 
-    // issue status as per Epic 3, bullet 1 in the User stories MVP
+    // issue status as per Epic 3, bullet 1 in the User storeis MVP
     public String getProgressById(Long issueId) {
         Issue targetIssue = issueRepo.getReferenceById(issueId);
         return targetIssue.getStatus();

@@ -39,4 +39,9 @@ public class AdminController {
         return jwtUtility.generateAccessToken(user.getUsername(), user.getUser_Role());
     }
 
+    @PostMapping("/projects/new")
+    public Project createProject(@RequestBody Project project){
+        return projectService.createProject(project);
+    }
+
 }

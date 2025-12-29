@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -27,12 +28,32 @@ public class ProjectService {
     }
 
     public boolean deleteProject(int projId){
-        Project targetProject = projectRepo.getReferenceById(projId);
-        if(targetProject == null){
+        Optional<Project> projectOptional = Optional.of(projectRepo.getReferenceById(projId));
+        if(!projectOptional.isPresent()){
             return false;
         }
         projectRepo.deleteById(projId);
         return true;
+    }
+
+    public Project getProjectById(Integer projectId){
+        Optional<Project> projectOptional = Optional.of(projectRepo.getReferenceById(projectId));
+        if(projectOptional.isPresent()){
+            return projectOptional.get();
+        }
+        return null; // TODO: Throw error here
+    }
+
+    // The Admin can update the project's name and description
+    public Project updateProject(int projectId, String name, String description){
+        Optional<Project> projectOptional = Optional.of(projectRepo.getReferenceById(projectId));
+        if(projectOptional.isPresent()){
+            Project projectUpdate = projectOptional.get();
+            projectUpdate.setProjectName(name);
+            projectUpdate.setProjectDescription(description);
+            this.projectRepo.save(projectUpdate);
+        }
+        return this.projectRepo.getReferenceById(projectId);
     }
 
     public List<User> getAllUsersByProject(Project project){
