@@ -58,7 +58,7 @@ public class AdminController {
     }
     @GetMapping("/projects/{id}")
     public Project getProject(@PathVariable int id){
-        return projectService.getAllProjectsById(id);
+        return projectService.getProjectById(id);
     }
     @PostMapping("/admin")
     public String adminLogin(@RequestBody User admin){
