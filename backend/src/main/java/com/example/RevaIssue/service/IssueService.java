@@ -34,7 +34,7 @@ public class IssueService {
         return targetIssue.getPriority();
     }
 
-    // issue status as per Epic 3, bullet 1 in the User storeis MVP
+    // issue status as per Epic 3, bullet 1 in the User stories MVP
     public String getProgressById(Long issueId) {
         Issue targetIssue = issueRepo.getReferenceById(issueId);
         return targetIssue.getStatus();
@@ -72,7 +72,23 @@ public class IssueService {
         return issueRepo.getReferenceById(issueId);
     }
 
-    public Issue updateIssueStatus(Long issueId, String status){
+    public Issue updateIssueStatus(Long issueId, String status, String role){
+
+        // Developer only status updates
+        if (status.equals("IN_PROGRESS") && !role.equals("DEVELOPER")) {
+            throw new RuntimeException("Only developers can move issues to In Progress");
+        }
+        if (status.equals("RESOLVED") && !role.equals("DEVELOPER")) {
+            throw new RuntimeException("Only developers can resolve issues");
+        }
+
+        // Tester only status updates
+        if (status.equals("CLOSED") && !role.equals("TESTER")) {
+            throw new RuntimeException("Only testers can close issues");
+        }
+        if (status.equals("OPEN") && !role.equals("TESTER")) {
+            throw new RuntimeException("Only testers can reopen issues");
+        }
         Issue targetIssue = issueRepo.getReferenceById(issueId);
         targetIssue.setStatus(status);
         issueRepo.save(targetIssue);
