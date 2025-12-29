@@ -53,7 +53,8 @@ public class DeveloperController {
     ) {
         String role = getRoleFromHeader(authHeader);
         String username = getUsernameFromHeader(authHeader);
-        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("MOVED ISSUE TO IN_PROGRESS", username, role));
+        String issueName = issueService.getIssue(issueId).getName();
+        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("MOVED ISSUE " + issueName + " TO IN_PROGRESS", username, role));
         return issueService.updateIssueStatus(issueId, "IN_PROGRESS", role);
     }
 
@@ -64,7 +65,8 @@ public class DeveloperController {
     ) {
         String role = getRoleFromHeader(authHeader);
         String username = getUsernameFromHeader(authHeader);
-        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("MOVED ISSUE TO RESOLVED", username, role));
+        String issueName = issueService.getIssue(issueId).getName();
+        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("MOVED ISSUE " + issueName + " TO RESOLVED", username, role));
         return issueService.updateIssueStatus(issueId, "RESOLVED", role);
     }
 }

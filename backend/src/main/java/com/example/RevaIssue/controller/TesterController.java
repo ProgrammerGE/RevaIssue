@@ -57,7 +57,8 @@ public class TesterController {
     public Issue closeIssue(@RequestHeader (name = "Authorization") String authHeader, @PathVariable("issue_id") Long issueId){
         String role = getRoleFromHeader(authHeader);
         String username = getUsernameFromHeader(authHeader);
-        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("CLOSED ISSUE", username, role));
+        String issueName = issueService.getIssue(issueId).getName();
+        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("CLOSED ISSUE " + issueName, username, role));
         return issueService.updateIssueStatus(issueId, "CLOSED", role);
     }
 
@@ -65,7 +66,8 @@ public class TesterController {
     public Issue reopenIssue(@RequestHeader (name = "Authorization") String authHeader, @PathVariable("issue_id") Long issueId){
         String role = getRoleFromHeader(authHeader);
         String username = getUsernameFromHeader(authHeader);
-        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("OPENED ISSUE", username, role));
+        String issueName = issueService.getIssue(issueId).getName();
+        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("OPENED ISSUE " + issueName, username, role));
         return issueService.updateIssueStatus(issueId, "OPEN", role);
     }
 }
