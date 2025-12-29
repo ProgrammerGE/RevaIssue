@@ -1,7 +1,9 @@
 package com.example.RevaIssue.controller;
 
+import com.example.RevaIssue.entity.AuditLog;
 import com.example.RevaIssue.entity.Issue;
 import com.example.RevaIssue.entity.User;
+import com.example.RevaIssue.service.AuditLogService;
 import com.example.RevaIssue.service.IssueService;
 import com.example.RevaIssue.service.ProjectService;
 import com.example.RevaIssue.service.UserService;
@@ -26,11 +28,18 @@ public class TesterController {
     private UserService userService;
     @Autowired
     private ProjectService projectService;
+    @Autowired
+    private AuditLogService auditLogService;
 
     // helper method to extract the role from the JWT
     private String getRoleFromHeader(String authHeader){
         String token = authHeader.split(" ")[1];
         return jwtUtility.extractRole(token);
+    }
+
+    private String getUsernameFromHeader(String authHeader){
+        String token = authHeader.split(" ")[1];
+        return jwtUtility.extractUsername(token);
     }
 
     @PostMapping("/login/tester")
@@ -47,12 +56,16 @@ public class TesterController {
     @PatchMapping("/project/{project_id}/issues/{issue_id}/close")
     public Issue closeIssue(@RequestHeader (name = "Authorization") String authHeader, @PathVariable("issue_id") Long issueId){
         String role = getRoleFromHeader(authHeader);
+        String username = getUsernameFromHeader(authHeader);
+        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("CLOSED ISSUE", username, role));
         return issueService.updateIssueStatus(issueId, "CLOSED", role);
     }
 
     @PatchMapping("/project/{project_id}/issues/{issue_id}/open")
     public Issue reopenIssue(@RequestHeader (name = "Authorization") String authHeader, @PathVariable("issue_id") Long issueId){
         String role = getRoleFromHeader(authHeader);
+        String username = getUsernameFromHeader(authHeader);
+        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("OPENED ISSUE", username, role));
         return issueService.updateIssueStatus(issueId, "OPEN", role);
     }
 }

@@ -37,14 +37,12 @@ public class UserService {
     public User createUser(User user) {
         // TODO : Make sure the user's id and username are both unique before returning
         // TODO : Make sure the user has a role before allowing creation
-        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("USER CREATED", "User"));
         return userRepository.save(user);
     }
 
     public void deleteUser(User user) {
         // TODO : Ensure admins cannot be deleted
         // TODO : Ensure only admins can delete other users
-        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("USER DELETED", "User"));
         userRepository.delete(user);
     }
 
