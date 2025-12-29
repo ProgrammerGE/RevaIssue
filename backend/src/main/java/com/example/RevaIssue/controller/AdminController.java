@@ -1,11 +1,13 @@
 package com.example.RevaIssue.controller;
 
+import com.example.RevaIssue.entity.AuditLog;
 import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.entity.User;
 import com.example.RevaIssue.entity.User_Projects;
 import com.example.RevaIssue.repository.IssueRepository;
 import com.example.RevaIssue.repository.ProjectRepository;
 import com.example.RevaIssue.repository.UserRepository;
+import com.example.RevaIssue.service.AuditLogService;
 import com.example.RevaIssue.service.IssueService;
 import com.example.RevaIssue.service.ProjectService;
 import com.example.RevaIssue.service.UserService;
@@ -37,6 +39,18 @@ public class AdminController {
     private UserService userService;
     @Autowired
     private ProjectService projectService;
+    @Autowired
+    private AuditLogService auditLogService;
+
+    private String getRoleFromHeader(String authHeader){
+        String token = authHeader.split(" ")[1];
+        return jwtUtility.extractRole(token);
+    }
+
+    private String getUsernameFromHeader(String authHeader){
+        String token = authHeader.split(" ")[1];
+        return jwtUtility.extractUsername(token);
+    }
 
     @GetMapping("/projects")
     public List<Project> getProjects(){
@@ -53,7 +67,13 @@ public class AdminController {
     }
 
     @PostMapping("/projects/new")
-    public Project createProject(@RequestBody Project project){
+    public Project createProject(
+            @RequestBody Project project,
+            @RequestHeader (name = "Authorization") String authHeader
+    ){
+        String role = getRoleFromHeader(authHeader);
+        String username = getUsernameFromHeader(authHeader);
+        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("MOVED ISSUE TO IN_PROGRESS", username, role));
         return projectService.createProject(project);
     }
 
