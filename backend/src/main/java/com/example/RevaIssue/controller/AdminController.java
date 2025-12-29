@@ -2,6 +2,7 @@ package com.example.RevaIssue.controller;
 
 import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.entity.User;
+import com.example.RevaIssue.entity.User_Projects;
 import com.example.RevaIssue.repository.IssueRepository;
 import com.example.RevaIssue.repository.ProjectRepository;
 import com.example.RevaIssue.repository.UserRepository;
@@ -10,13 +11,17 @@ import com.example.RevaIssue.service.ProjectService;
 import com.example.RevaIssue.service.UserService;
 import com.example.RevaIssue.util.JwtUtility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.spel.ast.Assign;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 //@CrossOrigin // used for Angular
 
 // feel free to change this mapping to something more suiting if you'd like
-@RequestMapping("/admin")
+@RequestMapping("/login")
 public class AdminController {
 
     /*
@@ -33,7 +38,17 @@ public class AdminController {
     @Autowired
     private ProjectService projectService;
 
-    @PostMapping("/login")
+    // TODO : implement
+    @GetMapping("/projects")
+    public List<Project> getProjects(){
+        return null;
+    }
+    // TODO : implement
+    @GetMapping("/projects/{id}")
+    public Project getProject(@PathVariable String id){
+        return null;
+    }
+    @PostMapping("/admin")
     public String adminLogin(@RequestBody User admin){
         User user = userService.getUserById(admin.getUser_ID());
         return jwtUtility.generateAccessToken(user.getUsername(), user.getUser_Role());
@@ -44,4 +59,8 @@ public class AdminController {
         return projectService.createProject(project);
     }
 
+    @PostMapping("projects/{projectId}/assign/")
+    public User_Projects assignProject(@PathVariable int projectId, @RequestParam UUID uuid){
+        return userService.assignProject(projectId, uuid);
+    }
 }
