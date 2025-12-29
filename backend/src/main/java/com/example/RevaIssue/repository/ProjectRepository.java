@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Integer> {
-    // TODO : add a method that accepts a list of ids, queries the database, and returns a list of projects
 }
