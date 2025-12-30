@@ -60,6 +60,10 @@ public class AdminController {
     public Project getProject(@PathVariable int id){
         return projectService.getProjectById(id);
     }
+    @GetMapping("/audits")
+    public List<AuditLog> getAuditLogs(){
+        return auditLogService.getAllAuditLogs();
+    }
     @PostMapping("/admin")
     public String adminLogin(@RequestBody User admin){
         User user = userService.getUserById(admin.getUser_ID());
