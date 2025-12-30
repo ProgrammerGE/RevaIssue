@@ -23,7 +23,7 @@ import java.util.UUID;
 //@CrossOrigin // used for Angular
 
 // feel free to change this mapping to something more suiting if you'd like
-@RequestMapping("/login")
+@RequestMapping("/admin")
 public class AdminController {
 
     /*
@@ -64,7 +64,7 @@ public class AdminController {
     public List<AuditLog> getAuditLogs(){
         return auditLogService.getAllAuditLogs();
     }
-    @PostMapping("/admin")
+    @PostMapping("/login")
     public String adminLogin(@RequestBody User admin){
         User user = userService.getUserById(admin.getUser_ID());
         return jwtUtility.generateAccessToken(user.getUsername(), user.getUser_Role());
