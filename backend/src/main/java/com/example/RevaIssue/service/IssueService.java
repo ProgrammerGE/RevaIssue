@@ -17,16 +17,18 @@ public class IssueService {
 
     @Autowired
     private IssueRepository issueRepo;
-    @Autowired
-    private AuditLogService auditLogService;
 
     public Issue createIssue(Issue issue){
-        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("ISSUE CREATED", "Issue"));
         return issueRepo.save(issue);
     }
 
     public Issue getIssue(Long issueId){
         return issueRepo.getReferenceById(issueId);
+    }
+
+    public List<Issue> getIssueByKeyword(String keyword){
+        List<Issue> issueList = issueRepo.findByKeyword(keyword);
+        return issueList;
     }
 
     public int getSeverityById(Long issueId) {
@@ -60,7 +62,6 @@ public class IssueService {
         }
         targetIssue.setDescription(desc);
         issueRepo.save(targetIssue);
-        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("DESCRIPTION UPDATED", "Issue"));
         return issueRepo.getReferenceById(issueId);
     }
 
@@ -68,7 +69,6 @@ public class IssueService {
         Issue targetIssue = issueRepo.getReferenceById(issueId);
         targetIssue.setSeverity(severity);
         issueRepo.save(targetIssue);
-        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("SEVERITY UPDATED", "Issue"));
         return issueRepo.getReferenceById(issueId);
     }
 
@@ -76,7 +76,6 @@ public class IssueService {
         Issue targetIssue = issueRepo.getReferenceById(issueId);
         targetIssue.setPriority(priority);
         issueRepo.save(targetIssue);
-        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("UPDATE PRIORITY TO " + priority, "Issue"));
         return issueRepo.getReferenceById(issueId);
     }
 
@@ -100,7 +99,6 @@ public class IssueService {
         Issue targetIssue = issueRepo.getReferenceById(issueId);
         targetIssue.setStatus(status);
         issueRepo.save(targetIssue);
-        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("UPDATE STATUS to " + status, "Issue"));
         return issueRepo.getReferenceById(issueId);
     }
 
@@ -108,14 +106,12 @@ public class IssueService {
         Issue targetIssue = issueRepo.getReferenceById(issueId);
         targetIssue.getComment().setText(comment);
         issueRepo.save(targetIssue);
-        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("COMMENT UPDATED", "Issue"));
         return targetIssue;
     }
 
     public Comment createIssueComment(Long issueId, Comment comment){
         Issue targetIssue = issueRepo.getReferenceById(issueId);
         targetIssue.setComment(comment);
-        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("COMMENT CREATED", "Issue"));
         return targetIssue.getComment();
     }
 

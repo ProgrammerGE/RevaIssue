@@ -24,13 +24,13 @@ public class ProjectService {
     @Autowired
     private User_ProjectsRepository user_projectsRepo;
 
-    @Autowired
-    private AuditLogService auditLogService;
-
     public Project createProject(Project project){
-        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("PROJECT CREATED", "Project"));
         return projectRepo.save(project);
     }
+
+    public List<Project> getAllProjects(){ return projectRepo.findAll(); }
+
+    public Project getProjectById(int id){ return projectRepo.getReferenceById(id); }
 
     public boolean deleteProject(int projId){
         Optional<Project> projectOptional = Optional.of(projectRepo.getReferenceById(projId));
@@ -38,7 +38,6 @@ public class ProjectService {
             return false;
         }
         projectRepo.deleteById(projId);
-        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("PROJECT DELETED", "Project"));
         return true;
     }
 
@@ -58,7 +57,6 @@ public class ProjectService {
             projectUpdate.setProjectName(name);
             projectUpdate.setProjectDescription(description);
             this.projectRepo.save(projectUpdate);
-            AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("PROJECT UPDATED", "Project"));
         }
         return this.projectRepo.getReferenceById(projectId);
     }

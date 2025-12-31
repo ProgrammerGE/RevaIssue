@@ -1,10 +1,9 @@
 package com.example.RevaIssue.controller;
 
+import com.example.RevaIssue.entity.AuditLog;
 import com.example.RevaIssue.entity.Issue;
 import com.example.RevaIssue.entity.User;
-import com.example.RevaIssue.repository.IssueRepository;
-import com.example.RevaIssue.repository.ProjectRepository;
-import com.example.RevaIssue.repository.UserRepository;
+import com.example.RevaIssue.service.AuditLogService;
 import com.example.RevaIssue.service.IssueService;
 import com.example.RevaIssue.service.ProjectService;
 import com.example.RevaIssue.service.UserService;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/developer")
 public class DeveloperController {
     /*
     Eric's example controller imports and uses repositories, but since we are using services, they should be imported
@@ -27,13 +27,20 @@ public class DeveloperController {
     private UserService userService;
     @Autowired
     private ProjectService projectService;
+    @Autowired
+    private AuditLogService auditLogService;
 
     private String getRoleFromHeader(String authHeader){
         String token = authHeader.split(" ")[1];
         return jwtUtility.extractRole(token);
     }
 
-    @PostMapping("/login/developer")
+    private String getUsernameFromHeader(String authHeader){
+        String token = authHeader.split(" ")[1];
+        return jwtUtility.extractUsername(token);
+    }
+
+    @PostMapping("/login")
     public String developerLogin(@RequestBody User developer){
         User user = userService.getUserById(developer.getUser_ID());
         return jwtUtility.generateAccessToken(user.getUsername(), user.getUser_Role());
@@ -45,6 +52,9 @@ public class DeveloperController {
             @PathVariable("issue_id") Long issueId
     ) {
         String role = getRoleFromHeader(authHeader);
+        String username = getUsernameFromHeader(authHeader);
+        String issueName = issueService.getIssue(issueId).getName();
+        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("MOVED ISSUE " + issueName + " TO IN_PROGRESS", username, role));
         return issueService.updateIssueStatus(issueId, "IN_PROGRESS", role);
     }
 
@@ -54,6 +64,9 @@ public class DeveloperController {
             @PathVariable("issue_id") Long issueId
     ) {
         String role = getRoleFromHeader(authHeader);
+        String username = getUsernameFromHeader(authHeader);
+        String issueName = issueService.getIssue(issueId).getName();
+        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("MOVED ISSUE " + issueName + " TO RESOLVED", username, role));
         return issueService.updateIssueStatus(issueId, "RESOLVED", role);
     }
 }

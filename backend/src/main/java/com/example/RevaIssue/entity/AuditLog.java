@@ -17,19 +17,26 @@ public class AuditLog {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "audit_id", nullable = false)
     private UUID logID;
+    @Column(name = "timestamp")
     private LocalDateTime timeLogged;
+    @Column(name = "action")
     private String action;
-    private String entityId;
+    @Column(name = "username")
+    private String username;  // Who created the log
+    @Column(name = "role")
+    private String role; // What was there role
 
-    public AuditLog(String action, String entityId){
+    public AuditLog(String action, String userName, String role){
         this.logID = UUID.randomUUID();
         this.timeLogged = LocalDateTime.now();
         this.action = action;
-        this.entityId = entityId;
+        this.username = userName;
+        this.role = role;
     }
 
     public String toString(){
-        return this.action + " in the " + entityId + " entity at " + timeLogged;
+        return this.role + ": " + this.username + " " + this.action + " at " + timeLogged;
     }
 }

@@ -16,6 +16,9 @@ public class Issue {
     @Column(name = "issue_id", nullable = false)
     private Long issueID;
 
+    @Column(name = "issue_name")
+    private String name;
+
     @Column(name = "issue_description")
     private String description;
 
