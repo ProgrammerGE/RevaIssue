@@ -1,0 +1,24 @@
+<div class="parent">
+    <div class="div1">        
+        <h3>Please enter your credentials here</h3>
+        <h3>Email Address</h3>
+        <input type="text" placeholder="your@email.com" [(ngModel)]="usernameInput">  
+
+        <h3>Password</h3>
+        <input type="password" placeholder="password" [(ngModel)]="passwordInput">
+
+        <h3>Confirm Password</h3>
+        <input type="password" placeholder="password" [(ngModel)]="confirmPasswordInput">
+        <br>
+        <h3>Choose your role</h3>
+        <select name="role" [(ngModel)]="roleInput">
+            <option value="admin">admin</option>
+            <option value="tester">tester</option>
+            <option value="developer">developer</option>
+        </select>
+        <br>
+        <button (click)="registerUser()">{{ buttonRegistration}}</button>
+        <button (click)="cancelRegistration()">{{ buttonCancel}}</button>
+    </div>
+</div>
+    
