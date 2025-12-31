@@ -7,22 +7,26 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class IssueService {
-  private issueSubject: BehaviorSubject<IssueData>;
+  private issueSubject = new BehaviorSubject<IssueData>({
+    issue_id: 0,
+    issue_title: '',
+    issue_description: '',
+    project_id: 0,
+    severity: 0,
+    priority: 0,
+    status: 'OPEN',
+    comment_chain: [],
+  });
 
-  // wont be httpClient it will talk to backend
-  constructor(private httpClient: HttpClient) {
-    this.issueSubject = new BehaviorSubject<IssueData>({
-      issue_id: 0,
-      issue_description: '',
-      project_id: 0,
-      severity: 0,
-      priority: 0,
-      status: '',
-      comment_chain: [],
-    });
-  }
+  private baseUrl = 'http://localhost:8080';
+
+  constructor(private httpClient: HttpClient) {}
 
   getIssueSubject() {
     return this.issueSubject;
   }
+  loadIssuesForProject(projectId: number): void {}
+  createIssue(projectId: number, issue: Partial<IssueData>): void {}
+  updateIssue(issueId: number, issue: Partial<IssueData>): void {}
+  updateIssueStatus(issueId: number, status: string): void {}
 }

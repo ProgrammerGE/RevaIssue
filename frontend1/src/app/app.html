@@ -1,1 +1,53 @@
+<div class="nav">
+  <nav>
+    <ul>
+      <li><a routerLink="/login">Login</a></li>
+      <li><a routerLink="/projects">Projects</a></li>
+      <li><a routerLink="/issues">Issues</a></li>
+    </ul>
+  </nav>
+</div>
+
+@if (userLoggedIn()) {
+
+<div class="parent">
+  <div class="div1">
+    <!-- Banner at the top of page, will include a signout button -->
+    This is the banner up top.
+    <app-signout-button />
+  </div>
+
+  <div class="div2">
+    <!-- Displays username and their role -->
+    The username and role will display here.
+  </div>
+
+  <div class="div3">
+    <!-- A search bar to filter the list of projects and the total count -->
+    There will be a search bar and a current count of projects.
+  </div>
+
+  <div class="div4">
+    <!-- A search bar to filter the list of issues and their total count -->
+    There will be a search bar and a current count of issues
+  </div>
+
+  <div class="div5">
+    <!-- The list of projects -->
+    This will be a list of projects
+  </div>
+
+  <div class="div6">
+    <!-- The list of issues -->
+    This will be a list of issues
+  </div>
+
+  <div class="div7">
+    <!-- A box of global audit logs for the admin's view -->
+    Here is a list of global logs for the admin's eyes.
+  </div>
+</div>
+
+}
+
 <router-outlet></router-outlet>
