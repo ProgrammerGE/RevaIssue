@@ -13,13 +13,13 @@ import java.util.UUID;
 public class User {
 
     @Id
-    @Column(name = "User_ID", nullable = false, unique = true)
+    @Column(name = "User_ID")
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID user_ID;
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
-    @Column
-    private String password_hash;
+    @Column(name="password_hash", nullable = false)
+    private String password;
     @Column(name = "User_Role", nullable = false)
     private String user_Role;
 }
