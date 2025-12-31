@@ -9,11 +9,12 @@ import { HttpClient } from '@angular/common/http';
 export class IssueService {
   private issueSubject = new BehaviorSubject<IssueData>({
     issue_id: 0,
+    issue_title: '',
     issue_description: '',
     project_id: 0,
     severity: 0,
     priority: 0,
-    status: '',
+    status: 'OPEN',
     comment_chain: [],
   });
 
@@ -24,4 +25,8 @@ export class IssueService {
   getIssueSubject() {
     return this.issueSubject;
   }
+  loadIssuesForProject(projectId: number): void {}
+  createIssue(projectId: number, issue: Partial<IssueData>): void {}
+  updateIssue(issueId: number, issue: Partial<IssueData>): void {}
+  updateIssueStatus(issueId: number, status: string): void {}
 }
