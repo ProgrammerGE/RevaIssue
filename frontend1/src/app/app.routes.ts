@@ -8,5 +8,6 @@ export const routes: Routes = [
     {path: 'login', component:Login},
     {path: 'projects', component:Projects},
     {path: 'issues', component:Issues},
+    // test route, TODO: correct later
     {path: 'chris-project', component:ProjectDetails}
 ];
