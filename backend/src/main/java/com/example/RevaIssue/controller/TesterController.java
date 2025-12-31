@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/tester")
 public class TesterController {
     /*
     Eric's example controller imports and uses repositories, but since we are using services, they should be imported
@@ -42,7 +42,7 @@ public class TesterController {
         return jwtUtility.extractUsername(token);
     }
 
-    @PostMapping("/login/tester")
+    @PostMapping("/login")
     public String testerLogin(@RequestBody User tester){
         User user = userService.getUserById(tester.getUser_ID());
         return jwtUtility.generateAccessToken(user.getUsername(), user.getUser_Role());

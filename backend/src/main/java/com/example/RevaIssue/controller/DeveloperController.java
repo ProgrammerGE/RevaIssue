@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/developer")
 public class DeveloperController {
     /*
     Eric's example controller imports and uses repositories, but since we are using services, they should be imported
@@ -40,7 +40,7 @@ public class DeveloperController {
         return jwtUtility.extractUsername(token);
     }
 
-    @PostMapping("/login/developer")
+    @PostMapping("/login")
     public String developerLogin(@RequestBody User developer){
         User user = userService.getUserById(developer.getUser_ID());
         return jwtUtility.generateAccessToken(user.getUsername(), user.getUser_Role());
