@@ -5,7 +5,7 @@ import { SignoutButton } from './components/signout-button/signout-button';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, SignoutButton],
+  imports: [RouterOutlet, RouterLink],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
