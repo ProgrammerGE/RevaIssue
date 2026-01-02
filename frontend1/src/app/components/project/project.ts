@@ -14,7 +14,7 @@ export class Project extends RevaIssueSubscriber {
   projectId: number = 0;
   projectTitle: WritableSignal<string> = signal('');
   projectDescription: WritableSignal<string> = signal('Sample description');
-  userRole!: 'admin' | 'tester' | 'developer';
+  userRole: 'admin' | 'tester' | 'developer' = 'tester';
 
   constructor(private projectService: ProjectService) {
     super();
