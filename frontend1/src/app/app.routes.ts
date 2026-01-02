@@ -7,7 +7,7 @@ import { Issue } from './components/issue/issue';
 import { CreateIssue } from './components/create-issue/create-issue';
 
 export const routes: Routes = [
-    {path:'', pathMatch:'full', redirectTo:'/admin/login'},
+    {path:'', pathMatch:'full', redirectTo:'/login'},
     {path: 'login', component:Login},
     {path: 'register', component:Registration},
     {path: 'hubpage', component:HubPage},//TODO: Implement route guards
