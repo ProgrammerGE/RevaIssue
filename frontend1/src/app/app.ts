@@ -2,7 +2,6 @@ import { Component, signal, WritableSignal, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { LoginService } from './services/login-service';
-import { SignoutButton } from './components/signout-button/signout-button';
 
 @Component({
   selector: 'app-root',

@@ -1,5 +1,6 @@
 package com.example.RevaIssue.util;
 
+import com.example.RevaIssue.enums.UserRole;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,7 @@ public class JwtUtility {
         return secret.toString();
     }
 
-    public String generateAccessToken(String username, String role){
+    public String generateAccessToken(String username, UserRole role){
         return Jwts.builder()
                 .subject(username)
                 .claim("role", role)

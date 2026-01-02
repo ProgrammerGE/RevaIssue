@@ -1,5 +1,6 @@
 import { Component, signal, WritableSignal } from '@angular/core';
-// import { Issues } from '../issues/issues';
+import { Projects } from '../projects/projects';
+import { Issue } from '../issue/issue';
 import { SignoutButton } from '../signout-button/signout-button';
 import { LoginService } from '../../services/login-service';
 import { Router, RouterLink } from '@angular/router';
