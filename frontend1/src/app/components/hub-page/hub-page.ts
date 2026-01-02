@@ -1,5 +1,4 @@
-import { Component, Input, signal, WritableSignal } from '@angular/core';
-import { Project } from '../project/project';
+import { Component, signal, WritableSignal } from '@angular/core';
 import { Issue } from '../issue/issue';
 import { SignoutButton } from '../signout-button/signout-button';
 import { LoginService } from '../../services/login-service';

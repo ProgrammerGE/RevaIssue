@@ -2,7 +2,6 @@ package com.example.RevaIssue.controller;
 
 import com.example.RevaIssue.entity.AuditLog;
 import com.example.RevaIssue.entity.Project;
-import com.example.RevaIssue.entity.User;
 import com.example.RevaIssue.entity.User_Projects;
 import com.example.RevaIssue.repository.IssueRepository;
 import com.example.RevaIssue.repository.ProjectRepository;
@@ -56,18 +55,15 @@ public class AdminController {
     public List<Project> getProjects(){
         return projectService.getAllProjects();
     }
+
     @GetMapping("/projects/{id}")
     public Project getProject(@PathVariable int id){
         return projectService.getProjectById(id);
     }
+
     @GetMapping("/audits")
     public List<AuditLog> getAuditLogs(){
         return auditLogService.getAllAuditLogs();
-    }
-    @PostMapping("/login")
-    public String adminLogin(@RequestBody User admin){
-        User user = userService.getUserById(admin.getUser_ID());
-        return jwtUtility.generateAccessToken(user.getUsername(), user.getUser_Role());
     }
 
     @PostMapping("/projects/new")

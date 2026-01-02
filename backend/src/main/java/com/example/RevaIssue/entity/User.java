@@ -1,5 +1,6 @@
 package com.example.RevaIssue.entity;
 
+import com.example.RevaIssue.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,13 +14,14 @@ import java.util.UUID;
 public class User {
 
     @Id
-    @Column(name = "User_ID", nullable = false, unique = true)
+    @Column(name = "User_ID")
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID user_ID;
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
-    @Column
-    private String password_hash;
+    @Column(name="password_hash", nullable = false)
+    private String password;
+    @Enumerated(EnumType.STRING)
     @Column(name = "User_Role", nullable = false)
-    private String user_Role;
+    private UserRole userRole;
 }
