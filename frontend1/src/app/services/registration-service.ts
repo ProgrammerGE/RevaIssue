@@ -16,7 +16,7 @@ export class RegistrationService {
     private router: Router){}
 
   registerUser(userData : string, passwordData: string, roleData: string){
-    this.httpClient.post<TokenData>(`http://localhost:8080/${roleData}/login}`,
+    this.httpClient.post<TokenData>(`http://localhost:8080/auth/register`,
       {
         username: userData,
         password: passwordData,
@@ -29,11 +29,11 @@ export class RegistrationService {
       next:responseData => {
         if(responseData.body){
           this.jwtTokenStorage.setToken(responseData.body.token);
-          this.router.navigate(['/hub-page']);
+          this.router.navigate(['/hubpage']);
         }
       },
       error: errMsg => {
-        console.log(errMsg);
+        console.error(errMsg);
       }
     });
   }

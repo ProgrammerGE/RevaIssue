@@ -2,7 +2,6 @@ package com.example.RevaIssue.controller;
 
 import com.example.RevaIssue.entity.AuditLog;
 import com.example.RevaIssue.entity.Issue;
-import com.example.RevaIssue.entity.User;
 import com.example.RevaIssue.service.AuditLogService;
 import com.example.RevaIssue.service.IssueService;
 import com.example.RevaIssue.service.ProjectService;
@@ -10,6 +9,8 @@ import com.example.RevaIssue.service.UserService;
 import com.example.RevaIssue.util.JwtUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/developer")
@@ -40,12 +41,6 @@ public class DeveloperController {
         return jwtUtility.extractUsername(token);
     }
 
-    @PostMapping("/login")
-    public String developerLogin(@RequestBody User developer){
-        User user = userService.getUserById(developer.getUser_ID());
-        return jwtUtility.generateAccessToken(user.getUsername(), user.getUser_Role());
-    }
-
     @PatchMapping("/project/{project_id}/issues/{issue_id}/in-progress")
     public Issue moveToInProgress(
             @RequestHeader (name = "Authorization") String authHeader,
@@ -68,5 +63,9 @@ public class DeveloperController {
         String issueName = issueService.getIssue(issueId).getName();
         AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("MOVED ISSUE " + issueName + " TO RESOLVED", username, role));
         return issueService.updateIssueStatus(issueId, "RESOLVED", role);
+    }
+    @GetMapping("/project/{project_id/issues")
+    public List<Issue> issueList(@PathVariable("project_id") Long projectId){
+               return issueService.getIssuesByProject(projectId);
     }
 }

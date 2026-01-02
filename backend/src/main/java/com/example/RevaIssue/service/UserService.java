@@ -4,15 +4,18 @@ import com.example.RevaIssue.entity.AuditLog;
 import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.entity.User;
 import com.example.RevaIssue.entity.User_Projects;
+import com.example.RevaIssue.enums.UserRole;
 import com.example.RevaIssue.repository.ProjectRepository;
 import com.example.RevaIssue.repository.UserRepository;
 import com.example.RevaIssue.repository.User_ProjectsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -36,14 +39,13 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        // user must have a unique uuid, username.
-        // user must have a role set.
+        user.setUsername(user.getUsername().toLowerCase());
         return userRepository.save(user);
     }
 
     public void deleteUser(User user) {
         // protection for admins
-        if (user.getUser_Role() == "admin") {
+        if (user.getUserRole() == UserRole.ADMIN) {
             // TODO: throw an error
         } else {
             // delete the user
@@ -54,6 +56,10 @@ public class UserService {
     public User getUserById(UUID id) {
         // consider throwing an error instead of returning null
         return userRepository.findById(id).orElse(null);
+    }
+
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
     // returns a list of all projects a given user id is associated with

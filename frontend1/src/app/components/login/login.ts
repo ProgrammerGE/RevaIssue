@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { JwtTokenStorage } from '../../services/jwt-token-storage';
+import { TokenData } from '../../interfaces/token-data';
 
 @Component({
   selector: 'app-login',
@@ -9,16 +11,35 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-
 export class Login {
   username = '';
   password = '';
 
-  onSubmit() {
-    console.log('user logged in');
-  }
+  httpClient = inject(HttpClient);
+  router = inject(Router);
+  jwtStorage = inject(JwtTokenStorage);
 
-  register() {
-    console.log('user logged in');
+  onSubmit() {
+    this.httpClient
+      .post<TokenData>(
+        'http://localhost:8080/auth/login',
+        {
+          username: this.username,
+          password: this.password,
+        },
+        { observe: 'response' }
+      )
+      .subscribe({
+        next: (response) => {
+          if (response.body) {
+            const token = response.body.token;
+            this.jwtStorage.setToken(token);
+            this.router.navigate(['/hubpage']);
+          }
+        },
+        error: (err) => {
+          console.error(err);
+        },
+      });
   }
 }

@@ -1,20 +1,20 @@
 import { Component, signal, WritableSignal } from '@angular/core';
 import { IssueService } from '../../services/issue-service';
 import { RevaIssueSubscriber } from '../../classes/reva-issue-subscriber';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-issue',
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './issue.html',
   styleUrl: './issue.css',
 })
 export class Issue extends RevaIssueSubscriber {
-  projectId: number = 0;
-
-  issueId: number = 0;
-
   issueTitle: WritableSignal<string> = signal('');
   issueDescription: WritableSignal<string> = signal('');
+
+  projectId: number = 0;
+  issueId: number = 0;
 
   issueSeverity: number = 0;
   issuePriority: number = 0;
@@ -22,6 +22,10 @@ export class Issue extends RevaIssueSubscriber {
   issueStatus: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED' = 'OPEN';
 
   issueComments: Comment[] = [];
+
+  // --- UI logic ---
+  userRole: 'tester' | 'developer' | 'admin' = 'tester';
+  isEditing: boolean = false;
 
   constructor(private issueService: IssueService) {
     super();
@@ -35,8 +39,8 @@ export class Issue extends RevaIssueSubscriber {
     });
   }
 
-  viewIssues(): void {
-    this.issueService.loadIssuesForProject(this.projectId);
+  viewIssue(): void {
+    this.issueService.viewIssueDetails(this.issueId, this.projectId, this.userRole);
   }
 
   createIssue(): void {
@@ -49,7 +53,7 @@ export class Issue extends RevaIssueSubscriber {
   }
 
   updateIssue(): void {
-    this.issueService.updateIssue(this.issueId, {
+    this.issueService.updateIssue(this.issueId, this.projectId, this.userRole, {
       issue_title: this.issueTitle(),
       issue_description: this.issueDescription(),
       priority: this.issuePriority,
@@ -58,18 +62,33 @@ export class Issue extends RevaIssueSubscriber {
   }
 
   setInProgress(): void {
-    this.issueService.updateIssueStatus(this.issueId, 'IN_PROGRESS');
+    this.issueService.updateIssueStatus(this.issueId, this.projectId, 'IN_PROGRESS', 'developer');
   }
 
   resolveIssue(): void {
-    this.issueService.updateIssueStatus(this.issueId, 'RESOLVED');
+    this.issueService.updateIssueStatus(this.issueId, this.projectId, 'RESOLVED', 'developer');
   }
 
   closeIssue(): void {
-    this.issueService.updateIssueStatus(this.issueId, 'CLOSED');
+    this.issueService.updateIssueStatus(this.issueId, this.projectId, 'CLOSED', 'tester');
   }
 
   reopenIssue(): void {
-    this.issueService.updateIssueStatus(this.issueId, 'OPEN');
+    this.issueService.updateIssueStatus(this.issueId, this.projectId, 'OPEN', 'tester');
+  }
+
+  // --- button logic ---
+  onEdit() {
+    this.isEditing = true;
+  }
+  onSubmit() {
+    this.isEditing = false;
+    alert('Issue updated!');
+  }
+  onClaim() {
+    alert('Issue claimed by you!');
+  }
+  onResolve() {
+    alert('Issue marked as resolved!');
   }
 }

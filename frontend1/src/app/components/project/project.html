@@ -1,1 +1,32 @@
 <p>projects works!</p>
+
+<div class="parent">
+  <div class="div1">
+    Project Title
+    <!-- This will contain an element that reflects the name of the project entity -->
+  </div>
+  <div class="div2">
+    <h4>Description:</h4>
+    <!-- This will contain an element that says something like "Description:". This could be removed -->
+  </div>
+  <div class="div3">
+    Users List
+    <!-- This will contain an element that shows a list of users who are associated with this project -->
+  </div>
+  <div class="div4">
+    <p> {{ projectDescription() }} </p>
+    <!-- This will contain an element that reflects the description of the project entity -->
+  </div>
+  <div class="div5">
+    Extra Space
+    <!-- What is in here will depend on the user type who is viewing this page.
+     In the case of a user who is:
+     Admin
+     A log of actions that are specific to THIS project
+     Tester
+     An issues section focused around creating and viewing issues
+     Developer
+     Similar to the tester's version, but without the ability to create issues. Instead, issues can be moved to in progress or resolved
+     -->
+  </div>
+</div>
