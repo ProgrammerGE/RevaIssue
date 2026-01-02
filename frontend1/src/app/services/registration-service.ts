@@ -39,7 +39,7 @@ export class RegistrationService {
   }
 
   cancelRegistration(){
-    this.router.navigate(['']);
+    this.router.navigate(['/login']);
   }
 
 }
