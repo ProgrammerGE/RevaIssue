@@ -5,7 +5,7 @@ import { LoginService } from './services/login-service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, SignoutButton, FormsModule],
+  imports: [RouterOutlet, RouterLink, FormsModule],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
