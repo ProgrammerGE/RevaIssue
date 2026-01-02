@@ -7,8 +7,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class IssueService {
-  private issueSubject = new BehaviorSubject<IssueData[]>([]);
-  private singleIssueSubject = new BehaviorSubject<IssueData>({
+  private issueSubject = new BehaviorSubject<IssueData>({
     issue_id: 0,
     issue_title: '',
     issue_description: '',
@@ -24,30 +23,22 @@ export class IssueService {
   constructor(private httpClient: HttpClient) {}
 
   getIssueSubject() {
-    return this.singleIssueSubject;
+    return this.issueSubject;
   }
-  viewIssuesForProjects(projectId: number, role: 'admin' | 'developer' | 'tester'): void {
-    this.httpClient
-      .get<IssueData[]>(`${this.baseUrl}/${role}/projects/${projectId}/issues`)
-      .subscribe({
-        next: (issues) => this.issueSubject.next(issues),
-        error: (err) =>
-          console.error(`Error loading issues for project with id: ${projectId}`, err),
-      });
-  }
+
   viewIssueDetails(issueId: number, projectId: number, role: string) {
     this.httpClient
       .get<IssueData>(`${this.baseUrl}/${role}/project/${projectId}/issues/${issueId}`)
       .subscribe({
-        next: (issue) => this.singleIssueSubject.next(issue),
-        error: (err) => console.log('error with viewing issue details', err),
+        next: (loadIssue) => this.issueSubject.next(loadIssue),
+        error: (err) => console.log(`Error loading issue details`, err),
       });
   }
   createIssue(projectId: number, newIssue: Partial<IssueData>): void {
     this.httpClient
       .post<IssueData>(`${this.baseUrl}/tester/projects/${projectId}/issues`, newIssue)
       .subscribe({
-        next: (createdIssue) => this.singleIssueSubject.next(createdIssue),
+        next: (createdIssue) => this.issueSubject.next(createdIssue),
         error: (err) =>
           console.error(`Error creating new issues for project with id: ${projectId}`, err),
       });
@@ -62,16 +53,9 @@ export class IssueService {
       .put<IssueData>(`${this.baseUrl}/${role}/projects/${projectId}/issues/${issueId}`, issue)
       .subscribe({
         next: (updatedIssue) => {
-          //updates the individual issue
-          this.singleIssueSubject.next(updatedIssue);
-          // updates the list of issues
-          this.issueSubject.next(
-            this.issueSubject.value.map((i) =>
-              i.issue_id === updatedIssue.issue_id ? updatedIssue : i
-            )
-          );
+          this.issueSubject.next(updatedIssue);
         },
-        error: (err) => console.log('error with updating issue details', err),
+        error: (err) => console.log(`Error updating ${issue.issue_title} details`, err),
       });
   }
   updateIssueStatus(

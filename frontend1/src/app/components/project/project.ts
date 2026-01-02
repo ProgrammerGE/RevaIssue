@@ -33,4 +33,8 @@ export class Project extends RevaIssueSubscriber {
       project_description: this.projectDescription(),
     });
   }
+
+  createProject() {
+    this.projectService;
+  }
 }
