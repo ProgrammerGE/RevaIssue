@@ -13,7 +13,7 @@ export class Project extends RevaIssueSubscriber {
   project!: ProjectData;
   projectId: number = 0;
   projectTitle: WritableSignal<string> = signal('');
-  projectDescription: WritableSignal<string> = signal('');
+  projectDescription: WritableSignal<string> = signal('Sample description');
   userRole!: 'admin' | 'tester' | 'developer';
 
   constructor(private projectService: ProjectService) {
