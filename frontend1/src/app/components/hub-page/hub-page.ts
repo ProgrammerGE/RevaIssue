@@ -1,4 +1,5 @@
 import { Component, signal, WritableSignal } from '@angular/core';
+import { Project } from '../project/project';
 import { Issue } from '../issue/issue';
 import { SignoutButton } from '../signout-button/signout-button';
 import { LoginService } from '../../services/login-service';
@@ -9,10 +10,11 @@ import { AuditLogService } from '../../services/audit-log-service';
 import { AuditLog } from '../../interfaces/audit-log-data';
 import { ProjectData } from '../../interfaces/project-data';
 import { IssueData } from '../../interfaces/issue-data';
+import { FormsModule } from "@angular/forms";
 
 @Component({
   selector: 'app-hub-page',
-  imports: [RouterLink],
+  imports: [FormsModule],
   templateUrl: './hub-page.html',
   styleUrl: './hub-page.css',
 })
@@ -22,6 +24,9 @@ export class HubPage {
 
   username!: string;  
   role!: 'admin' | 'tester' | 'developer';
+
+   projectSearchInput: string = "";
+   issueSearchInput: string = "";
   
   projects: WritableSignal<Array<ProjectData>> = signal([]);
   issues: WritableSignal<Array<IssueData>> = signal([]);
@@ -31,6 +36,8 @@ export class HubPage {
     private issueService: IssueService, 
     private auditLogService: AuditLogService,
     private router: Router){
+    this.username = "username";
+    this.role = 'admin'
     this.projectService.viewAllProjects(this.projects, this.role);
     this.issueService.viewAllIssues(this.issues, this.role);
     this.auditLogService.getAllAuditLogs(this.auditLogs);
