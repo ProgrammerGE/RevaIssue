@@ -21,5 +21,5 @@ public class User {
     @Column(name="password_hash", nullable = false)
     private String password;
     @Column(name = "User_Role", nullable = false)
-    private String user_Role;
+    private String userRole;
 }

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -43,7 +44,7 @@ public class UserService {
 
     public void deleteUser(User user) {
         // protection for admins
-        if (user.getUser_Role() == "admin") {
+        if (user.getUserRole() == "admin") {
             // TODO: throw an error
         } else {
             // delete the user
@@ -54,6 +55,10 @@ public class UserService {
     public User getUserById(UUID id) {
         // consider throwing an error instead of returning null
         return userRepository.findById(id).orElse(null);
+    }
+
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow();
     }
 
     // returns a list of all projects a given user id is associated with
