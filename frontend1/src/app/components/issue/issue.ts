@@ -39,10 +39,6 @@ export class Issue extends RevaIssueSubscriber {
     });
   }
 
-  viewIssueForProject(): void {
-    this.issueService.viewIssuesForProjects(this.projectId, this.userRole);
-  }
-
   viewIssue(): void {
     this.issueService.viewIssueDetails(this.issueId, this.projectId, this.userRole);
   }

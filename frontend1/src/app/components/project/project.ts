@@ -1,4 +1,4 @@
-import { Component, OnDestroy, signal, WritableSignal } from '@angular/core';
+import { Component, signal, WritableSignal } from '@angular/core';
 import { RevaIssueSubscriber } from '../../classes/reva-issue-subscriber';
 import { ProjectService } from '../../services/project-service';
 import { ProjectData } from '../../interfaces/project-data';
@@ -29,6 +29,13 @@ export class Project extends RevaIssueSubscriber {
 
   updateProject() {
     this.projectService.updateProject(this.projectId, {
+      project_name: this.projectTitle(),
+      project_description: this.projectDescription(),
+    });
+  }
+
+  createProject() {
+    this.projectService.createProject({
       project_name: this.projectTitle(),
       project_description: this.projectDescription(),
     });
