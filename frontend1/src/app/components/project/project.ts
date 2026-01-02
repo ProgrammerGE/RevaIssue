@@ -12,9 +12,9 @@ import { ProjectData } from '../../interfaces/project-data';
 export class Project extends RevaIssueSubscriber {
   project!: ProjectData;
   projectId: number = 0;
-  projectTitle: WritableSignal<string> = signal('');
+  projectTitle: WritableSignal<string> = signal('Sample title');
   projectDescription: WritableSignal<string> = signal('Sample description');
-  userRole!: 'admin' | 'tester' | 'developer';
+  userRole: 'admin' | 'tester' | 'developer' = 'tester';
 
   constructor(private projectService: ProjectService) {
     super();
