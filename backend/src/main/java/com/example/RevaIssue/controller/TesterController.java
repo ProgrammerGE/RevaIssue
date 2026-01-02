@@ -2,7 +2,6 @@ package com.example.RevaIssue.controller;
 
 import com.example.RevaIssue.entity.AuditLog;
 import com.example.RevaIssue.entity.Issue;
-import com.example.RevaIssue.entity.User;
 import com.example.RevaIssue.service.AuditLogService;
 import com.example.RevaIssue.service.IssueService;
 import com.example.RevaIssue.service.ProjectService;
@@ -40,12 +39,6 @@ public class TesterController {
     private String getUsernameFromHeader(String authHeader){
         String token = authHeader.split(" ")[1];
         return jwtUtility.extractUsername(token);
-    }
-
-    @PostMapping("/login")
-    public String testerLogin(@RequestBody User tester){
-        User user = userService.getUserById(tester.getUser_ID());
-        return jwtUtility.generateAccessToken(user.getUsername(), user.getUser_Role());
     }
 
     @PostMapping("/project/{project_id}/issues")

@@ -1,5 +1,6 @@
 package com.example.RevaIssue.entity;
 
+import com.example.RevaIssue.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ public class User {
     private String username;
     @Column(name="password_hash", nullable = false)
     private String password;
+    @Enumerated(EnumType.STRING)
     @Column(name = "User_Role", nullable = false)
-    private String userRole;
+    private UserRole userRole;
 }

@@ -4,6 +4,7 @@ import com.example.RevaIssue.entity.AuditLog;
 import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.entity.User;
 import com.example.RevaIssue.entity.User_Projects;
+import com.example.RevaIssue.enums.UserRole;
 import com.example.RevaIssue.repository.ProjectRepository;
 import com.example.RevaIssue.repository.UserRepository;
 import com.example.RevaIssue.repository.User_ProjectsRepository;
@@ -44,7 +45,7 @@ public class UserService {
 
     public void deleteUser(User user) {
         // protection for admins
-        if (user.getUserRole() == "admin") {
+        if (user.getUserRole() == UserRole.ADMIN) {
             // TODO: throw an error
         } else {
             // delete the user
