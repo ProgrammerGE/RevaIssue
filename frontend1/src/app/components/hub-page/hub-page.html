@@ -1,42 +1,34 @@
-<nav>
-    <ul>
-        <li><a routerLink="/login">Login</a></li>
-        <li><a routerLink="/projects">Projects</a></li>
-        <li><a routerLink="/issues">Issues</a></li>
-    </ul>
-</nav>
-    
+   
     <div class="parent">
-        <div class="div1"> <!-- Banner at the top of page, will include a signout button -->
-            This is the banner up top.
-        </div>
 
-        <div class="div2"> <!-- Displays username and their role -->
-            The username and role will display here.
-            <h3>{{username}}</h3> <br>
+        <div class="displayUsername"> <!-- Displays username and their role -->
+            <h2>Welcome, {{username}}</h2>
             <h3>{{role}}</h3>
         </div>
 
-        <div class="div3"> <!-- A search bar to filter the list of projects and the total count -->
+        <div class="projectSearchBar"> <!-- A search bar to filter the list of projects and the total count -->
             There will be a search bar and a current count of projects.
+            <input type="text" [(ngModel)]="projectSearchInput" placeholder="Project Name"> <button>Search</button>
         </div>
 
-        <div class="div4"> <!-- A search bar to filter the list of issues and their total count -->
+        <div class="issueSearchBar"> <!-- A search bar to filter the list of issues and their total count -->
             There will be a search bar and a current count of issues
+            <input type="text" [(ngModel)]="issueSearchInput" placeholder="Issue Name"> <button>Search</button>
         </div>
 
-        <div class="div5"> <!-- The list of projects -->
-            This will be a list of projects
+        <div class="projectListing"> <!-- The list of projects -->
+            This will be a list of projects <br>
             <ul>
                 @for (proj of projects(); track $index) {
                     <li>
-                        <button (click)="moveToProject('${{proj.project_id}}')"> {{ proj.project_name }}</button>
+                        <button (click)="moveToProject('${{proj.project_id}}')" class="projectButton"> {{ proj.project_name }}</button>
+                        <button class="projectButton"> Delete Project</button>
                     </li>
                 }
             </ul>
         </div>
 
-        <div class="div6"> <!-- The list of issues -->
+        <div class="issueListing"> <!-- The list of issues -->
             This will be a list of issues
             <ul>
                 @for (issue of issues(); track $index) {
@@ -47,7 +39,7 @@
             </ul>
         </div>
 
-        <div class="div7"> <!-- A box of global audit logs for the admin's view -->
+        <div class="auditLogListing"> <!-- A box of global audit logs for the admin's view -->
             Here is a list of global logs for the admin's eyes.
             <ul>
                 @for (audits of auditLogs(); track $index) {
