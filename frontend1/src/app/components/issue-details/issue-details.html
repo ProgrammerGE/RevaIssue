@@ -4,14 +4,29 @@
     <h2>Issue title: {{ issueTitle }}</h2>
   </div>
   <div class="div2">
-    <!-- This will contain the Issue's description -->
-    Description Box
+    @if (isEditing) {
+    <textarea [(ngModel)]="issueDescription"></textarea>
+    } @else {
+    <p>{{ issueDescription }}</p>
+    }
   </div>
   <div class="div3">
     <!-- This will hold buttons/dropdowns that are specific to certain users
      Testers can edit the issue details themselves
      Developers can claim issues, or resolve them-->
-    Controls
+    @if (userRole === 'tester') {
+    <button (click)="onEdit()" [disabled]="isEditing">Edit Issue</button>
+    <button (click)="onSubmit()" [disabled]="!isEditing">Submit Changes</button>
+    }
+
+    @else if (userRole === 'developer') {
+    <button (click)="onClaim()">Claim Issue</button>
+    <button (click)="onResolve()">Resolve Issue</button>
+    }
+
+    @else {
+    <p>View Only Mode</p>
+    }
   </div>
   <div class="div4">
     <!-- Available to testers to submit their edits -->
