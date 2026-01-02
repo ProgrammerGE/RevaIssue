@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, WritableSignal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { IssueData } from '../interfaces/issue-data';
 import { HttpClient } from '@angular/common/http';
@@ -25,6 +25,18 @@ export class IssueService {
   getIssueSubject() {
     return this.issueSubject;
   }
+
+  viewAllIssues(issues: WritableSignal<Array<IssueData>>, role: 'admin' | 'developer' | 'tester') : void{
+      this.httpClient.get<IssueData[]>(`${this.baseUrl}/${role}/issues`)
+      .subscribe( issueList => {
+        const newIssueList = [];
+        for(const issueObj of issueList){
+          newIssueList.push(issueObj);
+        }
+        issues.set(newIssueList);
+      });
+  }
+
   loadIssuesForProject(projectId: number): void {}
   createIssue(projectId: number, issue: Partial<IssueData>): void {}
   updateIssue(issueId: number, issue: Partial<IssueData>): void {}

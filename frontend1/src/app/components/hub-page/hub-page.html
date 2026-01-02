@@ -13,6 +13,8 @@
 
         <div class="div2"> <!-- Displays username and their role -->
             The username and role will display here.
+            <h3>{{username}}</h3> <br>
+            <h3>{{role}}</h3>
         </div>
 
         <div class="div3"> <!-- A search bar to filter the list of projects and the total count -->
@@ -25,13 +27,35 @@
 
         <div class="div5"> <!-- The list of projects -->
             This will be a list of projects
+            <ul>
+                @for (proj of projects(); track $index) {
+                    <li>
+                        <button (click)="moveToProject('${{proj.project_id}}')"> {{ proj.project_name }}</button>
+                    </li>
+                }
+            </ul>
         </div>
 
         <div class="div6"> <!-- The list of issues -->
             This will be a list of issues
+            <ul>
+                @for (issue of issues(); track $index) {
+                    <li>
+                        <button (click)="moveToIssue('${issue.issue_id}')"> {{ issue.issue_title }}</button>
+                    </li>
+                }
+            </ul>
         </div>
 
         <div class="div7"> <!-- A box of global audit logs for the admin's view -->
             Here is a list of global logs for the admin's eyes.
+            <ul>
+                @for (audits of auditLogs(); track $index) {
+                    <!--
+                        this.role + ": " + this.username + " " + this.action + " at " + timeLogged
+                    -->
+                    <li>{{ audits.role }}: {{ audits.username}} {{ audits.action}} at {{ audits.timestamp}}</li>
+                }
+            </ul>
         </div>
     </div>
