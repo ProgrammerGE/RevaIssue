@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './issue-details.css',
 })
 export class IssueDetails {
-
+  issueTitle: string = 'Test';
 }
