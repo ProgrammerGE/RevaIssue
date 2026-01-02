@@ -1,8 +1,10 @@
 package com.example.RevaIssue.controller;
 
+import com.example.RevaIssue.dto.JwtTransport;
 import com.example.RevaIssue.dto.LoginRequest;
 import com.example.RevaIssue.dto.RegisterRequest;
 import com.example.RevaIssue.service.AuthService;
+import io.jsonwebtoken.Jwt;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,14 +21,16 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser (@RequestBody LoginRequest request){
+    public ResponseEntity<JwtTransport> loginUser (@RequestBody LoginRequest request){
         String token = authService.login(request);
-        return ResponseEntity.ok(token);
+        JwtTransport response = new JwtTransport(token);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser (@RequestBody RegisterRequest request){
+    public ResponseEntity<JwtTransport> registerUser (@RequestBody RegisterRequest request){
         String token = authService.register(request);
-        return ResponseEntity.ok(token);
+        JwtTransport response = new JwtTransport(token);
+        return ResponseEntity.ok(response);
     }
 }

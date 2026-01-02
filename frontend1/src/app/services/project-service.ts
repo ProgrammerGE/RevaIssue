@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, WritableSignal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ProjectData } from '../interfaces/project-data';
 import { HttpClient } from '@angular/common/http';
@@ -19,6 +19,17 @@ export class ProjectService {
 
   getProjectSubject() {
     return this.projectSubject;
+  }
+
+  viewAllProjects(projects: WritableSignal<Array<ProjectData>>, role: 'admin' | 'developer' | 'tester') : void{
+    this.httpClient.get<ProjectData[]>(`${this.baseUrl}/${role}/projects`)
+    .subscribe( projectList => {
+      const newProjectList = [];
+      for(const projectObj of projectList){
+        newProjectList.push(projectObj);
+      }
+      projects.set(newProjectList);
+    });
   }
 
   viewProject(projectId: number, role: 'admin' | 'developer' | 'tester'): void {
