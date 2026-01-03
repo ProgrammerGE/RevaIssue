@@ -4,6 +4,7 @@ import com.example.RevaIssue.dto.LoginRequest;
 import com.example.RevaIssue.dto.RegisterRequest;
 import com.example.RevaIssue.entity.User;
 import com.example.RevaIssue.util.JwtUtility;
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -34,5 +35,20 @@ public class AuthService {
         newUser.setUserRole(request.role());
         User savedUser = userService.createUser(newUser);
         return jwtUtility.generateAccessToken(savedUser.getUsername(), savedUser.getUserRole());
+    }
+
+    public boolean checkUserToken(String headerData){
+        if (headerData == null){
+            return false;
+        }
+        try{
+            String token = headerData.split(" ") [1];
+            String role = this.jwtUtility.extractRole(token);
+            return  role.equalsIgnoreCase("admin")
+                    || role.equalsIgnoreCase("tester")
+                    || role.equalsIgnoreCase("developer") ;
+        }catch (JwtException e){
+            return false;
+        }
     }
 }

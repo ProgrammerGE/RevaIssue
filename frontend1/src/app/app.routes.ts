@@ -5,13 +5,14 @@ import { HubPage } from './components/hub-page/hub-page';
 import { Project } from './components/project/project';
 import { Issue } from './components/issue/issue';
 import { CreateIssue } from './components/create-issue/create-issue';
+import { authorizationGuard } from './guards/authorization-guard';
 
 export const routes: Routes = [
     {path:'', pathMatch:'full', redirectTo:'/login'},
     {path: 'login', component:Login},
     {path: 'register', component:Registration},
-    {path: 'hubpage', component:HubPage},//TODO: Implement route guards
-    {path: 'project', component:Project},
-    {path: 'issue', component:Issue},
-    {path: 'create-issue', component:CreateIssue}
+    {path: 'hubpage', component:HubPage, canActivate:[authorizationGuard]},
+    {path: 'project', component:Project, canActivate:[authorizationGuard]},
+    {path: 'issue', component:Issue, canActivate:[authorizationGuard]},
+    {path: 'create-issue', component:CreateIssue, canActivate:[authorizationGuard]}
 ];
