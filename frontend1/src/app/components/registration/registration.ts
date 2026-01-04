@@ -24,7 +24,7 @@ export class Registration {
     this.registrationService.registerUser(this.usernameInput, this.passwordInput, this.roleInput);
   }
 
-  cancelRegistration(){
+  cancelRegister(){
     this.registrationService.cancelRegistration();
   }
 }

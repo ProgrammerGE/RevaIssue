@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, WritableSignal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ProjectData } from '../interfaces/project-data';
 import { HttpClient } from '@angular/common/http';
@@ -21,6 +21,17 @@ export class ProjectService {
     return this.projectSubject;
   }
 
+  viewAllProjects(projects: WritableSignal<Array<ProjectData>>, role: 'admin' | 'developer' | 'tester') : void{
+    this.httpClient.get<ProjectData[]>(`${this.baseUrl}/${role}/projects`)
+    .subscribe( projectList => {
+      const newProjectList = [];
+      for(const projectObj of projectList){
+        newProjectList.push(projectObj);
+      }
+      projects.set(newProjectList);
+    });
+  }
+
   viewProject(projectId: number, role: 'admin' | 'developer' | 'tester'): void {
     this.httpClient.get<ProjectData>(`${this.baseUrl}/${role}/projects/${projectId}`).subscribe({
       next: (project) => this.projectSubject.next(project),
@@ -35,5 +46,12 @@ export class ProjectService {
         next: (updatedProject) => this.projectSubject.next(updatedProject),
         error: (err) => console.error('Error updating project', err),
       });
+  }
+
+  createProject(project: Partial<ProjectData>): void {
+    this.httpClient.post<ProjectData>(`${this.baseUrl}/admin/projects/new`, project).subscribe({
+      next: (create) => this.projectSubject.next(create),
+      error: (err) => console.error('Error creating new project', err),
+    });
   }
 }
