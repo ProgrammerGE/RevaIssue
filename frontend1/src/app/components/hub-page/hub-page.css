@@ -1,18 +1,18 @@
-.hubPage {
+.hub-page {
   padding: 8px;
 }
 
-.topBar {
+.hub-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.topBar > h2 {
+.welcome-user {
   margin: 0;
 }
 
-.renameWrapper {
+.lists {
   display: flex;
   flex-direction: column;
   gap: 8px;

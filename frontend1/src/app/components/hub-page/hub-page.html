@@ -1,15 +1,11 @@
-<div class="hubPage">
-    <div class="topBar">
-        <h2 class="welcomeMessage">Welcome, {{username}}</h2>
+<div class="hub-page">
+    <header class="hub-header">
+        <h2 class="welcome-user">Welcome, {{username}}</h2>
         <input type="search" />
-    </div>
+    </header>
     <span>{{userRole}}</span>
-    <div class="renameWrapper">
-        <div class="projectsContainer">
-            <app-list-container title="Projects" [items]="projectsList"></app-list-container>
-        </div>
-        <div class="issuesContainer">
-            <app-list-container title="Issues" [items]="issuesList"></app-list-container>
-        </div>
-    </div>
+    <section class="lists">
+        <app-list-container title="Projects" [items]="projectsList"></app-list-container>
+        <app-list-container title="Issues" [items]="issuesList"></app-list-container>
+    </section>
 </div>
