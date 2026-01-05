@@ -1,53 +1,15 @@
-   
-    <div class="parent">
-
-        <div class="displayUsername"> <!-- Displays username and their role -->
-            <h2>Welcome, {{username}}</h2>
-            <h3>{{role}}</h3>
+<div class="hubPage">
+    <div class="topBar">
+        <h2 class="welcomeMessage">Welcome, {{username}}</h2>
+        <input type="search" />
+    </div>
+    <span>{{userRole}}</span>
+    <div class="renameWrapper">
+        <div class="projectsContainer">
+            <app-list-container title="Projects" [items]="projectsList"></app-list-container>
         </div>
-
-        <div class="projectSearchBar"> <!-- A search bar to filter the list of projects and the total count -->
-            There will be a search bar and a current count of projects.
-            <input type="text" [(ngModel)]="projectSearchInput" placeholder="Project Name"> <button>Search</button>
-        </div>
-
-        <div class="issueSearchBar"> <!-- A search bar to filter the list of issues and their total count -->
-            There will be a search bar and a current count of issues
-            <input type="text" [(ngModel)]="issueSearchInput" placeholder="Issue Name"> <button>Search</button>
-        </div>
-
-        <div class="projectListing"> <!-- The list of projects -->
-            This will be a list of projects <br>
-            <ul>
-                @for (proj of projects(); track $index) {
-                    <li>
-                        <button (click)="moveToProject('${{proj.project_id}}')" class="projectButton"> {{ proj.project_name }}</button>
-                        <button class="projectButton"> Delete Project</button>
-                    </li>
-                }
-            </ul>
-        </div>
-
-        <div class="issueListing"> <!-- The list of issues -->
-            This will be a list of issues
-            <ul>
-                @for (issue of issues(); track $index) {
-                    <li>
-                        <button (click)="moveToIssue('${issue.issue_id}')"> {{ issue.issue_title }}</button>
-                    </li>
-                }
-            </ul>
-        </div>
-
-        <div class="auditLogListing"> <!-- A box of global audit logs for the admin's view -->
-            Here is a list of global logs for the admin's eyes.
-            <ul>
-                @for (audits of auditLogs(); track $index) {
-                    <!--
-                        this.role + ": " + this.username + " " + this.action + " at " + timeLogged
-                    -->
-                    <li>{{ audits.role }}: {{ audits.username}} {{ audits.action}} at {{ audits.timestamp}}</li>
-                }
-            </ul>
+        <div class="issuesContainer">
+            <app-list-container title="Issues" [items]="issuesList"></app-list-container>
         </div>
     </div>
+</div>

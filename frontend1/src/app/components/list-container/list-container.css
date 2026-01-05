@@ -1,0 +1,97 @@
+.projectsContainer {
+  font-family: 'Satoshi';
+}
+
+.toolBar {
+  --toolbar-gap: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toolBar > :first-child {
+  display: flex;
+  align-items: center;
+  gap: var(--toolbar-gap);
+}
+
+button {
+  border: none;
+  padding: 0;
+  background-color: transparent;
+}
+
+.toggleExpandBtn {
+  cursor: pointer;
+  height: fit-content;
+  transform: rotate(-90deg);
+  transition: transform 0.1s;
+}
+
+.isExpanded {
+  transform: none;
+}
+
+.toggleExpandBtn > img {
+  display: block;
+  height: 0.8rem;
+}
+
+.titleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--toolbar-gap);
+}
+
+.title {
+  font-weight: 600;
+  /* border-right: 1px solid red; */
+  /* padding-right: var(--toolbar-gap); */
+}
+
+
+.itemCount {
+  opacity: 0.5;
+}
+
+.addNewBtn {
+  padding: 8px;
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.addNewBtn > img {
+  height: 1.1rem;
+}
+
+.addNewBtn:hover {
+  /* background-color: var(--dust-grey); */
+}
+
+.addNewBtn:active {
+  opacity: 0.7;
+}
+
+hr {
+  border: 1px solid var(--dust-grey);
+}
+
+.projectsList {
+  display: flex;
+  flex-direction: column;
+}
+
+.project {
+  padding: 6px;
+}
+
+.project:hover {
+  color: var(--floral-white);
+  background-color: var(--spicy-paprika);
+}
+
+input[type='checkbox']:checked {
+}
