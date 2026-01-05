@@ -50,7 +50,10 @@ export class ProjectService {
 
   createProject(project: Partial<ProjectData>): void {
     this.httpClient.post<ProjectData>(`${this.baseUrl}/admin/projects/new`, project).subscribe({
-      next: (create) => this.projectSubject.next(create),
+      next: (create) => {
+        if(!create)
+          this.projectSubject.next(create) 
+      },
       error: (err) => console.error('Error creating new project', err),
     });
   }
