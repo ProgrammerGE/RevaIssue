@@ -20,7 +20,7 @@ export class Project extends RevaIssueSubscriber {
     super();
     this.subscription = this.projectService
       .getProjectSubject()
-      .subscribe((projectData) => this.projectTitle.set(projectData.project_name));
+      .subscribe((projectData) => this.projectTitle.set(projectData.projectName));
   }
 
   viewProject() {
@@ -29,15 +29,15 @@ export class Project extends RevaIssueSubscriber {
 
   updateProject() {
     this.projectService.updateProject(this.projectId, {
-      project_name: this.projectTitle(),
-      project_description: this.projectDescription(),
+      projectName: this.projectTitle(),
+      projectDescription: this.projectDescription(),
     });
   }
 
   createProject() {
     this.projectService.createProject({
-      project_name: this.projectTitle(),
-      project_description: this.projectDescription(),
+      projectName: this.projectTitle(),
+      projectDescription: this.projectDescription(),
     });
   }
 }
