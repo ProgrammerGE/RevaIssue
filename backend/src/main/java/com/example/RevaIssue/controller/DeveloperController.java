@@ -64,7 +64,7 @@ public class DeveloperController {
         AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("MOVED ISSUE " + issueName + " TO RESOLVED", username, role));
         return issueService.updateIssueStatus(issueId, "RESOLVED", role);
     }
-    @GetMapping("/project/{project_id/issues")
+    @GetMapping("/project/{project_id}/issues")
     public List<Issue> issueList(@PathVariable("project_id") Long projectId){
                return issueService.getIssuesByProject(projectId);
     }
