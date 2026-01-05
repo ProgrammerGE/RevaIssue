@@ -67,7 +67,7 @@ public class CommonController {
     @GetMapping("/issues/")
     public Issue getIssueById(int id){ return null; }
 
-    // TODO: Implement. Make it so that it only adds relevant users to the list
+    // TODO: Implement. Make it so that it only adds relevant users to the list 
     @GetMapping("/users")
     public List<User> getUsers(){ return null; }
 }
