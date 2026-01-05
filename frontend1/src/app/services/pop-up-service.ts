@@ -6,17 +6,30 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class PopUpService {
   
-  private popUpSubject: BehaviorSubject<boolean>;
+  private popUpSubjectProject: BehaviorSubject<boolean>;
+  private popUpSubjectIssue: BehaviorSubject<boolean>;
 
   constructor(){
-    this.popUpSubject = new BehaviorSubject<boolean>(false);
+    this.popUpSubjectProject = new BehaviorSubject<boolean>(false);
+    this.popUpSubjectIssue = new BehaviorSubject<boolean>(false);
   }
   
-  openPopUp(){
-    this.popUpSubject.next(true);
+  openPopUpProject(){
+    this.popUpSubjectProject.next(true);
+    this.popUpSubjectIssue.next(false);
   }
 
-  getPopUpSubject(){
-    return this.popUpSubject;
+  getPopUpProjectSubject(){
+    return this.popUpSubjectProject;
   }
+
+  openPopUpIssue(){
+    this.popUpSubjectIssue.next(true);
+    this.popUpSubjectProject.next(false);
+  }
+
+  getPopUpIssueSubject(){
+    return this.popUpSubjectIssue;
+  }
+  
 }
