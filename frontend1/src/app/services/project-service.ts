@@ -8,9 +8,9 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ProjectService {
   private projectSubject = new BehaviorSubject<ProjectData>({
-    project_id: 0,
-    project_name: '',
-    project_description: '',
+    projectId: 0,
+    projectName: '',
+    projectDescription: '',
   });
 
   private baseUrl = 'http://localhost:8080';
