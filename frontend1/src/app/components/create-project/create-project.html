@@ -1,0 +1,20 @@
+@if ((isPoppedUp())){
+    <div class="parent">
+        <div class="proj_name">
+            @if (titleMissing) {            
+            <h4 style="color: red;">Enter a title name for the project</h4>
+            }
+            <input type="text" placeholder="Project Title" [(ngModel)]="projectTitle"> 
+        </div>
+        <div class="proj_description">     
+            @if (descriptionMissing) {            
+            <h4 style="color: red;">Enter a description</h4>
+            }   
+            <input type="text" placeholder="Project Description" class="description" [(ngModel)]="projectDesc"> 
+            <button (click)="createProject()">{{ buttonText }}</button>
+            <button (click)="cancelCreation()">{{ buttonCancel }}</button>
+        </div>
+    </div>
+
+}
+    
