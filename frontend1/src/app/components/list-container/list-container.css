@@ -1,15 +1,15 @@
-.projectsContainer {
+.lists-container {
   font-family: 'Satoshi';
 }
 
-.toolBar {
+.tool-bar {
   --toolbar-gap: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.toolBar > :first-child {
+.tool-bar > :first-child {
   display: flex;
   align-items: center;
   gap: var(--toolbar-gap);
@@ -37,7 +37,7 @@ button {
   height: 0.8rem;
 }
 
-.titleContainer {
+.title-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -50,12 +50,11 @@ button {
   /* padding-right: var(--toolbar-gap); */
 }
 
-
-.itemCount {
+.item-count {
   opacity: 0.5;
 }
 
-.addNewBtn {
+.add-button {
   padding: 8px;
   display: flex;
   gap: 2px;
@@ -63,35 +62,37 @@ button {
   cursor: pointer;
 }
 
-.addNewBtn > img {
+.add-button > img {
   height: 1.1rem;
 }
 
-.addNewBtn:hover {
+.add-button:hover {
   /* background-color: var(--dust-grey); */
 }
 
-.addNewBtn:active {
-  opacity: 0.7;
+.add-button:active {
+  opacity: 0.5;
 }
 
 hr {
   border: 1px solid var(--dust-grey);
 }
 
-.projectsList {
+.list-container {
   display: flex;
   flex-direction: column;
 }
 
-.project {
+.list-item {
   padding: 6px;
 }
 
-.project:hover {
+.list-item:hover {
   color: var(--floral-white);
   background-color: var(--spicy-paprika);
 }
 
 input[type='checkbox']:checked {
+  /* Rule will be ignored if browser does not support it */
+  accent-color: var(--carbon-black);
 }
