@@ -2,15 +2,27 @@
     <div class="div1">        
         <h3>Please enter your credentials here</h3>
         <h3>Email Address</h3>
+        @if (usernameMissing) {            
+            <h4 style="color: red;">Enter your email address</h4>
+        }
         <input type="text" placeholder="your@email.com" [(ngModel)]="usernameInput">  
 
         <h3>Password</h3>
+        @if (passwordMissing) {            
+            <h4 style="color: red;">Enter your password</h4>
+        }
         <input type="password" placeholder="password" [(ngModel)]="passwordInput">
 
         <h3>Confirm Password</h3>
+        @if (passwordMismatch) {            
+            <h4 style="color: red;">Password must match</h4>
+        }
         <input type="password" placeholder="password" [(ngModel)]="confirmPasswordInput">
         <br>
         <h3>Choose your role</h3>
+        @if (roleMissing) {            
+            <h4 style="color: red;">You must select a role</h4>
+        }
         <select name="role" [(ngModel)]="roleInput">
             <option value="ADMIN">admin</option>
             <option value="TESTER">tester</option>
