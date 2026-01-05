@@ -23,7 +23,6 @@ export const authorizationGuard: CanActivateFn = (route, state) => {
     }
   ).pipe(
     map( response => {
-      router.navigate(['']);
       authorizedPass = response.status === 204;
       if(!authorizedPass){
         router.navigate(['']);

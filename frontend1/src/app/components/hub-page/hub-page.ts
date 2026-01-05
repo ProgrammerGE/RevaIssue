@@ -1,6 +1,6 @@
 import { Component, signal, WritableSignal } from '@angular/core';
 import { ListContainer } from '../list-container/list-container';
-import { Projects } from '../projects/projects';
+import { Project } from '../project/project';
 import { SignoutButton } from '../signout-button/signout-button';
 import { LoginService } from '../../services/login-service';
 import { Router, RouterLink } from '@angular/router';
