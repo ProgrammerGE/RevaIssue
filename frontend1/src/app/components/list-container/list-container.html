@@ -1,14 +1,17 @@
 <section class="lists-container">
-  <div class="tool-bar">
-    <div class="">
-      <button [class.isExpanded]="isExpanded()" class="toggleExpandBtn">
-        <img src="assets/icons/expand.svg" (click)="expandList()" />
-      </button>
-
-      <div class="title-container">
-        <span class="title">{{ title() }}</span>
-        <span class="item-count">{{ itemCount() }}</span>
-      </div>
+    <div class="tool-bar">
+        <div class="">
+            <button [class.isExpanded]="isExpanded()" class="toggleExpandBtn">
+                <img src="assets/icons/expand.svg" (click)="expandList()" />
+            </button>
+            <div class="title-container">
+                <span class="title">{{title()}}</span>
+                <span class="item-count">{{itemCount()}}</span>
+            </div>
+        </div>
+        @if(hasButton()){
+            <button class="addNewBtn" title="Add new" (click)="addPopup()"><img src="assets/icons/plus.svg"/></button>
+        }
     </div>
 
     <button

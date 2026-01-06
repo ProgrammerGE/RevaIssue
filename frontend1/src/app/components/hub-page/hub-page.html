@@ -8,7 +8,7 @@
   </header>
   <span>{{ userRole() }}</span>
   <section class="lists">
-    <app-list-container title="Projects" [items]="projectsList"></app-list-container>
-    <app-list-container title="Issues" [items]="issuesList"></app-list-container>
+    <app-list-container title="Projects" [items]="projectsList" [hasButton]="true"></app-list-container>
+    <app-list-container title="Issues" [items]="issuesList" [hasButton]="false"></app-list-container>
   </section>
 </div>
