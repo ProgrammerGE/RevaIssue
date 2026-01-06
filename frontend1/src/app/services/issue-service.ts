@@ -38,7 +38,10 @@ export class IssueService {
     this.httpClient
       .post<IssueData>(`${this.baseUrl}/tester/projects/${projectId}/issues`, newIssue)
       .subscribe({
-        next: (createdIssue) => this.issueSubject.next(createdIssue),
+        next: (createdIssue) => {
+          if(!createdIssue)
+          this.issueSubject.next(createdIssue)
+        },
         error: (err) =>
           console.error(`Error creating new issues for project with id: ${projectId}`, err),
       });
@@ -53,6 +56,7 @@ export class IssueService {
       .put<IssueData>(`${this.baseUrl}/${role}/projects/${projectId}/issues/${issueId}`, issue)
       .subscribe({
         next: (updatedIssue) => {
+          if(!updatedIssue)
           this.issueSubject.next(updatedIssue);
         },
         error: (err) => console.log(`Error updating ${issue.issue_title} details`, err),

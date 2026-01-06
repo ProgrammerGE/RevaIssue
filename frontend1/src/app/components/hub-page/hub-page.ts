@@ -6,10 +6,11 @@ import { LoginService } from '../../services/login-service';
 import { Router, RouterLink } from '@angular/router';
 import { hubListItem } from '../../interfaces/hubpage-list-item';
 import { CreateProject } from "../create-project/create-project";
+import { CreateIssue } from "../create-issue/create-issue";
 
 @Component({
   selector: 'app-hub-page',
-  imports: [RouterLink, ListContainer, CreateProject],
+  imports: [RouterLink, ListContainer, CreateProject, CreateIssue],
   templateUrl: './hub-page.html',
   styleUrl: './hub-page.css',
 })

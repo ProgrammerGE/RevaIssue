@@ -24,7 +24,7 @@ export class CreateProject {
 
 
   constructor(private popUpService: PopUpService, private projectService: ProjectService, private router: Router) {
-    this.popUpService.getPopUpSubject().subscribe( popUpSetting => {
+    this.popUpService.getPopUpProjectSubject().subscribe( popUpSetting => {
       this.isPoppedUp.set(popUpSetting);
     })
   }
