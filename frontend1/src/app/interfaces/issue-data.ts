@@ -1,7 +1,7 @@
 export interface IssueData {
-  issue_id: number;
-  issue_title: string;
-  issue_description: string;
+  issueID: number;
+  name: string;
+  description: string;
   project_id: number;
   severity: number;
   priority: number;
