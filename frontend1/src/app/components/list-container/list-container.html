@@ -9,7 +9,9 @@
                 <span class="item-count">{{itemCount()}}</span>
             </div>
         </div>
-        <button class="addNewBtn" title="Add new" (click)="addPopup()"><img src="assets/icons/plus.svg"/></button>
+        @if(hasButton()){
+            <button class="addNewBtn" title="Add new" (click)="addPopup()"><img src="assets/icons/plus.svg"/></button>
+        }
     </div>
     <hr />
 

@@ -14,6 +14,7 @@ export class ListContainer {
   isExpanded = signal(true);
   items: InputSignal<hubListItem[]> = input([{ name: 'placeholder title', description: 'placeholder description' }]);
   itemCount = computed(() => this.items().length);
+  hasButton : InputSignal<boolean> = input(true);
 
   constructor(private popUpService: PopUpService){}
 
