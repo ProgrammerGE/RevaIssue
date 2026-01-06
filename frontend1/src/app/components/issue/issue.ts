@@ -30,12 +30,12 @@ export class Issue extends RevaIssueSubscriber {
   constructor(private issueService: IssueService) {
     super();
     this.subscription = this.issueService.getIssueSubject().subscribe((issueData) => {
-      this.issueTitle.set(issueData.issue_title);
-      this.issueDescription.set(issueData.issue_description);
+      this.issueTitle.set(issueData.name);
+      this.issueDescription.set(issueData.description);
       this.issuePriority = issueData.priority;
       this.issueSeverity = issueData.severity;
       this.issueStatus = issueData.status;
-      this.issueId = issueData.issue_id;
+      this.issueId = issueData.issueID;
     });
   }
 
@@ -45,8 +45,8 @@ export class Issue extends RevaIssueSubscriber {
 
   createIssue(): void {
     this.issueService.createIssue(this.projectId, {
-      issue_title: this.issueTitle(),
-      issue_description: this.issueDescription(),
+      name: this.issueTitle(),
+      description: this.issueDescription(),
       priority: this.issuePriority,
       severity: this.issueSeverity,
     });
@@ -54,8 +54,8 @@ export class Issue extends RevaIssueSubscriber {
 
   updateIssue(): void {
     this.issueService.updateIssue(this.issueId, this.projectId, this.userRole, {
-      issue_title: this.issueTitle(),
-      issue_description: this.issueDescription(),
+      name: this.issueTitle(),
+      description: this.issueDescription(),
       priority: this.issuePriority,
       severity: this.issueSeverity,
     });
