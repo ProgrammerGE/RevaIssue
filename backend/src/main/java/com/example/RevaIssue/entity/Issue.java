@@ -4,6 +4,8 @@ import com.example.RevaIssue.helper.Comment;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -37,4 +39,8 @@ public class Issue {
 
     @Column(name = "status")
     private String status = "Open"; // "Open", "In Progress", "Resolved", "Close"
+
+    @Column(name = "date_created", nullable = false)
+    @CreationTimestamp
+    private LocalDateTime dateCreated;
 }
