@@ -29,7 +29,10 @@ export class Registration {
     this.usernameMissing = false;
     this.roleMissing= false;
     this.passwordMissing = false;
-    if((this.passwordInput === this.confirmPasswordInput) && (this.passwordInput != "")){      
+    if((this.passwordInput === this.confirmPasswordInput) 
+      && (this.passwordInput != "") 
+      && (this.usernameInput != "") 
+      && (this.roleInput != "")){      
       this.registrationService.registerUser(this.usernameInput, this.passwordInput, this.roleInput);
     }
   

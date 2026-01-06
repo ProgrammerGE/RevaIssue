@@ -2,12 +2,14 @@ package com.example.RevaIssue.controller;
 
 import com.example.RevaIssue.entity.AuditLog;
 import com.example.RevaIssue.entity.Project;
+import com.example.RevaIssue.entity.User;
 import com.example.RevaIssue.entity.User_Projects;
 import com.example.RevaIssue.repository.IssueRepository;
 import com.example.RevaIssue.repository.ProjectRepository;
 import com.example.RevaIssue.repository.UserRepository;
 import com.example.RevaIssue.service.*;
 import com.example.RevaIssue.util.JwtUtility;
+import com.example.RevaIssue.util.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.spel.ast.Assign;
 import org.springframework.web.bind.annotation.*;
@@ -56,6 +58,12 @@ public class AdminController {
     public List<AuditLog> getAuditLogs(){
         return auditLogService.getAllAuditLogs();
     }
+
+    // Get all users
+    @GetMapping("/users")
+    public List<UserDTO> getUsers(){ return userService.getAllUsers(); }
+
+    // Assign User to Project by creating a User_Projects entity
 
     @PostMapping("/projects/new")
     public Project createProject(

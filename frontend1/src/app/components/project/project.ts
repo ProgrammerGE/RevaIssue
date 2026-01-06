@@ -3,10 +3,12 @@ import { RevaIssueSubscriber } from '../../classes/reva-issue-subscriber';
 import { ProjectService } from '../../services/project-service';
 import { ProjectData } from '../../interfaces/project-data';
 import { ActivatedRoute } from '@angular/router';
+import { CreateIssue } from "../create-issue/create-issue";
+import { PopUpService } from '../../services/pop-up-service';
 
 @Component({
   selector: 'app-project',
-  imports: [],
+  imports: [CreateIssue],
   templateUrl: './project.html',
   styleUrl: './project.css',
 })
@@ -16,9 +18,9 @@ export class Project extends RevaIssueSubscriber {
   projectTitle: WritableSignal<string> = signal('');
   projectDescription: WritableSignal<string> = signal('');
 
-  userRole: 'admin' | 'tester' | 'developer' = 'tester';
+  userRole: 'admin' | 'tester' | 'developer' = 'admin';
 
-  constructor(private projectService: ProjectService, private route: ActivatedRoute) {
+  constructor(private projectService: ProjectService, private route: ActivatedRoute, private popUpService: PopUpService) {
     super();
     this.subscription = this.projectService.getProjectSubject().subscribe((projectData) => {
       console.log('EMIT', projectData);
@@ -55,5 +57,10 @@ export class Project extends RevaIssueSubscriber {
       projectName: this.projectTitle(),
       projectDescription: this.projectDescription(),
     });
+  }
+
+  //Be sure to assign this method to a button in the project html that will be clicked for "creating issues"
+  addPopup(){
+      this.popUpService.openPopUpIssue();
   }
 }

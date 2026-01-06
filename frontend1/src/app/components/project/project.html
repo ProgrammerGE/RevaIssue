@@ -1,4 +1,5 @@
 <div class="parent">
+        <app-create-issue></app-create-issue>
   <div class="div1">
     <h4>Project Title:</h4>
     <h3>{{ projectTitle() }}</h3>
@@ -11,6 +12,20 @@
   <div class="div3">
     Users List
     <!-- This will contain an element that shows a list of users who are associated with this project -->
+     <!--
+        Here's what needs to be done:
+        1) Div that shows the users
+          a) This will be scrollable
+          b) It holds <a> elements that represent users. Clicking removes them (for now)
+            i) Must get all users from that project using the user service
+        2) Div that holds the admin button(s)
+          a) Button to add user. Makes a popup come up, showing a scrollable menu of all users
+            i) Must get all users.
+            ii) Search bar for quick adding.
+     -->
+    @if (userRole === 'admin') {
+    <!-- Show buttons for adding and removing users -->
+    }
   </div>
   <div class="div4">
     <p>{{ projectDescription() }}</p>

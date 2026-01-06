@@ -1,7 +1,5 @@
 import { Component, signal, WritableSignal } from '@angular/core';
 import { ListContainer } from '../list-container/list-container';
-import { Project } from '../project/project';
-import { SignoutButton } from '../signout-button/signout-button';
 import { LoginService } from '../../services/login-service';
 import { Router, RouterLink } from '@angular/router';
 import { hubListItem } from '../../interfaces/hubpage-list-item';
@@ -14,7 +12,7 @@ import { CreateIssue } from '../create-issue/create-issue';
 
 @Component({
   selector: 'app-hub-page',
-  imports: [RouterLink, ListContainer, CreateProject, CreateIssue],
+  imports: [ListContainer, CreateProject],
   templateUrl: './hub-page.html',
   styleUrl: './hub-page.css',
 })

@@ -17,6 +17,7 @@ export class ListContainer {
     { name: 'placeholder title', description: 'placeholder description' },
   ]);
   itemCount = computed(() => this.items().length);
+  hasButton : InputSignal<boolean> = input(true);
 
   constructor(private popUpService: PopUpService) {}
 
@@ -24,8 +25,7 @@ export class ListContainer {
     this.isExpanded.update((v) => !v);
   }
 
-  addPopup() {
-    if (this.title() === 'Projects') this.popUpService.openPopUpProject();
-    else if (this.title() === 'Issues') this.popUpService.openPopUpIssue();
+  addPopup(){
+      this.popUpService.openPopUpProject();
   }
 }
