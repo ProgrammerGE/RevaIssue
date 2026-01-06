@@ -1,4 +1,4 @@
-import { Component, computed, OnInit, Signal, signal, WritableSignal } from '@angular/core';
+import { Component, computed, effect, OnInit, Signal, signal, WritableSignal } from '@angular/core';
 import { ListContainer } from '../list-container/list-container';
 import { LoginService } from '../../services/login-service';
 import { Router, RouterLink } from '@angular/router';
@@ -9,7 +9,7 @@ import { RegistrationService } from '../../services/registration-service';
 import { UserService } from '../../services/user-service';
 import { CreateProject } from '../create-project/create-project';
 import { CreateIssue } from '../create-issue/create-issue';
-import { FormsModule } from "@angular/forms";
+import { FormsModule } from '@angular/forms';
 import { AuditLogService } from '../../services/audit-log-service';
 import { AuditLog } from '../../interfaces/audit-log-data';
 import { IssueService } from '../../services/issue-service';
@@ -27,6 +27,7 @@ export class HubPage extends RevaIssueSubscriber {
   userRole: WritableSignal<string> = signal('');
   auditLogs: WritableSignal<Array<string>> = signal([]);
   isAdmin: WritableSignal<boolean> = signal(false);
+
   constructor(
     private userService: UserService,
     private auditLogService: AuditLogService,
@@ -36,7 +37,14 @@ export class HubPage extends RevaIssueSubscriber {
     super();
     this.subscription = this.userService.getUserSubject().subscribe((userData) => {
       this.username.set(userData.username);
-      this.userRole.set(userData.role);
+      this.userRole.set(userData.role.toLowerCase());
+    });
+
+    effect(() => {
+      const role = this.userRole();
+      if (!role) return;
+
+      this.projectService.viewAllProjects(this.projects, role);
     });
     this.auditLogService.getAllAuditLogs(this.auditLogs);
   }
@@ -49,11 +57,6 @@ export class HubPage extends RevaIssueSubscriber {
   projectsList: Signal<hubListItem[]> = computed(() => {
     return this.mapProject(this.projects());
   });
-
-  getProjects() {
-    this.projectService.viewAllProjects(this.projects, this.userRole());
-    this.projectsList = this.projectsList;
-  }
 
   getIssues() {
     this.issueService.getMostRecentIssues(this.issues);
@@ -74,8 +77,8 @@ export class HubPage extends RevaIssueSubscriber {
   }
 
   ngOnInit() {
-    this.getProjects();
-    this.getIssues();    
+    this.userService.getUserInfo();
+    this.getIssues();
     this.isAdmin.set(this.userRole() === 'ADMIN');
   }
 
