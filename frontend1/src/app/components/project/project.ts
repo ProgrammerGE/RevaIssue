@@ -6,7 +6,6 @@ import { ActivatedRoute } from '@angular/router';
 import { CreateIssue } from "../create-issue/create-issue";
 import { PopUpService } from '../../services/pop-up-service';
 
-
 @Component({
   selector: 'app-project',
   imports: [CreateIssue],
@@ -16,8 +15,8 @@ import { PopUpService } from '../../services/pop-up-service';
 export class Project extends RevaIssueSubscriber {
   project!: ProjectData;
   projectId: number = 0;
-  projectTitle: WritableSignal<string> = signal('Sample title');
-  projectDescription: WritableSignal<string> = signal('Sample description');
+  projectTitle: WritableSignal<string> = signal('');
+  projectDescription: WritableSignal<string> = signal('');
 
   userRole: 'admin' | 'tester' | 'developer' = 'tester';
 
@@ -29,8 +28,6 @@ export class Project extends RevaIssueSubscriber {
       this.projectDescription.set(projectData.projectDescription);
       console.log('SIGNALS', this.projectTitle(), this.projectDescription());
     });
-
-
   }
 
   ngOnInit(): void {

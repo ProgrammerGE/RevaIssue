@@ -3,7 +3,12 @@ import { ListContainer } from '../list-container/list-container';
 import { LoginService } from '../../services/login-service';
 import { Router, RouterLink } from '@angular/router';
 import { hubListItem } from '../../interfaces/hubpage-list-item';
-import { CreateProject } from "../create-project/create-project";
+import { ProjectService } from '../../services/project-service';
+import { RevaIssueSubscriber } from '../../classes/reva-issue-subscriber';
+import { RegistrationService } from '../../services/registration-service';
+import { UserService } from '../../services/user-service';
+import { CreateProject } from '../create-project/create-project';
+import { CreateIssue } from '../create-issue/create-issue';
 
 @Component({
   selector: 'app-hub-page',
@@ -11,25 +16,37 @@ import { CreateProject } from "../create-project/create-project";
   templateUrl: './hub-page.html',
   styleUrl: './hub-page.css',
 })
-export class HubPage {
-  username: string = 'username';
-  userRole: string = 'role';
+export class HubPage extends RevaIssueSubscriber {
+  username: WritableSignal<string> = signal('');
+  userRole: WritableSignal<string> = signal('');
+  constructor(
+    private userService: UserService // private router: Router
+  ) {
+    super();
+    this.subscription = this.userService.getUserSubject().subscribe((userData) => {
+      this.username.set(userData.username);
+      this.userRole.set(userData.role);
+    });
+  }
+
   issuesCount: string = '0';
 
   projectsList: hubListItem[] = [
     { name: 'Project 1', description: 'this is a description for project 1' },
-    { name: 'Project 2', description: 'this is a desription for project 2' },
-    { name: 'Project 3', description: 'this is a description for projet 3' },
+    { name: 'Project 2', description: 'this is a description for project 2' },
+    { name: 'Project 3', description: 'this is a description for project 3' },
   ];
 
   issuesList: hubListItem[] = [
     { name: 'Issue 1', description: 'this is a description for project 1' },
-    { name: 'Issue 2', description: 'this is a desription for issue 2' },
+    { name: 'Issue 2', description: 'this is a description for issue 2' },
     { name: 'Issue 3', description: 'this is a description for issue 3' },
     { name: 'Issue 4', description: 'this is a description for issue 4' },
   ];
 
   userLoggedIn: WritableSignal<boolean> = signal(false);
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  ngOnInit(): void {
+    this.userService.getUserInfo();
+  }
 }
