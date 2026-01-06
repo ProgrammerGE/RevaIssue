@@ -9,12 +9,13 @@ export class AuditLogService {
 
   constructor(private httpClient:HttpClient){}
 
-  getAllAuditLogs(auditLogs: WritableSignal<Array<AuditLog>>){
+  getAllAuditLogs(auditLogs: WritableSignal<Array<String>>){
     this.httpClient.get<AuditLogData>('http://localhost:8080/admin/audits')
     .subscribe( auditLogsList => {
         const newAuditLogs = [];
         for(const auditObj of auditLogsList.auditLogs){
-          newAuditLogs.push(auditObj);
+          let message = `${auditObj.role}: ${auditObj.username} ${auditObj.action} at ${auditObj.timestamp}`;
+          newAuditLogs.push(message);
         }
         auditLogs.set(newAuditLogs);
     });

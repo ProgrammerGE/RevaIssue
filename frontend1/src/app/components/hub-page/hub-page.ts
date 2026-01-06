@@ -1,4 +1,4 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, Signal, signal, WritableSignal } from '@angular/core';
 import { ListContainer } from '../list-container/list-container';
 import { LoginService } from '../../services/login-service';
 import { Router, RouterLink } from '@angular/router';
@@ -9,24 +9,31 @@ import { RegistrationService } from '../../services/registration-service';
 import { UserService } from '../../services/user-service';
 import { CreateProject } from '../create-project/create-project';
 import { CreateIssue } from '../create-issue/create-issue';
+import { FormsModule } from "@angular/forms";
+import { AuditLogService } from '../../services/audit-log-service';
+import { AuditLog } from '../../interfaces/audit-log-data';
 
 @Component({
   selector: 'app-hub-page',
-  imports: [ListContainer, CreateProject],
+  imports: [ListContainer, CreateProject, FormsModule],
   templateUrl: './hub-page.html',
   styleUrl: './hub-page.css',
 })
 export class HubPage extends RevaIssueSubscriber {
   username: WritableSignal<string> = signal('');
   userRole: WritableSignal<string> = signal('');
+  auditLogs: WritableSignal<Array<string>> = signal([]);
+  isAdmin: WritableSignal<boolean> = signal(false);
   constructor(
-    private userService: UserService // private router: Router
+    private userService: UserService,
+    private auditLogService: AuditLogService // private router: Router
   ) {
     super();
     this.subscription = this.userService.getUserSubject().subscribe((userData) => {
       this.username.set(userData.username);
       this.userRole.set(userData.role);
     });
+    this.auditLogService.getAllAuditLogs(this.auditLogs);
   }
 
   issuesCount: string = '0';
@@ -48,5 +55,9 @@ export class HubPage extends RevaIssueSubscriber {
 
   ngOnInit(): void {
     this.userService.getUserInfo();
+    console.log("You hit OnInit");
+    this.isAdmin.set(this.userRole() === 'ADMIN');
   }
+  
+  
 }
