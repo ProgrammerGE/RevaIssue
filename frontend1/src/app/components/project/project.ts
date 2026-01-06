@@ -4,7 +4,6 @@ import { ProjectService } from '../../services/project-service';
 import { ProjectData } from '../../interfaces/project-data';
 import { ActivatedRoute } from '@angular/router';
 
-
 @Component({
   selector: 'app-project',
   imports: [],
@@ -14,8 +13,8 @@ import { ActivatedRoute } from '@angular/router';
 export class Project extends RevaIssueSubscriber {
   project!: ProjectData;
   projectId: number = 0;
-  projectTitle: WritableSignal<string> = signal('Sample title');
-  projectDescription: WritableSignal<string> = signal('Sample description');
+  projectTitle: WritableSignal<string> = signal('');
+  projectDescription: WritableSignal<string> = signal('');
 
   userRole: 'admin' | 'tester' | 'developer' = 'tester';
 
@@ -27,8 +26,6 @@ export class Project extends RevaIssueSubscriber {
       this.projectDescription.set(projectData.projectDescription);
       console.log('SIGNALS', this.projectTitle(), this.projectDescription());
     });
-
-
   }
 
   ngOnInit(): void {

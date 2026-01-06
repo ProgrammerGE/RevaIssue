@@ -1,26 +1,35 @@
 <section class="lists-container">
-    <div class="tool-bar">
-        <div class="">
-            <button [class.isExpanded]="isExpanded()" class="toggleExpandBtn">
-                <img src="assets/icons/expand.svg" (click)="expandList()" />
-            </button>
-            <div class="title-container">
-                <span class="title">{{title()}}</span>
-                <span class="item-count">{{itemCount()}}</span>
-            </div>
-        </div>
-        <button class="addNewBtn" title="Add new" (click)="addPopup()"><img src="assets/icons/plus.svg"/></button>
-    </div>
-    <hr />
+  <div class="tool-bar">
+    <div class="">
+      <button [class.isExpanded]="isExpanded()" class="toggleExpandBtn">
+        <img src="assets/icons/expand.svg" (click)="expandList()" />
+      </button>
 
-    @if(isExpanded()){
-    <div class="list-container">
-        @for (item of items(); track $index) {
-        <div class="list-item">
-            <input type="checkbox" />
-            {{item.name}}
-        </div>
-        }
+      <div class="title-container">
+        <span class="title">{{ title() }}</span>
+        <span class="item-count">{{ itemCount() }}</span>
+      </div>
     </div>
-    }
+
+    <button
+      class="addNewBtn"
+      title="Add new"
+      (click)="addPopup()"
+    >
+      <img src="assets/icons/plus.svg" />
+    </button>
+  </div>
+
+  <hr />
+
+  @if (isExpanded()) {
+    <div class="list-container">
+      @for (item of items(); track $index) {
+        <div class="list-item">
+          <input type="checkbox" />
+          {{ item.name }}
+        </div>
+      }
+    </div>
+  }
 </section>
