@@ -51,6 +51,8 @@ export class CreateProject {
     if (this.projectDesc == '') {
       this.descriptionMissing = true;
     }
+    this.projectTitle = '';
+    this.projectDesc = '';
   }
 
   cancelCreation() {
