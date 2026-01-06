@@ -1,4 +1,9 @@
 .login-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25%;
 }
 
 .login-form {
@@ -12,6 +17,10 @@
 .input-container {
   position: relative;
   width: 100%;
+}
+
+.input-container > input {
+  text-indent: 16px;
 }
 
 .input-container > label {
