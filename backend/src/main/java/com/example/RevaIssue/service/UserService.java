@@ -8,6 +8,8 @@ import com.example.RevaIssue.enums.UserRole;
 import com.example.RevaIssue.repository.ProjectRepository;
 import com.example.RevaIssue.repository.UserRepository;
 import com.example.RevaIssue.repository.User_ProjectsRepository;
+import com.example.RevaIssue.util.UserDTO;
+import com.example.RevaIssue.util.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -31,11 +33,13 @@ public class UserService {
     @Autowired
     private AuditLogService auditLogService;
     private final ProjectRepository projectRepository;
+    private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository, User_ProjectsRepository userProjectsRepository, ProjectRepository projectRepository) {
+    public UserService(UserRepository userRepository, User_ProjectsRepository userProjectsRepository, ProjectRepository projectRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.userProjectsRepository = userProjectsRepository;
         this.projectRepository = projectRepository;
+        this.userMapper = userMapper;
     }
 
     public User createUser(User user) {
@@ -62,8 +66,15 @@ public class UserService {
         return userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    //
+    public List<UserDTO> getAllUsers() {
+//        List<User> users = userRepository.findAll();
+//        List<UserDTO> userDTOs = new ArrayList<>();
+//        return userDTOs;
+        return userRepository.findAll() // List<User>
+                .stream()   // Stream<User>
+                .map(userMapper::toDTO) // Stream<UserDTO>
+                .toList();
     }
 
     // returns a list of all projects a given user id is associated with

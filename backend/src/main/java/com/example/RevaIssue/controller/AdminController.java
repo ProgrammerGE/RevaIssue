@@ -12,6 +12,7 @@ import com.example.RevaIssue.service.IssueService;
 import com.example.RevaIssue.service.ProjectService;
 import com.example.RevaIssue.service.UserService;
 import com.example.RevaIssue.util.JwtUtility;
+import com.example.RevaIssue.util.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.spel.ast.Assign;
 import org.springframework.web.bind.annotation.*;
@@ -69,7 +70,7 @@ public class AdminController {
 
     // Get all users
     @GetMapping("/users")
-    public List<User> getUsers(){ return userService.getAllUsers(); }
+    public List<UserDTO> getUsers(){ return userService.getAllUsers(); }
 
     // Assign User to Project by creating a User_Projects entity
 
