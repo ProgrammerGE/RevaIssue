@@ -39,7 +39,7 @@ export class CreateProject {
     if (this.projectTitle != '' && this.projectDesc != '') {
       this.projectService.createProject({
         projectName: this.projectTitle,
-        projectDescription: this.projectDesc,
+        projectDescription: this.projectDesc
       });
       this.isPoppedUp.set(false);
     }
