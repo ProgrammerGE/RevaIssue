@@ -16,7 +16,7 @@ public class AuditLog {
      * CREATION, UPDATING, and DELETING actions in any entity
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "audit_id", nullable = false)
     private UUID logID;
     @Column(name = "timestamp")
@@ -29,7 +29,6 @@ public class AuditLog {
     private String role; // What was there role
 
     public AuditLog(String action, String userName, String role){
-        this.logID = UUID.randomUUID();
         this.timeLogged = LocalDateTime.now();
         this.action = action;
         this.username = userName;

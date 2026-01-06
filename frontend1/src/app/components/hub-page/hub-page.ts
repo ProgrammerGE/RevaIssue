@@ -9,21 +9,21 @@ import { ProjectService } from '../../services/project-service';
 import { RevaIssueSubscriber } from '../../classes/reva-issue-subscriber';
 import { RegistrationService } from '../../services/registration-service';
 import { UserService } from '../../services/user-service';
+import { CreateProject } from '../create-project/create-project';
+import { CreateIssue } from '../create-issue/create-issue';
 
 @Component({
   selector: 'app-hub-page',
-  imports: [
-    // RouterLink,
-    ListContainer,
-  ],
+  imports: [RouterLink, ListContainer, CreateProject, CreateIssue],
   templateUrl: './hub-page.html',
   styleUrl: './hub-page.css',
 })
 export class HubPage extends RevaIssueSubscriber {
   username: WritableSignal<string> = signal('');
   userRole: WritableSignal<string> = signal('');
-  constructor(private userService: UserService) // private router: Router
-  {
+  constructor(
+    private userService: UserService // private router: Router
+  ) {
     super();
     this.subscription = this.userService.getUserSubject().subscribe((userData) => {
       this.username.set(userData.username);

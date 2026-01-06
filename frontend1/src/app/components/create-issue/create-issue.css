@@ -3,29 +3,37 @@
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(5, 1fr);
   gap: 8px;
+  position: absolute;
+  left: 30%;
+  top: 50%;
+  background-color: #0e287e;
+  width: 50%;
+  text-align: center;
+  padding-top: 20%;
+  overflow: auto;
 }
 
-.div1 {
+.issue_title {
   grid-column: span 3 / span 3;
 }
 
-.div2 {
+.issue_desc {
   grid-column: span 2 / span 2;
   grid-row: span 2 / span 2;
   grid-row-start: 2;
 }
 
-.div3 {
+.issue_severity {
   grid-column-start: 3;
   grid-row-start: 2;
 }
 
-.div4 {
+.issue_priority {
   grid-column-start: 3;
   grid-row-start: 3;
 }
 
-.div5 {
+.issue_buttons {
   grid-column: span 3 / span 3;
   grid-row-start: 4;
 }

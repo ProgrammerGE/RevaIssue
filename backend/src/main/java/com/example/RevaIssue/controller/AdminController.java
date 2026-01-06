@@ -64,6 +64,10 @@ public class AdminController {
     ){
         String role = authService.getRoleFromHeader(authHeader);
         String username = authService.getUsernameFromHeader(authHeader);
+
+        if(!role.equalsIgnoreCase("admin")){
+            return null;
+        }
         AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("CREATED " + project.getProjectName() + " PROJECT", username, role));
         return projectService.createProject(project);
     }

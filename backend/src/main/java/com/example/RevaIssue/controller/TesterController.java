@@ -42,6 +42,9 @@ public class TesterController {
         String role = authService.getRoleFromHeader(authHeader);
         String username = authService.getUsernameFromHeader(authHeader);
         String issueName = issueService.getIssue(issueId).getName();
+        if(!role.equalsIgnoreCase("tester")){
+            return null;
+        }
         AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("CLOSED ISSUE " + issueName, username, role));
         return issueService.updateIssueStatus(issueId, "CLOSED", role);
     }
@@ -51,6 +54,9 @@ public class TesterController {
         String role = authService.getRoleFromHeader(authHeader);
         String username = authService.getUsernameFromHeader(authHeader);
         String issueName = issueService.getIssue(issueId).getName();
+        if(!role.equalsIgnoreCase("tester")){
+            return null;
+        }
         AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("OPENED ISSUE " + issueName, username, role));
         return issueService.updateIssueStatus(issueId, "OPEN", role);
     }
