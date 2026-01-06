@@ -1,33 +1,37 @@
 .parent {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(5, 1fr);
-    gap: 8px;
-    position: absolute;
-    left: 30%;
-    top: 50%;
-    background-color: #0e287e;
-    width: 50%;
-    text-align: center;
-    padding-top: 20%;
-    overflow: auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 8px;
+  position: absolute;
+  left: 25%;
+  top: 50%;
+  background-color: #f8f8f8;
+  width: 50%;
+  text-align: center;
+  /* padding-top: 20%; */
+  /* overflow: auto; */
+  border-radius: 40px;
 }
-    
+
 .proj_name {
-    grid-column: span 2 / span 2;
-    grid-column-start: 2;
-    grid-row-start: 2;
+  grid-column: span 2 / span 2;
+  grid-column-start: 2;
+  grid-row-start: 2;
 }
 
 .proj_description {
-    grid-column: span 2 / span 2;
-    grid-row: span 2 / span 2;
-    grid-column-start: 2;
-    grid-row-start: 3;
+  grid-column: span 2 / span 2;
+  grid-row: span 2 / span 2;
+  grid-column-start: 2;
+  grid-row-start: 3;
 }
 
-
-button{
-    margin-top: 10px;
+button {
+  margin-top: 10px;
 }
-        
+
+#descriptionBox {
+  height: 60px;
+  width: 300px;
+}

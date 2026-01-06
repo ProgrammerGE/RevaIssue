@@ -2,6 +2,7 @@ import { Injectable, WritableSignal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ProjectData } from '../interfaces/project-data';
 import { HttpClient } from '@angular/common/http';
+import { JwtTokenStorage } from './jwt-token-storage';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ export class ProjectService {
 
   private baseUrl = 'http://localhost:8080';
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient, private tokenStorage: JwtTokenStorage) {}
 
   getProjectSubject() {
     return this.projectSubject;
@@ -61,11 +62,16 @@ export class ProjectService {
   }
 
   createProject(project: Partial<ProjectData>): void {
-    this.httpClient.post<ProjectData>(`${this.baseUrl}/admin/projects/new`, project).subscribe({
-      next: (create) => {
-        if (!create) this.projectSubject.next(create);
-      },
-      error: (err) => console.error('Error creating new project', err),
-    });
+    const headers = {
+      Authorization: `Bearer ${this.tokenStorage.getToken()}`,
+    };
+    this.httpClient
+      .post<ProjectData>(`${this.baseUrl}/admin/projects/new`, project, { headers })
+      .subscribe({
+        next: (create) => {
+          if (!create) this.projectSubject.next(create);
+        },
+        error: (err) => console.error('Error creating new project', err),
+      });
   }
 }
