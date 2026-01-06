@@ -35,8 +35,8 @@ export class CreateProject {
     
     if(this.projectTitle != "" &&  this.projectDesc != ""){
       this.projectService.createProject({
-        project_name: this.projectTitle,
-        project_description: this.projectDesc
+        projectName: this.projectTitle,
+        projectDescription: this.projectDesc
       });    
       this.isPoppedUp.set(false);
     }

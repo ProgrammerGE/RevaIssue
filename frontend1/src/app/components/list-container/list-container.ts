@@ -22,10 +22,7 @@ export class ListContainer {
   }
 
   addPopup(){
-    if(this.title() === "Projects")
       this.popUpService.openPopUpProject();
-    else if(this.title()  === "Issues")
-      this.popUpService.openPopUpIssue();
   }
 }
 
