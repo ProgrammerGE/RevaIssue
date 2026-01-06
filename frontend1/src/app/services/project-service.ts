@@ -2,6 +2,7 @@ import { Injectable, WritableSignal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ProjectData } from '../interfaces/project-data';
 import { HttpClient } from '@angular/common/http';
+import { JwtTokenStorage } from './jwt-token-storage';
 
 @Injectable({
   providedIn: 'root',
@@ -15,26 +16,26 @@ export class ProjectService {
 
   private baseUrl = 'http://localhost:8080';
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient, private tokenStorage: JwtTokenStorage) {}
 
   getProjectSubject() {
     return this.projectSubject;
   }
 
-  // viewAllProjects(
-  //   projects: WritableSignal<Array<String>>,
-  //   role: 'admin' | 'developer' | 'tester'
-  // ): void {
-  //   this.httpClient
-  //     .get<ProjectData[]>(`${this.baseUrl}/${role}/projects`)
-  //     .subscribe((projectList) => {
-  //       const newProjectList = [];
-  //       for (const projectObj of projectList) {
-  //         newProjectList.push(projectObj.project_name);
-  //       }
-  //       projects.set(newProjectList);
-  //     });
-  // }
+  viewAllProjects(
+    projects: WritableSignal<Array<String>>,
+    role: 'admin' | 'developer' | 'tester'
+  ): void {
+    this.httpClient
+      .get<ProjectData[]>(`${this.baseUrl}/${role}/projects`)
+      .subscribe((projectList) => {
+        const newProjectList = [];
+        for (const projectObj of projectList) {
+          newProjectList.push(projectObj.projectName);
+        }
+        projects.set(newProjectList);
+      });
+  }
 
   // viewAllProjects(projects: WritableSignal<ProjectData[]>): void {
   //   this.httpClient
@@ -61,11 +62,16 @@ export class ProjectService {
   }
 
   createProject(project: Partial<ProjectData>): void {
-    this.httpClient.post<ProjectData>(`${this.baseUrl}/admin/projects/new`, project).subscribe({
-      next: (create) => {
-        if (!create) this.projectSubject.next(create);
-      },
-      error: (err) => console.error('Error creating new project', err),
-    });
+    const headers = {
+      Authorization: `Bearer ${this.tokenStorage.getToken()}`,
+    };
+    this.httpClient
+      .post<ProjectData>(`${this.baseUrl}/admin/projects/new`, project, { headers })
+      .subscribe({
+        next: (create) => {
+          if (!create) this.projectSubject.next(create);
+        },
+        error: (err) => console.error('Error creating new project', err),
+      });
   }
 }
