@@ -4,28 +4,32 @@
       <button [class.isExpanded]="isExpanded()" class="toggleExpandBtn">
         <img src="assets/icons/expand.svg" (click)="expandList()" />
       </button>
+
       <div class="title-container">
         <span class="title">{{ title() }}</span>
         <span class="item-count">{{ itemCount() }}</span>
       </div>
     </div>
-    <button class="addNewBtn" title="Add new" (click)="addPopup()">
+
+    <button
+      class="addNewBtn"
+      title="Add new"
+      (click)="addPopup()"
+    >
       <img src="assets/icons/plus.svg" />
     </button>
-    <button class="add-button" (click)="addPopup()" title="add new item">
-      <img src="assets/icons/plus.svg" alt="add new item" />
-    </button>
   </div>
+
   <hr />
 
-  @if(isExpanded()){
-  <div class="list-container">
-    @for (item of items(); track $index) {
-    <div class="list-item">
-      <input type="checkbox" />
-      {{ item.name }}
+  @if (isExpanded()) {
+    <div class="list-container">
+      @for (item of items(); track $index) {
+        <div class="list-item">
+          <input type="checkbox" />
+          {{ item.name }}
+        </div>
+      }
     </div>
-    }
-  </div>
   }
 </section>
