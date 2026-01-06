@@ -15,10 +15,11 @@ import { AuditLog } from '../../interfaces/audit-log-data';
 import { IssueService } from '../../services/issue-service';
 import { ProjectData } from '../../interfaces/project-data';
 import { IssueData } from '../../interfaces/issue-data';
+import { NavBar } from "../nav-bar/nav-bar";
 
 @Component({
   selector: 'app-hub-page',
-  imports: [ListContainer, CreateProject, FormsModule],
+  imports: [ListContainer, CreateProject, FormsModule, NavBar],
   templateUrl: './hub-page.html',
   styleUrl: './hub-page.css',
 })
@@ -77,6 +78,7 @@ export class HubPage extends RevaIssueSubscriber {
   ngOnInit() {
     this.getProjects();
     this.getIssues();    
+    this.userService.getUserInfo();
     this.isAdmin.set(this.userRole() === 'ADMIN');
   }
 
