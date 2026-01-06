@@ -68,12 +68,9 @@ public class UserService {
 
     //
     public List<UserDTO> getAllUsers() {
-//        List<User> users = userRepository.findAll();
-//        List<UserDTO> userDTOs = new ArrayList<>();
-//        return userDTOs;
-        return userRepository.findAll() // List<User>
-                .stream()   // Stream<User>
-                .map(userMapper::toDTO) // Stream<UserDTO>
+        return userRepository.findAll()  //  List<User>
+                .stream()                //  Stream<User>
+                .map(userMapper::toDTO)  //  Stream<UserDTO>
                 .toList();
     }
 
