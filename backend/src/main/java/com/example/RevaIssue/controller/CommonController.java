@@ -73,6 +73,6 @@ public class CommonController {
 
     @GetMapping("/issues/latest")
     public List<Issue> getMostRecentIssues() {
-        return issueService.getMostRecent();
+        return issueService.getMostRecentIssues();
     }
 }
