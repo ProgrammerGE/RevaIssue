@@ -1,19 +1,15 @@
-<div class="hubPage">
+<div class="hub-page">
     <div class="popup">        
         <app-create-project></app-create-project>
         <app-create-issue></app-create-issue>
     </div>
-    <div class="topBar">
-        <h2 class="welcomeMessage">Welcome, {{username}}</h2>
+    <header class="hub-header">
+        <h2 class="welcome-message">Welcome, {{username}}</h2>
         <input type="search" />
-    </div>
+    </header>
     <span>{{userRole}}</span>
-    <div class="renameWrapper">
-        <div class="projectsContainer">
-            <app-list-container title="Projects" [items]="projectsList"></app-list-container>
-        </div>
-        <div class="issuesContainer">
-            <app-list-container title="Issues" [items]="issuesList"></app-list-container>
-        </div>
-    </div>
+    <section class="lists">
+        <app-list-container title="Projects" [items]="projectsList"></app-list-container>
+        <app-list-container title="Issues" [items]="issuesList"></app-list-container>
+    </section>
 </div>

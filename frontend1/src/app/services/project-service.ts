@@ -8,9 +8,9 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ProjectService {
   private projectSubject = new BehaviorSubject<ProjectData>({
-    project_id: 0,
-    project_name: '',
-    project_description: '',
+    projectId: 0,
+    projectName: '',
+    projectDescription: '',
   });
 
   private baseUrl = 'http://localhost:8080';
@@ -21,19 +21,30 @@ export class ProjectService {
     return this.projectSubject;
   }
 
-  viewAllProjects(projects: WritableSignal<Array<ProjectData>>, role: 'admin' | 'developer' | 'tester') : void{
-    this.httpClient.get<ProjectData[]>(`${this.baseUrl}/${role}/projects`)
-    .subscribe( projectList => {
-      const newProjectList = [];
-      for(const projectObj of projectList){
-        newProjectList.push(projectObj);
-      }
-      projects.set(newProjectList);
-    });
+  // viewAllProjects(
+  //   projects: WritableSignal<Array<ProjectData>>,
+  //   role: 'admin' | 'developer' | 'tester'
+  // ): void {
+  //   this.httpClient
+  //     .get<ProjectData[]>(`${this.baseUrl}/${role}/projects`)
+  //     .subscribe((projectList) => {
+  //       const newProjectList = [];
+  //       for (const projectObj of projectList) {
+  //         newProjectList.push(projectObj);
+  //       }
+  //       projects.set(newProjectList);
+  //     });
+  // }
+  viewAllProjects(projects: WritableSignal<ProjectData[]>): void {
+    this.httpClient
+      .get<ProjectData[]>(`${this.baseUrl}/common/projects`)
+      .subscribe((projectList) => {
+        projects.set(projectList);
+      });
   }
 
   viewProject(projectId: number, role: 'admin' | 'developer' | 'tester'): void {
-    this.httpClient.get<ProjectData>(`${this.baseUrl}/${role}/projects/${projectId}`).subscribe({
+    this.httpClient.get<ProjectData>(`${this.baseUrl}/common/projects/${projectId}`).subscribe({
       next: (project) => this.projectSubject.next(project),
       error: (err) => console.error('Error loading project', err),
     });
