@@ -1,27 +1,31 @@
 <section class="lists-container">
-    <div class="tool-bar">
-        <div class="">
-            <button [class.isExpanded]="isExpanded()" class="toggleExpandBtn">
-                <img src="assets/icons/expand.svg" (click)="expandList()" />
-            </button>
-            <div class="title-container">
-                <span class="title">{{title()}}</span>
-                <span class="item-count">{{itemCount()}}</span>
-            </div>
-        </div>
-        <button class="addNewBtn" title="Add new" (click)="addPopup()"><img src="assets/icons/plus.svg"/></button>
-        <button class="add-button" (click)="addProjectPopup() title="add new item"><img src="assets/icons/plus.svg" alt="add new item" /></button>
+  <div class="tool-bar">
+    <div class="">
+      <button [class.isExpanded]="isExpanded()" class="toggleExpandBtn">
+        <img src="assets/icons/expand.svg" (click)="expandList()" />
+      </button>
+      <div class="title-container">
+        <span class="title">{{ title() }}</span>
+        <span class="item-count">{{ itemCount() }}</span>
+      </div>
     </div>
-    <hr />
+    <button class="addNewBtn" title="Add new" (click)="addPopup()">
+      <img src="assets/icons/plus.svg" />
+    </button>
+    <button class="add-button" (click)="addPopup()" title="add new item">
+      <img src="assets/icons/plus.svg" alt="add new item" />
+    </button>
+  </div>
+  <hr />
 
-    @if(isExpanded()){
-    <div class="list-container">
-        @for (item of items(); track $index) {
-        <div class="list-item">
-            <input type="checkbox" />
-            {{item.name}}
-        </div>
-        }
+  @if(isExpanded()){
+  <div class="list-container">
+    @for (item of items(); track $index) {
+    <div class="list-item">
+      <input type="checkbox" />
+      {{ item.name }}
     </div>
     }
+  </div>
+  }
 </section>
