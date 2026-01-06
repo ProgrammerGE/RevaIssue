@@ -41,7 +41,6 @@ export class HubPage extends RevaIssueSubscriber {
     this.auditLogService.getAllAuditLogs(this.auditLogs);
   }
 
-  issuesCount: string = '0';
   issues: WritableSignal<IssueData[]> = signal([]);
   issuesList: Signal<hubListItem[]> = computed(() => {
     return this.mapIssues(this.issues());
