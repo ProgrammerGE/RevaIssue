@@ -12,8 +12,8 @@ import { ProjectData } from '../../interfaces/project-data';
 export class Project extends RevaIssueSubscriber {
   project!: ProjectData;
   projectId: number = 0;
-  projectTitle: WritableSignal<string> = signal('Sample title');
-  projectDescription: WritableSignal<string> = signal('Sample description');
+  projectTitle: WritableSignal<string> = signal('');
+  projectDescription: WritableSignal<string> = signal('');
   userRole: 'admin' | 'tester' | 'developer' = 'tester';
 
   constructor(private projectService: ProjectService) {

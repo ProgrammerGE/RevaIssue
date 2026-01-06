@@ -3,6 +3,7 @@ package com.example.RevaIssue.controller;
 import com.example.RevaIssue.dto.JwtTransport;
 import com.example.RevaIssue.dto.LoginRequest;
 import com.example.RevaIssue.dto.RegisterRequest;
+import com.example.RevaIssue.dto.UserInfo;
 import com.example.RevaIssue.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,4 +41,12 @@ public class AuthController {
             return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
+    @GetMapping("/userInfo")
+    public ResponseEntity<UserInfo> getUser(@RequestHeader("Authorization") String authorization){
+        String username = authService.getUsernameFromHeader(authorization);
+        String role = authService.getRoleFromHeader(authorization);
+
+        return ResponseEntity.ok(new UserInfo(username, role));
+    }
+
 }
