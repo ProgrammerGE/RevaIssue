@@ -5,10 +5,12 @@ import { ProjectData } from '../../interfaces/project-data';
 import { ActivatedRoute } from '@angular/router';
 import { CreateIssue } from "../create-issue/create-issue";
 import { PopUpService } from '../../services/pop-up-service';
+import { SignoutButton } from "../signout-button/signout-button";
+import { NavBar } from "../nav-bar/nav-bar";
 
 @Component({
   selector: 'app-project',
-  imports: [CreateIssue],
+  imports: [CreateIssue, NavBar],
   templateUrl: './project.html',
   styleUrl: './project.css',
 })
