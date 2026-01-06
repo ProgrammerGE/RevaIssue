@@ -62,7 +62,12 @@ public class UserService {
         return userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
     // returns a list of all projects a given user id is associated with
+    // TODO: consider moving to project service since this is returning projects
     public List<Project> getProjectsById(UUID id) {
         // get the user object
         User user = getUserById(id);

@@ -2,6 +2,7 @@ package com.example.RevaIssue.controller;
 
 import com.example.RevaIssue.entity.AuditLog;
 import com.example.RevaIssue.entity.Project;
+import com.example.RevaIssue.entity.User;
 import com.example.RevaIssue.entity.User_Projects;
 import com.example.RevaIssue.repository.IssueRepository;
 import com.example.RevaIssue.repository.ProjectRepository;
@@ -65,6 +66,12 @@ public class AdminController {
     public List<AuditLog> getAuditLogs(){
         return auditLogService.getAllAuditLogs();
     }
+
+    // Get all users
+    @GetMapping("/users")
+    public List<User> getUsers(){ return userService.getAllUsers(); }
+
+    // Assign User to Project by creating a User_Projects entity
 
     @PostMapping("/projects/new")
     public Project createProject(
