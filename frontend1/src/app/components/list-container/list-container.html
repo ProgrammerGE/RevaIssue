@@ -13,16 +13,26 @@
             <button class="addNewBtn" title="Add new" (click)="addPopup()"><img src="assets/icons/plus.svg"/></button>
         }
     </div>
-    <hr />
 
-    @if(isExpanded()){
+    <button
+      class="addNewBtn"
+      title="Add new"
+      (click)="addPopup()"
+    >
+      <img src="assets/icons/plus.svg" />
+    </button>
+  </div>
+
+  <hr />
+
+  @if (isExpanded()) {
     <div class="list-container">
-        @for (item of items(); track $index) {
+      @for (item of items(); track $index) {
         <div class="list-item">
-            <input type="checkbox" />
-            {{item.name}}
+          <input type="checkbox" />
+          {{ item.name }}
         </div>
-        }
+      }
     </div>
-    }
+  }
 </section>

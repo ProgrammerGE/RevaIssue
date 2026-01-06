@@ -10,23 +10,22 @@ import { PopUpService } from '../../services/pop-up-service';
   styleUrl: './list-container.css',
 })
 export class ListContainer {
+  [x: string]: any;
   title = input<string>('Title');
   isExpanded = signal(true);
-  items: InputSignal<hubListItem[]> = input([{ name: 'placeholder title', description: 'placeholder description' }]);
+  items: InputSignal<hubListItem[]> = input([
+    { name: 'placeholder title', description: 'placeholder description' },
+  ]);
   itemCount = computed(() => this.items().length);
   hasButton : InputSignal<boolean> = input(true);
 
-  constructor(private popUpService: PopUpService){}
+  constructor(private popUpService: PopUpService) {}
 
   expandList() {
     this.isExpanded.update((v) => !v);
   }
 
   addPopup(){
-    if(this.title() === "Projects")
       this.popUpService.openPopUpProject();
-    else if(this.title()  === "Issues")
-      this.popUpService.openPopUpIssue();
   }
 }
-
