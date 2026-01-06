@@ -32,12 +32,12 @@ export class CreateProject {
   createProject(){ //Following the same format as on the project.ts file
     this.titleMissing = false;
     this.descriptionMissing = false;
-    
+
     if(this.projectTitle != "" &&  this.projectDesc != ""){
       this.projectService.createProject({
-        project_name: this.projectTitle,
-        project_description: this.projectDesc
-      });    
+        projectName: this.projectTitle,
+        projectDescription: this.projectDesc
+      });
       this.isPoppedUp.set(false);
     }
 
