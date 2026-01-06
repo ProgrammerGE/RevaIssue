@@ -24,8 +24,7 @@ export class ListContainer {
     this.isExpanded.update((v) => !v);
   }
 
-  addPopup() {
-    if (this.title() === 'Projects') this.popUpService.openPopUpProject();
-    else if (this.title() === 'Issues') this.popUpService.openPopUpIssue();
+  addPopup(){
+      this.popUpService.openPopUpProject();
   }
 }
