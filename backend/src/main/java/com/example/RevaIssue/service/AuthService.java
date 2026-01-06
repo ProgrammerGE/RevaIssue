@@ -51,4 +51,14 @@ public class AuthService {
             return false;
         }
     }
+
+    public String getRoleFromHeader(String authHeader){
+        String token = authHeader.split(" ")[1];
+        return this.jwtUtility.extractRole(token);
+    }
+
+    public String getUsernameFromHeader(String authHeader){
+        String token = authHeader.split(" ")[1];
+        return this.jwtUtility.extractUsername(token);
+    }
 }

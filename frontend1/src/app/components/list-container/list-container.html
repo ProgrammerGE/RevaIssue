@@ -9,18 +9,20 @@
                 <span class="item-count">{{itemCount()}}</span>
             </div>
         </div>
-        <button class="addNewBtn" title="Add new" (click)="addPopup()"><img src="assets/icons/plus.svg"/></button>
-    </div>
-    <hr />
-
-    @if(isExpanded()){
-    <div class="list-container">
-        @for (item of items(); track $index) {
-        <div class="list-item">
-            <input type="checkbox" />
-            {{item.name}}
-        </div>
+        @if(hasButton()){
+            <button class="addNewBtn" title="Add new" (click)="addPopup()"><img src="assets/icons/plus.svg"/></button>
         }
     </div>
-    }
+  <hr />
+
+  @if (isExpanded()) {
+    <div class="list-container">
+      @for (item of items(); track $index) {
+        <div class="list-item">
+          <input type="checkbox" />
+          {{ item.name }}
+        </div>
+      }
+    </div>
+  }
 </section>

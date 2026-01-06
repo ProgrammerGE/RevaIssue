@@ -7,10 +7,7 @@ import com.example.RevaIssue.entity.User_Projects;
 import com.example.RevaIssue.repository.IssueRepository;
 import com.example.RevaIssue.repository.ProjectRepository;
 import com.example.RevaIssue.repository.UserRepository;
-import com.example.RevaIssue.service.AuditLogService;
-import com.example.RevaIssue.service.IssueService;
-import com.example.RevaIssue.service.ProjectService;
-import com.example.RevaIssue.service.UserService;
+import com.example.RevaIssue.service.*;
 import com.example.RevaIssue.util.JwtUtility;
 import com.example.RevaIssue.util.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,16 +39,10 @@ public class AdminController {
     private ProjectService projectService;
     @Autowired
     private AuditLogService auditLogService;
+    @Autowired
+    private AuthService authService;
 
-    private String getRoleFromHeader(String authHeader){
-        String token = authHeader.split(" ")[1];
-        return jwtUtility.extractRole(token);
-    }
 
-    private String getUsernameFromHeader(String authHeader){
-        String token = authHeader.split(" ")[1];
-        return jwtUtility.extractUsername(token);
-    }
 
     @GetMapping("/projects")
     public List<Project> getProjects(){
@@ -79,8 +70,9 @@ public class AdminController {
             @RequestBody Project project,
             @RequestHeader (name = "Authorization") String authHeader
     ){
-        String role = getRoleFromHeader(authHeader);
-        String username = getUsernameFromHeader(authHeader);
+        String role = authService.getRoleFromHeader(authHeader);
+        String username = authService.getUsernameFromHeader(authHeader);
+
         if(!role.equalsIgnoreCase("admin")){
             return null;
         }

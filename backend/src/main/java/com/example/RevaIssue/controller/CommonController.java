@@ -70,4 +70,9 @@ public class CommonController {
     // TODO: Implement. Make it so that it only adds relevant users to the list 
     @GetMapping("/users")
     public List<User> getUsers(){ return null; }
+
+    @GetMapping("/issues/latest")
+    public List<Issue> getMostRecentIssues() {
+        return issueService.getMostRecentIssues();
+    }
 }
