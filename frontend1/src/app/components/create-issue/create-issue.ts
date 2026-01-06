@@ -46,8 +46,8 @@ export class CreateIssue {
       && this.priorityInput != ""){
       
       this.issueService.createIssue(this.projectID(), {
-        issue_title: this.issueTitle,
-        issue_description: this.issueDesc,
+        name: this.issueTitle,
+        description: this.issueDesc,
         severity: Number(this.severityInput),
         priority: Number(this.priorityInput)
       });
