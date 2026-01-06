@@ -1,3 +1,6 @@
+.login-page {
+}
+
 .login-form {
   display: flex;
   flex-direction: column;
@@ -15,13 +18,18 @@
   position: absolute;
   background-color: white;
   color: gray;
-  top: -8px;
+  top: 50%;
+  transform: translateY(-50%);
   left: 12px;
   padding: 0 4px;
+  transition: all 0.2s;
 }
 
-.input-container:focus-within > label {
+.input-container:focus-within > label,
+.input-container > input:not(:placeholder-shown) + label {
   color: black;
+  top: 0;
+  transform: translateY(-50%);
 }
 
 .input-container > input {
@@ -33,12 +41,16 @@
 
 #login-submit-btn {
   border: none;
-  background-color: #f35b04;
+  background-color: var(--spicy-paprika);
   color: white;
   width: 100%;
   padding: 1rem 0 1rem 0;
   border-radius: 4px;
   font-weight: 500;
+}
+
+#login-submit-btn {
+
 }
 
 #login-submit-btn:disabled {

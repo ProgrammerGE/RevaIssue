@@ -29,7 +29,7 @@ export class RegistrationService {
       next:responseData => {
         if(responseData.body){
           this.jwtTokenStorage.setToken(responseData.body.token);
-          this.router.navigate(['/hubpage']);
+          this.router.navigate(['/login']);
         }
       },
       error: errMsg => {

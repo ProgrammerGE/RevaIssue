@@ -1,24 +1,27 @@
 <!-- This component will be a popup window that will show up in the
      Tester's view (viewing a project). It is the dialogue window for creating a new issue. -->
-<div class="parent">
-  <div class="div1">
-    <!-- Just the title of the popup that appears when making a new issue -->
-    Element Title
+@if(isPoppedUp()){
+  <div class="parent">
+    <div class="issue_title">
+      <!-- Just the title of the popup that appears when making a new issue -->      
+        <input type="text" placeholder="Issue Title" [(ngModel)]="issueTitle"> 
+    </div>
+    <div class="issue_desc">
+      <!-- Holds the description of the issue -->
+      <input type="text" placeholder="Issue Description" class="description" [(ngModel)]="issueDesc">
+    </div>
+    <div class="issue_severity">
+      <!-- Could be a dropdown, buttons, etc to set the severity -->
+      Severity Controls
+    </div>
+    <div class="issue_priority">
+      <!-- Could be a dropdown, buttons, etc to set the priority -->
+      Priority Controls
+    </div>
+    <div class="issue_buttons">
+      <!-- This will hold (2) buttons, Confirm and Cancel -->
+      <button (click)="createIssue()">{{ buttonText }}</button>
+      <button (click)="cancelCreation()">{{ buttonCancel }}</button>
+    </div>
   </div>
-  <div class="div2">
-    <!-- Holds the description of the issue -->
-    Description Box
-  </div>
-  <div class="div3">
-    <!-- Could be a dropdown, buttons, etc to set the severity -->
-    Severity Controls
-  </div>
-  <div class="div4">
-    <!-- Could be a dropdown, buttons, etc to set the priority -->
-    Priority Controls
-  </div>
-  <div class="div5">
-    <!-- This will hold (2) buttons, Confirm and Cancel -->
-    Buttons
-  </div>
-</div>
+}
