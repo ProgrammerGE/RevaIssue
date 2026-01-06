@@ -8,9 +8,9 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ProjectService {
   private projectSubject = new BehaviorSubject<ProjectData>({
-    project_id: 0,
-    project_name: '',
-    project_description: '',
+    projectID: 0,
+    projectName: '',
+    projectDescription: '',
   });
 
   private baseUrl = 'http://localhost:8080';
@@ -35,15 +35,15 @@ export class ProjectService {
   //       projects.set(newProjectList);
   //     });
   // }
-  viewAllProjects(projects: WritableSignal<ProjectData[]>): void {
-    this.httpClient
-      .get<ProjectData[]>(`${this.baseUrl}/common/projects`)
-      .subscribe((projectList) => {
-        projects.set(projectList);
-      });
-  }
+  // viewAllProjects(projects: WritableSignal<ProjectData[]>): void {
+  //   this.httpClient
+  //     .get<ProjectData[]>(`${this.baseUrl}/common/projects`)
+  //     .subscribe((projectList) => {
+  //       projects.set(projectList);
+  //     });
+  // }
 
-  viewProject(projectId: number, role: 'admin' | 'developer' | 'tester'): void {
+  viewProject(projectId: number): void {
     this.httpClient.get<ProjectData>(`${this.baseUrl}/common/projects/${projectId}`).subscribe({
       next: (project) => this.projectSubject.next(project),
       error: (err) => console.error('Error loading project', err),
