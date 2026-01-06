@@ -85,4 +85,16 @@ export class IssueService {
       });
   }
 
+    getMostRecentIssues(issues: WritableSignal<Array<IssueData>>): void {
+    this.httpClient
+      .get<IssueData[]>(`${this.baseUrl}/common/issues/latest`)
+      .subscribe((issueList) => {
+        const newIssueList = [];
+        for (const issueObj of issueList) {
+          newIssueList.push(issueObj);
+        }
+        issues.set(newIssueList);
+      });
+  }
+
 }
