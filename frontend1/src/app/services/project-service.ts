@@ -21,16 +21,17 @@ export class ProjectService {
     return this.projectSubject;
   }
 
+  // TODO: user role should only be of type admin | developer | tester
   viewAllProjects(
-    projects: WritableSignal<Array<String>>,
-    role: 'admin' | 'developer' | 'tester'
+    projects: WritableSignal<Array<ProjectData>>,
+    role: string
   ): void {
     this.httpClient
       .get<ProjectData[]>(`${this.baseUrl}/${role}/projects`)
       .subscribe((projectList) => {
         const newProjectList = [];
         for (const projectObj of projectList) {
-          newProjectList.push(projectObj.projectName);
+          newProjectList.push(projectObj);
         }
         projects.set(newProjectList);
       });
