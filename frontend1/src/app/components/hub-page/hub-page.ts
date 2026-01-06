@@ -1,4 +1,4 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, computed, OnInit, Signal, signal, WritableSignal } from '@angular/core';
 import { ListContainer } from '../list-container/list-container';
 import { LoginService } from '../../services/login-service';
 import { Router, RouterLink } from '@angular/router';
@@ -9,6 +9,9 @@ import { RegistrationService } from '../../services/registration-service';
 import { UserService } from '../../services/user-service';
 import { CreateProject } from '../create-project/create-project';
 import { CreateIssue } from '../create-issue/create-issue';
+import { IssueService } from '../../services/issue-service';
+import { ProjectData } from '../../interfaces/project-data';
+import { IssueData } from '../../interfaces/issue-data';
 
 @Component({
   selector: 'app-hub-page',
@@ -19,8 +22,11 @@ import { CreateIssue } from '../create-issue/create-issue';
 export class HubPage extends RevaIssueSubscriber {
   username: WritableSignal<string> = signal('');
   userRole: WritableSignal<string> = signal('');
+
   constructor(
-    private userService: UserService // private router: Router
+    private userService: UserService,
+    private issueService: IssueService,
+    private projectService: ProjectService // private router: Router
   ) {
     super();
     this.subscription = this.userService.getUserSubject().subscribe((userData) => {
@@ -30,23 +36,42 @@ export class HubPage extends RevaIssueSubscriber {
   }
 
   issuesCount: string = '0';
+  issues: WritableSignal<IssueData[]> = signal([]);
+  issuesList: Signal<hubListItem[]> = computed(() => {
+    return this.mapIssues(this.issues());
+  });
+  projects: WritableSignal<ProjectData[]> = signal([]);
+  projectsList: Signal<hubListItem[]> = computed(() => {
+    return this.mapProject(this.projects());
+  });
 
-  projectsList: hubListItem[] = [
-    { name: 'Project 1', description: 'this is a description for project 1' },
-    { name: 'Project 2', description: 'this is a description for project 2' },
-    { name: 'Project 3', description: 'this is a description for project 3' },
-  ];
+  getProjects() {
+    this.projectService.viewAllProjects(this.projects, this.userRole());
+    this.projectsList = this.projectsList;
+  }
 
-  issuesList: hubListItem[] = [
-    { name: 'Issue 1', description: 'this is a description for project 1' },
-    { name: 'Issue 2', description: 'this is a description for issue 2' },
-    { name: 'Issue 3', description: 'this is a description for issue 3' },
-    { name: 'Issue 4', description: 'this is a description for issue 4' },
-  ];
+  getIssues() {
+    this.issueService.getMostRecentIssues(this.issues);
+  }
+
+  mapProject(projects: ProjectData[]): hubListItem[] {
+    return projects.map((p) => ({
+      name: p.projectName,
+      description: p.projectDescription,
+    }));
+  }
+
+  mapIssues(issues: IssueData[]): hubListItem[] {
+    return issues.map((i) => ({
+      name: i.name,
+      description: i.description,
+    }));
+  }
+
+  ngOnInit() {
+    this.getProjects();
+    this.getIssues();
+  }
 
   userLoggedIn: WritableSignal<boolean> = signal(false);
-
-  ngOnInit(): void {
-    this.userService.getUserInfo();
-  }
 }
