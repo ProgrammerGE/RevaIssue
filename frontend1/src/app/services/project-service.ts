@@ -21,20 +21,20 @@ export class ProjectService {
     return this.projectSubject;
   }
 
-  // viewAllProjects(
-  //   projects: WritableSignal<Array<String>>,
-  //   role: 'admin' | 'developer' | 'tester'
-  // ): void {
-  //   this.httpClient
-  //     .get<ProjectData[]>(`${this.baseUrl}/${role}/projects`)
-  //     .subscribe((projectList) => {
-  //       const newProjectList = [];
-  //       for (const projectObj of projectList) {
-  //         newProjectList.push(projectObj.project_name);
-  //       }
-  //       projects.set(newProjectList);
-  //     });
-  // }
+  viewAllProjects(
+    projects: WritableSignal<Array<String>>,
+    role: 'admin' | 'developer' | 'tester'
+  ): void {
+    this.httpClient
+      .get<ProjectData[]>(`${this.baseUrl}/${role}/projects`)
+      .subscribe((projectList) => {
+        const newProjectList = [];
+        for (const projectObj of projectList) {
+          newProjectList.push(projectObj.projectName);
+        }
+        projects.set(newProjectList);
+      });
+  }
 
   // viewAllProjects(projects: WritableSignal<ProjectData[]>): void {
   //   this.httpClient
