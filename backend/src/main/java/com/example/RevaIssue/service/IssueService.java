@@ -26,6 +26,10 @@ public class IssueService {
         return issueRepo.getReferenceById(issueId);
     }
 
+    public List<Issue> getMostRecentIssues(){
+        return issueRepo.findTop5ByOrderByDateCreatedDesc();
+    }
+
     public List<Issue> getIssueByKeyword(String keyword){
         List<Issue> issueList = issueRepo.findByKeyword(keyword);
         return issueList;
