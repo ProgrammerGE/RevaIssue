@@ -18,3 +18,8 @@
   flex-direction: column;
   gap: 8px;
 }
+
+.audit-logs{
+  margin-top: 10px;
+  overflow-y: scroll;
+}

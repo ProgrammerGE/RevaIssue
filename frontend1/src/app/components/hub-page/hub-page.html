@@ -11,4 +11,12 @@
     <app-list-container title="Projects" [items]="projectsList()" [hasButton]="true"></app-list-container>
     <app-list-container title="Issues" [items]="issuesList()" [hasButton]="false"></app-list-container>
   </section>
+  @if(!isAdmin()){
+  <section class="audit-logs">
+    <h4 style="margin-left: 10px;"> Audit Logs </h4>
+    @for (item of auditLogs(); track $index) {
+        {{ item }}
+    }
+  </section>    
+  }
 </div>
