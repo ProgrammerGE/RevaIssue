@@ -58,7 +58,7 @@ public class CommonController {
 
     // TODO: Implement. Make it return all users associated with a given project.
     @GetMapping("/projects/{id}/users")
-    public List<UserDTO> getUsers(@PathVariable int id){
+    public List<UserDTO> getUsersByProjectId(@PathVariable int id){
         return userService.getAllUsersByProjectId(id);
     }
 
