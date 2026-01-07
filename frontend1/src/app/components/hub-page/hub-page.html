@@ -5,10 +5,12 @@
     <app-create-project></app-create-project>
   </div>
   <header class="hub-header">
-    <h2 class="welcome-message">Welcome, {{ username() | capitalizeFirst }}</h2>
+    <div>
+      <h2 class="welcome-message">Welcome, {{ username() | capitalizeFirst }}</h2>
+      <span>{{ userRole() }}</span>
+    </div>
     <input type="search" />
   </header>
-  <span>{{ userRole() }}</span>
   <section class="lists">
     <app-list-container title="Projects" [items]="projectsList()" [hasButton]="true"></app-list-container>
     <app-list-container title="Issues" [items]="issuesList()" [hasButton]="false"></app-list-container>
