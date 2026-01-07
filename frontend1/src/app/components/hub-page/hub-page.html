@@ -33,7 +33,7 @@
   <section class="audit-logs">
     <h4 style="margin-left: 10px">Audit Logs</h4>
     @for (item of auditLogs(); track $index) {
-    {{ item.role }}: {{ item.username }} {{ item.action }} at {{ item.timestamp }}
+    {{ item.role }}: {{ item.username }} {{ item.action }} at {{ item.timeLogged }} <br />
     }
   </section>
   }

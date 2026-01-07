@@ -62,7 +62,10 @@ export class HubPage extends RevaIssueSubscriber {
   goToProject = (item: hubListItem) => {
     this.router.navigate(['/projects', item.id]);
   };
-
+  getProjects() {
+    this.projectService.viewAllProjects(this.projects, this.userRole());
+    this.projectsList = this.projectsList;
+  }
   getIssues() {
     this.issueService.getMostRecentIssues(this.issues);
   }
@@ -85,6 +88,7 @@ export class HubPage extends RevaIssueSubscriber {
 
   ngOnInit() {
     this.userService.getUserInfo();
+    this.getProjects();
     this.getIssues();
     this.isAdmin.set(this.userRole() === 'ADMIN');
     this.auditLogService.getAllAuditLogs(this.auditLogs);
