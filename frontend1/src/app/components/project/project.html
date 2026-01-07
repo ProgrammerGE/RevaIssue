@@ -1,7 +1,6 @@
 <app-nav-bar></app-nav-bar>
 
 <div class="parent">
-
   <!-- title -->
   <div class="div1">
     <!-- This will contain an element that reflects the name of the project entity -->
@@ -18,15 +17,23 @@
     <h2>Users List</h2>
     <!-- Show button/form for adding and removing users -->
     @if (userRole === 'admin') {
-      <button (click)="addUserToProject()">Add User</button>
-      <input type="text" [ngModel]="newUser()" (ngModelChange)="newUser.set($event)" placeholder="Enter username" />
+    <button (click)="addUserToProject()">Add User</button>
+    <input
+      type="text"
+      [ngModel]="newUser()"
+      (ngModelChange)="newUser.set($event)"
+      placeholder="Enter username"
+    />
     }
     <!-- Show the user list -->
     <div id="project-user-list">
       @for (user of users(); track user.username; let i = $index) {
-      <div class="user-item" [class.is-admin]="userRole === 'admin'"
-        (click)="userRole === 'admin' ? onUserClick(user) : null">
-        <strong>{{ user.username }} {{user.role}}</strong>
+      <div
+        class="user-item"
+        [class.is-admin]="userRole === 'admin'"
+        (click)="userRole === 'admin' ? onUserClick(user) : null"
+      >
+        <strong>{{ user.username }} {{ user.role }}</strong>
       </div>
       } @empty {
       <p>No users found or still loading...</p>
@@ -35,35 +42,39 @@
   </div>
   <!-- issue selector pane -->
   <div class="div4">
-      <!--First is the issues browser pane. It shows the projects issues. Users can click on them
+    <!--First is the issues browser pane. It shows the projects issues. Users can click on them
               to be taken to a page where they can view that issue's details. Testers have a button
               to create issues. -->
-      <div class="issues-header">
-        <h4>Project Issues</h4>
-        @if (userRole === 'tester') {
-        <button class="btn-create">Create Issue</button>
-        }
-      </div>
+    <div class="issues-header">
+      <h4>Project Issues</h4>
+      @if (userRole === 'tester') {
+      <app-create-issue></app-create-issue>
+      <button class="btn-create">Create Issue</button>
+      }
+    </div>
 
-      <div class="issues-list">
-        @for (issue of issues(); track issue.issueID) {
-        <div class="issue-card" (mouseenter)="hoveredIssue = issue" (mouseleave)="hoveredIssue = null"
-          (click)="selectIssue(issue)" [class.active]="selectedIssue?.issueID === issue.issueID">
-
-          <span class="issue-id">#{{ issue.issueID }} </span>
-          <span class="issue-title">{{ issue.name }}</span>
-          <span class="issue-priority" [attr.data-priority]="issue.priority">
-            {{ issue.priority }}
-          </span>
-        </div>
-        }
+    <div class="issues-list">
+      @for (issue of issues(); track issue.issueID) {
+      <div
+        class="issue-card"
+        (mouseenter)="hoveredIssue = issue"
+        (mouseleave)="hoveredIssue = null"
+        (click)="selectIssue(issue)"
+        [class.active]="selectedIssue?.issueID === issue.issueID"
+      >
+        <span class="issue-id">#{{ issue.issueID }} </span>
+        <span class="issue-title">{{ issue.name }}</span>
+        <span class="issue-priority" [attr.data-priority]="issue.priority">
+          {{ issue.priority }}
+        </span>
       </div>
+      }
+    </div>
   </div>
   <!-- issue viewing pane -->
   <div class="div5">
     <div class="view-pane-container">
-      @if (hoveredIssue || selectedIssue) {
-      @let current = (hoveredIssue || selectedIssue)!;
+      @if (hoveredIssue || selectedIssue) { @let current = (hoveredIssue || selectedIssue)!;
 
       <div class="issue-details fade-in">
         <div class="details-header">
@@ -87,11 +98,11 @@
       <div class="comments-section">
         <div>
           @if (userRole === 'tester') {
-            <button>Re open issue</button>
-            <button>Close issue</button>
+          <button>Re open issue</button>
+          <button>Close issue</button>
           } @else if (userRole === 'developer') {
-            <button>Move to in progress</button>
-            <button>Resolve Issue</button>
+          <button>Move to in progress</button>
+          <button>Resolve Issue</button>
           }
         </div>
         <h4>Comments ({{ current.comments.length || 0 }})</h4>

@@ -14,6 +14,7 @@ export class ProjectService {
     projectName: '',
     projectDescription: '',
   });
+  private projectsListSubject = new BehaviorSubject<ProjectData[]>([]);
 
   private baseUrl = 'http://localhost:8080';
 
@@ -74,8 +75,9 @@ export class ProjectService {
     this.httpClient
       .post<ProjectData>(`${this.baseUrl}/admin/projects/new`, project, { headers })
       .subscribe({
-        next: (create) => {
-          if (!create) this.projectSubject.next(create);
+        next: (createdProject) => {
+          const current = this.projectsListSubject.value;
+          this.projectsListSubject.next([...current, createdProject]);
         },
         error: (err) => console.error('Error creating new project', err),
       });

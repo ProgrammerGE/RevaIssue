@@ -1,8 +1,9 @@
-import { Component, input, InputSignal, signal, computed } from '@angular/core';
+import { Component, input, InputSignal, signal, computed, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { hubListItem } from '../../interfaces/hubpage-list-item';
 import { PopUpService } from '../../services/pop-up-service';
 import { CapitalizeFirst } from '../../pipes/capitalize-first.pipe';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list-container',
@@ -15,18 +16,21 @@ export class ListContainer {
   title = input<string>('Title');
   isExpanded = signal(true);
   items: InputSignal<hubListItem[]> = input([
-    { name: 'placeholder title', description: 'placeholder description' },
+    { id: 999, name: 'placeholder title', description: 'placeholder description' },
   ]);
   itemCount = computed(() => this.items().length);
-  hasButton : InputSignal<boolean> = input(true);
+  hasButton: InputSignal<boolean> = input(true);
 
-  constructor(private popUpService: PopUpService) {}
+  @Input() listItems: hubListItem[] = [];
+  @Input() itemClicked?: (item: hubListItem) => void;
+
+  constructor(private popUpService: PopUpService, private router: Router) {}
 
   expandList() {
     this.isExpanded.update((v) => !v);
   }
 
-  addPopup(){
-      this.popUpService.openPopUpProject();
+  addPopup() {
+    this.popUpService.openPopUpProject();
   }
 }

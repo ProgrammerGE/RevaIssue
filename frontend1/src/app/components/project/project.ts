@@ -3,20 +3,20 @@ import { RevaIssueSubscriber } from '../../classes/reva-issue-subscriber';
 import { ProjectService } from '../../services/project-service';
 import { ProjectData } from '../../interfaces/project-data';
 import { ActivatedRoute } from '@angular/router';
-import { CreateIssue } from "../create-issue/create-issue";
+import { CreateIssue } from '../create-issue/create-issue';
 import { PopUpService } from '../../services/pop-up-service';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { UserService } from '../../services/user-service';
 import { UserData } from '../../interfaces/user-data';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { SignoutButton } from "../signout-button/signout-button";
-import { NavBar } from "../nav-bar/nav-bar";
+import { SignoutButton } from '../signout-button/signout-button';
+import { NavBar } from '../nav-bar/nav-bar';
 import { IssueData } from '../../interfaces/issue-data';
 
 @Component({
   selector: 'app-project',
-  imports: [NavBar, FormsModule],
+  imports: [NavBar, FormsModule, CreateIssue],
   templateUrl: './project.html',
   styleUrl: './project.css',
 })
@@ -114,7 +114,9 @@ export class Project extends RevaIssueSubscriber {
   newUser: WritableSignal<string> = signal('');
 
   // TODO: Have this update based on the current user
-  userRole: 'admin' | 'tester' | 'developer' = 'admin';
+  // userRole: 'admin' | 'tester' | 'developer' = 'tester';
+  // userRole: 'admin' | 'tester' | 'developer' = 'admin';
+  userRole: 'admin' | 'tester' | 'developer' = 'developer';
 
   // This will hold the issue currently being hovered
   hoveredIssue: IssueData | null = null;
