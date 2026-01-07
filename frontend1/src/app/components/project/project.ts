@@ -84,18 +84,18 @@ export class Project extends RevaIssueSubscriber {
     this.fetchAndLogUsers();
   }
 
+  addUserToProject(): void {
+    const username = this.newUser();
+    const projectId = this.projectId;
+
+    if (username) {
+      this.projectService.addUserToProject(projectId, username)
+    }
+  }
+
   private fetchAndLogUsers(): void {
     console.log('Fetching users...');
     this.userService.fetchUsers();
-    // this.userService.getUsersSubject().subscribe({
-    //   next: (users: UserData[]) => {
-    //     console.log('Users received:', users);
-    //     this.users = users;
-    //   },
-    //   error: (err) => {
-    //     console.error('Failed to fetch users:', err);
-    //   },
-    // });
   }
 
   viewProject() {
