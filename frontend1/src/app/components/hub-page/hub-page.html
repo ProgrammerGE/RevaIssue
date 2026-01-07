@@ -5,7 +5,7 @@
     <app-create-project></app-create-project>
   </div>
   <header class="hub-header">
-    <h2 class="welcome-message">Welcome, {{ username() }}</h2>
+    <h2 class="welcome-message">Welcome, {{ username() | capitalizeFirst }}</h2>
     <input type="search" />
   </header>
   <span>{{ userRole() }}</span>
