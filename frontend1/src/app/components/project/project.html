@@ -19,7 +19,9 @@
     @if (userRole === 'admin') {
       <!-- Show button/form for adding and removing users -->
       <button (click)="addUserToProject()">Add User</button>
-      <input type="text" [(ngModel)]="newUser" placeholder="Enter username" />
+      <!-- <input type="text" [(ngModel)]="newUser" placeholder="Enter username" /> -->
+
+      <input type="text" [ngModel]="newUser()" (ngModelChange)="newUser.set($event)" placeholder="Enter username" />
     }
     <!-- Show the user list -->
     <div id="project-user-list">

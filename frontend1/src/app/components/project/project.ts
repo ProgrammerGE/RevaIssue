@@ -76,6 +76,8 @@ export class Project extends RevaIssueSubscriber {
 
   ngOnInit(): void {
     this.projectId = Number(this.route.snapshot.paramMap.get('id'));
+    console.log("The project id is ", this.projectId);
+
     if (!this.projectId) {
       throw new Error('Invalid project id');
     }

@@ -54,7 +54,7 @@ export class ProjectService {
 
   updateProject(projectId: number, project: Partial<ProjectData>): void {
     this.httpClient
-      .put<ProjectData>(`${this.baseUrl}/admin/projects${projectId}`, project)
+      .put<ProjectData>(`${this.baseUrl}/admin/projects/${projectId}`, project)
       .subscribe({
         next: (updatedProject) => this.projectSubject.next(updatedProject),
         error: (err) => console.error('Error updating project', err),
