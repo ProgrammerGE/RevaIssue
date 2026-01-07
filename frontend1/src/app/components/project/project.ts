@@ -94,10 +94,13 @@ export class Project extends RevaIssueSubscriber {
   /**
    * Function called by project.html
    * Triggers from clicking on users in the users list
+   * Asks the project service to remove a user from a project
    */
   onUserClick(user: UserData) {
-    console.log(user.username);
-
+    console.log("removing ", user.username);
+    const username = user.username;
+    const projectId = this.projectId;
+    this.projectService.removeUserFromProject(this.projectId, username);
   }
 
   addUserToProject(): void {
