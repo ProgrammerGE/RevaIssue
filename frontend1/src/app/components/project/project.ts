@@ -76,7 +76,7 @@ export class Project extends RevaIssueSubscriber {
 
   ngOnInit(): void {
     this.projectId = Number(this.route.snapshot.paramMap.get('id'));
-    console.log("The project id is ", this.projectId);
+    console.log('The project id is ', this.projectId);
 
     if (!this.projectId) {
       throw new Error('Invalid project id');
@@ -86,18 +86,18 @@ export class Project extends RevaIssueSubscriber {
     this.fetchAndLogUsers();
   }
 
+  private fetchAndLogUsers(): void {
+    console.log('Fetching users...');
+    this.userService.fetchUsers(this.projectId);
+  }
+
   addUserToProject(): void {
     const username = this.newUser();
     const projectId = this.projectId;
 
     if (username) {
-      this.projectService.addUserToProject(projectId, username)
+      this.projectService.addUserToProject(projectId, username);
     }
-  }
-
-  private fetchAndLogUsers(): void {
-    console.log('Fetching users...');
-    this.userService.fetchUsers();
   }
 
   viewProject() {
