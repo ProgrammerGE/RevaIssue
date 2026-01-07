@@ -70,6 +70,31 @@ export class Project extends RevaIssueSubscriber {
           text: 'Likely related to missing pagination.',
           dateCreated: '2026-01-02T14:30:00Z',
         },
+        {
+          author: 'Chris Jacobs',
+          text: 'Hello world!.',
+          dateCreated: '2026-01-02T14:30:00Z',
+        },
+        {
+          author: 'Chris Jacobs',
+          text: 'Hello world!.',
+          dateCreated: '2026-01-02T14:30:00Z',
+        },
+        {
+          author: 'Chris Jacobs',
+          text: 'Hello world!.',
+          dateCreated: '2026-01-02T14:30:00Z',
+        },
+        {
+          author: 'Chris Jacobs',
+          text: 'Hello world!.',
+          dateCreated: '2026-01-02T14:30:00Z',
+        },
+        {
+          author: 'Chris Jacobs',
+          text: 'Hello world!.',
+          dateCreated: '2026-01-02T14:30:00Z',
+        },
       ],
     },
   ]);
@@ -92,9 +117,9 @@ export class Project extends RevaIssueSubscriber {
   userRole: 'admin' | 'tester' | 'developer' = 'admin';
 
   // This will hold the issue currently being hovered
-  hoveredIssue: any = null;
+  hoveredIssue: IssueData | null = null;
   // This will hold the issue that was just clicked on
-  selectedIssue: any = null;
+  selectedIssue: IssueData | null = null;
 
   constructor() {
     super();

@@ -63,7 +63,7 @@
   <div class="div5">
     <div class="view-pane-container">
       @if (hoveredIssue || selectedIssue) {
-      @let current = hoveredIssue || selectedIssue;
+      @let current = (hoveredIssue || selectedIssue)!;
 
       <div class="issue-details fade-in">
         <div class="details-header">
@@ -85,9 +85,15 @@
       <hr />
 
       <div class="comments-section">
-        <h4>Comments ({{ current.comments?.length || 0 }})</h4>
+        <h4>Comments ({{ current.comments.length || 0 }})</h4>
+
+        <div class="comment-input-placeholder">
+          <input type="text" placeholder="Add a comment..." disabled />
+          <button disabled>Send</button>
+        </div>
+
         <div class="comments-scroll-area">
-          @for (comment of current.comments; track $index) {
+          @for (comment of current.comments.slice().reverse(); track $index) {
           <div class="comment-item">
             <div class="comment-meta">
               <span class="author">{{ comment.author }}</span>
@@ -98,10 +104,6 @@
           } @empty {
           <p class="no-comments">No comments yet.</p>
           }
-        </div>
-        <div class="comment-input-placeholder">
-          <input type="text" placeholder="Add a comment..." disabled />
-          <button disabled>Send</button>
         </div>
       </div>
 
