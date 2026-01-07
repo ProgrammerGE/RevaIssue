@@ -39,9 +39,11 @@ export class CreateProject {
     if (this.projectTitle != '' && this.projectDesc != '') {
       this.projectService.createProject({
         projectName: this.projectTitle,
-        projectDescription: this.projectDesc
+        projectDescription: this.projectDesc,
       });
       this.isPoppedUp.set(false);
+      this.projectTitle = '';
+      this.projectDesc = '';
     }
 
     if (this.projectTitle == '') {
@@ -51,8 +53,6 @@ export class CreateProject {
     if (this.projectDesc == '') {
       this.descriptionMissing = true;
     }
-    this.projectTitle = '';
-    this.projectDesc = '';
   }
 
   cancelCreation() {

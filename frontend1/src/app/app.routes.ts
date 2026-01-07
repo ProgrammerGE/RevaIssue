@@ -13,9 +13,9 @@ export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'register', component: Registration },
   { path: 'hubpage', component: HubPage, canActivate: [authorizationGuard] },
-  { path: 'project', component: Project, canActivate: [authorizationGuard] },
-  { path: 'project/:id', component: Project, canActivate: [authorizationGuard] },
-  { path: 'issue', component: Issue, canActivate: [authorizationGuard] },
+  { path: 'projects', component: Project, canActivate: [authorizationGuard] },
+  { path: 'projects/:id', component: Project, canActivate: [authorizationGuard] },
+  { path: 'issues', component: Issue, canActivate: [authorizationGuard] },
   { path: 'create-issue', component: CreateIssue, canActivate: [authorizationGuard] },
   { path: 'create-project', component: CreateProject, canActivate: [authorizationGuard] },
 ];

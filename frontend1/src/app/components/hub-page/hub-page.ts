@@ -5,13 +5,14 @@ import { ProjectService } from '../../services/project-service';
 import { RevaIssueSubscriber } from '../../classes/reva-issue-subscriber';
 import { UserService } from '../../services/user-service';
 import { CreateProject } from '../create-project/create-project';
+import { CreateIssue } from '../create-issue/create-issue';
 import { FormsModule } from '@angular/forms';
 import { AuditLogService } from '../../services/audit-log-service';
 import { AuditLogData } from '../../interfaces/audit-log-data';
 import { IssueService } from '../../services/issue-service';
 import { ProjectData } from '../../interfaces/project-data';
 import { IssueData } from '../../interfaces/issue-data';
-import { NavBar } from "../nav-bar/nav-bar";
+import { NavBar } from '../nav-bar/nav-bar';
 import { CapitalizeFirst } from '../../pipes/capitalize-first.pipe';
 import { DeleteProject } from '../delete-project/delete-project';
 import { PopUpService } from '../../services/pop-up-service';
@@ -22,6 +23,7 @@ import { PopUpService } from '../../services/pop-up-service';
   templateUrl: './hub-page.html',
   styleUrl: './hub-page.css',
 })
+
 export class HubPage extends RevaIssueSubscriber {
   username: WritableSignal<string> = signal('');
   userRole: WritableSignal<string> = signal('');
@@ -33,8 +35,7 @@ export class HubPage extends RevaIssueSubscriber {
     private userService: UserService,
     private auditLogService: AuditLogService,
     private issueService: IssueService,
-    private projectService: ProjectService,
-    private popUpService: PopUpService
+    private projectService: ProjectService // private router: Router
   ) {
     super();
     this.subscription = this.userService.getUserSubject().subscribe((userData) => {
@@ -43,10 +44,7 @@ export class HubPage extends RevaIssueSubscriber {
     });
 
     effect(() => {
-      const role = this.userRole();
-      if (!role) return;
-
-      this.projectService.viewAllProjects(this.projects, role);
+      this.projectService.viewAllProjects(this.projects, this.userRole());
     });
   }
 
@@ -59,12 +57,20 @@ export class HubPage extends RevaIssueSubscriber {
     return this.mapProject(this.projects());
   });
 
+  goToProject = (item: hubListItem) => {
+    this.router.navigate(['/projects', item.id]);
+  };
+  getProjects() {
+    this.projectService.viewAllProjects(this.projects, this.userRole());
+    this.projectsList = this.projectsList;
+  }
   getIssues() {
     this.issueService.getMostRecentIssues(this.issues);
   }
 
   mapProject(projects: ProjectData[]): hubListItem[] {
     return projects.map((p) => ({
+      id: p.projectID,
       name: p.projectName,
       description: p.projectDescription,
     }));
@@ -72,6 +78,7 @@ export class HubPage extends RevaIssueSubscriber {
 
   mapIssues(issues: IssueData[]): hubListItem[] {
     return issues.map((i) => ({
+      id: i.issueID,
       name: i.name,
       description: i.description,
     }));
@@ -79,6 +86,7 @@ export class HubPage extends RevaIssueSubscriber {
 
   ngOnInit() {
     this.userService.getUserInfo();
+    this.getProjects();
     this.getIssues();
     this.isAdmin.set(this.userRole() === 'ADMIN');
     this.auditLogService.getAllAuditLogs(this.auditLogs);
@@ -86,9 +94,7 @@ export class HubPage extends RevaIssueSubscriber {
 
   userLoggedIn: WritableSignal<boolean> = signal(false);
 
-  addDeletePopup(){
-      this.popUpService.openDeletingPopup();
-  }
+  
     /**
      * I keep getting internal errors from this query function, I commented it out for now.
      */

@@ -13,66 +13,75 @@ import { ObservableInput } from 'rxjs';
   styleUrl: './create-issue.css',
 })
 export class CreateIssue {
-
-  issueTitle: string = "";
-  issueDesc: string = "";  
-  severityInput: string = "";
-  priorityInput: string = "";
+  issueTitle: string = '';
+  issueDesc: string = '';
+  severityInput: string = '';
+  priorityInput: string = '';
 
   isPoppedUp: WritableSignal<boolean> = signal(false);
   projectID: WritableSignal<number> = signal(0);
-  buttonText = "Create Issue";
-  buttonCancel = "Cancel";
+  buttonText = 'Create Issue';
+  buttonCancel = 'Cancel';
 
   titleMissing: boolean = false;
   descriptionMissing: boolean = false;
   severityMissing: boolean = false;
   priorityMissing: boolean = false;
 
-  constructor(private popUpService: PopUpService, private issueService: IssueService, 
-    private router: Router, private projectService: ProjectService) {
-    this.popUpService.getPopUpIssueSubject().subscribe( popUpSetting => {
+  constructor(
+    private popUpService: PopUpService,
+    private issueService: IssueService,
+    private router: Router,
+    private projectService: ProjectService
+  ) {
+    this.popUpService.getPopUpIssueSubject().subscribe((popUpSetting) => {
       this.isPoppedUp.set(popUpSetting);
     });
-    this.projectService.getProjectSubject().subscribe( projectData => {
+    this.projectService.getProjectSubject().subscribe((projectData) => {
       this.projectID.set(projectData.projectID);
-    })
+    });
   }
 
-  createIssue(){ //Following the same format as on the project.ts file    
-    if(this.issueTitle != "" 
-      &&  this.issueDesc != ""
-      && this.severityInput != ""
-      && this.priorityInput != ""){
-      
+  createIssue() {
+    //Following the same format as on the project.ts file
+    if (
+      this.issueTitle != '' &&
+      this.issueDesc != '' &&
+      this.severityInput != '' &&
+      this.priorityInput != ''
+    ) {
       this.issueService.createIssue(this.projectID(), {
         name: this.issueTitle,
         description: this.issueDesc,
         severity: Number(this.severityInput),
-        priority: Number(this.priorityInput)
+        priority: Number(this.priorityInput),
       });
       this.isPoppedUp.set(false);
-    }    
+    }
 
-    if(this.issueTitle == ""){
+    if (this.issueTitle == '') {
       this.titleMissing = true;
     }
 
-    if(this.issueDesc == ""){
+    if (this.issueDesc == '') {
       this.descriptionMissing = true;
     }
 
-    if(this.severityInput == ""){
+    if (this.severityInput == '') {
       this.severityMissing = true;
     }
 
-    if(this.priorityInput == ""){
+    if (this.priorityInput == '') {
       this.priorityMissing = true;
     }
 
+    this.issueTitle = '';
+    this.issueDesc = '';
+    this.severityInput = '';
+    this.priorityInput = '';
   }
 
-  cancelCreation(){
+  cancelCreation() {
     this.isPoppedUp.set(false);
   }
 }
