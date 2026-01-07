@@ -81,12 +81,22 @@ public class AdminController {
     }
 
     @PostMapping("/projects/{projectId}/assign/{userName}")
-    public User_Projects assignProject(@PathVariable int projectId, @PathVariable String userName){
+    public User_Projects assignProject(@PathVariable int projectId, @PathVariable String userName,
+                                       @RequestHeader (name = "Authorization") String authHeader){
+        String role = authService.getRoleFromHeader(authHeader);
+        String adminName = authService.getUsernameFromHeader(authHeader);
+        String projectName = projectService.getProjectById(projectId).getProjectName();
+        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("ASSIGNED " + userName + " TO " + projectName, adminName, role));
         return userService.assignProject(projectId, userName);
     }
 
     @DeleteMapping("/projects/{projectId}/revoke/{userName}")
-    public boolean revokeProject(@PathVariable int projectId, @PathVariable String userName){
+    public boolean revokeProject(@PathVariable int projectId, @PathVariable String userName,
+                                 @RequestHeader (name = "Authorization") String authHeader){
+        String role = authService.getRoleFromHeader(authHeader);
+        String adminName = authService.getUsernameFromHeader(authHeader);
+        String projectName = projectService.getProjectById(projectId).getProjectName();
+        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("REMOVED " + userName + " FROM " + projectName, adminName, role));
         return userService.revokeProject(projectId, userName);
     }
 }

@@ -1,6 +1,6 @@
 export interface AuditLogData{    
     audit_id: number,
-    timestamp: string,
+    timeLogged: string,
     action: string,
     username: string,
     role: string
