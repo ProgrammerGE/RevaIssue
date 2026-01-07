@@ -1,30 +1,69 @@
 .parent {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(6, 1fr);
-  gap: 8px;
+  /* Using a 4-column layout is often easier than 5 for dashboards */
+  grid-template-columns: 250px 1fr 1fr;
+  grid-template-rows: auto auto 1fr;
+  gap: 16px;
+  height: 90vh;
+  /* Set a height so the scrollbars work inside the divs */
+  padding: 16px;
 }
 
+/* Title Area */
+.div1 {
+  grid-column: 1 / span 3;
+  border-bottom: 2px solid #eee;
+}
 
+/* Description Area */
 .div2 {
-  grid-column-start: 1;
-  grid-row-start: 2;
+  grid-column: 1 / span 3;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 4px;
 }
 
+/* Sidebar: Users List */
 .div3 {
-  grid-row: span 2 / span 2;
-  grid-column-start: 2;
-  grid-row-start: 1;
+  grid-column: 1;
+  grid-row: 3;
+  background: #f4f4f4;
+  padding: 15px;
+  border-radius: 8px;
+  overflow-y: auto;
 }
 
+/* Issue List - Taking up more space */
 .div4 {
-  grid-column: span 2 / span 2;
-  grid-row: span 2 / span 2;
-  grid-row-start: 3;
+  grid-column: 2;
+  grid-row: 3;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow-y: auto;
+  padding: 10px;
 }
 
+/* Issue Preview Pane */
 .div5 {
-  grid-column: span 2 / span 2;
-  grid-row: span 2 / span 2;
-  grid-row-start: 5;
+  grid-column: 3;
+  grid-row: 3;
+  background: #fff;
+  border: 1px solid #007bff;
+  /* Blue accent to show it's the detail view */
+  border-radius: 8px;
+  padding: 20px;
+}
+
+/* Styling the Issue Cards inside div4 */
+.issue-card {
+  padding: 12px;
+  margin-bottom: 8px;
+  border: 1px solid #eee;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.issue-card:hover {
+  background-color: #eef6ff;
+  border-color: #007bff;
 }
