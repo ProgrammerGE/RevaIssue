@@ -33,7 +33,7 @@ public class TesterController {
 
 
     @PostMapping("/project/{project_id}/issues")
-    public Issue createIssue(@RequestHeader (name = "Authorization") String authHeader, @RequestBody Issue issue){
+    public Issue createIssue(@RequestBody Issue issue, @RequestHeader (name = "Authorization") String authHeader){
         String role = authService.getRoleFromHeader(authHeader);
         String username = authService.getUsernameFromHeader(authHeader);
         AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("CREATED ISSUE " + issue.getName(), username, role));
@@ -41,7 +41,7 @@ public class TesterController {
     }
 
     @PatchMapping("/project/{project_id}/issues/{issue_id}/close")
-    public Issue closeIssue(@RequestHeader (name = "Authorization") String authHeader, @PathVariable("issue_id") Long issueId){
+    public Issue closeIssue(@PathVariable("issue_id") Long issueId, @RequestHeader (name = "Authorization") String authHeader){
         String role = authService.getRoleFromHeader(authHeader);
         String username = authService.getUsernameFromHeader(authHeader);
         String issueName = issueService.getIssue(issueId).getName();
@@ -53,7 +53,7 @@ public class TesterController {
     }
 
     @PatchMapping("/project/{project_id}/issues/{issue_id}/open")
-    public Issue reopenIssue(@RequestHeader (name = "Authorization") String authHeader, @PathVariable("issue_id") Long issueId){
+    public Issue reopenIssue(@PathVariable("issue_id") Long issueId, @RequestHeader (name = "Authorization") String authHeader){
         String role = authService.getRoleFromHeader(authHeader);
         String username = authService.getUsernameFromHeader(authHeader);
         String issueName = issueService.getIssue(issueId).getName();

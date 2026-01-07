@@ -80,6 +80,16 @@ public class AdminController {
         return projectService.createProject(project);
     }
 
+    @DeleteMapping("/projects/{projectId}")
+    public boolean deleteProject(@PathVariable int projectId,
+            @RequestHeader (name = "Authorization") String authHeader){
+        String role = authService.getRoleFromHeader(authHeader);
+        String adminName = authService.getUsernameFromHeader(authHeader);
+        String projectName = projectService.getProjectById(projectId).getProjectName();
+        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("DELETED " + projectName, adminName, role));
+        return projectService.deleteProject(projectId);
+    }
+
     @PostMapping("/projects/{projectId}/assign/{userName}")
     public User_Projects assignProject(@PathVariable int projectId, @PathVariable String userName,
                                        @RequestHeader (name = "Authorization") String authHeader){
