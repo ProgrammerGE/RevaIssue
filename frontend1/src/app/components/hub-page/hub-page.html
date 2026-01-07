@@ -10,21 +10,31 @@
       <span>{{ userRole() }}</span>
     </div>
     <div class="filter">
-    <input type="search" [(ngModel)]="searchFilter"  class="filterInput"/>
-    <button (click)="filterList()" class="filterButton"> Filter Issues </button>
+      <input type="search" [(ngModel)]="searchFilter" class="filterInput" />
+      <button (click)="filterList()" class="filterButton">Filter Issues</button>
     </div>
     <input type="search" />
   </header>
   <section class="lists">
-    <app-list-container title="Projects" [items]="projectsList()" [hasButton]="true"></app-list-container>
-    <app-list-container title="Issues" [items]="issuesList()" [hasButton]="false"></app-list-container>
+    <app-list-container
+      title="Projects"
+      [items]="projectsList()"
+      [hasButton]="true"
+      [itemClicked]="goToProject"
+    >
+    </app-list-container>
+    <app-list-container
+      title="Issues"
+      [items]="issuesList()"
+      [hasButton]="false"
+    ></app-list-container>
   </section>
   @if(!isAdmin()){
   <section class="audit-logs">
-    <h4 style="margin-left: 10px;"> Audit Logs </h4>
+    <h4 style="margin-left: 10px">Audit Logs</h4>
     @for (item of auditLogs(); track $index) {
-        {{ item.role }}: {{ item.username}} {{ item.action}} at {{ item.timestamp }}
+    {{ item.role }}: {{ item.username }} {{ item.action }} at {{ item.timestamp }}
     }
-  </section>    
+  </section>
   }
 </div>

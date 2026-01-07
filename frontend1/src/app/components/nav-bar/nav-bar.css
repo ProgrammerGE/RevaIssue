@@ -24,6 +24,7 @@
 .nav ul li a:hover {
   background-color: #e0e0e0;
   color: #000;
+  cursor: pointer;
 }
 
 .nav ul li a.active {

@@ -14,6 +14,7 @@ import { ProjectData } from '../../interfaces/project-data';
 import { IssueData } from '../../interfaces/issue-data';
 import { NavBar } from '../nav-bar/nav-bar';
 import { CapitalizeFirst } from '../../pipes/capitalize-first.pipe';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-hub-page',
@@ -32,7 +33,8 @@ export class HubPage extends RevaIssueSubscriber {
     private userService: UserService,
     private auditLogService: AuditLogService,
     private issueService: IssueService,
-    private projectService: ProjectService // private router: Router
+    private projectService: ProjectService,
+    private router: Router
   ) {
     super();
     this.subscription = this.userService.getUserSubject().subscribe((userData) => {
@@ -57,12 +59,17 @@ export class HubPage extends RevaIssueSubscriber {
     return this.mapProject(this.projects());
   });
 
+  goToProject = (item: hubListItem) => {
+    this.router.navigate(['/projects', item.id]);
+  };
+
   getIssues() {
     this.issueService.getMostRecentIssues(this.issues);
   }
 
   mapProject(projects: ProjectData[]): hubListItem[] {
     return projects.map((p) => ({
+      id: p.projectID,
       name: p.projectName,
       description: p.projectDescription,
     }));
@@ -70,6 +77,7 @@ export class HubPage extends RevaIssueSubscriber {
 
   mapIssues(issues: IssueData[]): hubListItem[] {
     return issues.map((i) => ({
+      id: i.issueID,
       name: i.name,
       description: i.description,
     }));
