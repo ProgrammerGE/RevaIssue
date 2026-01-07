@@ -78,7 +78,7 @@ public class CommonController {
         return issueService.getIssuesByKeyword(keyword);
     }
 
-    @GetMapping("/projects/{keyword}")
+    @GetMapping("/projects/key/{keyword}")
     public List<Project> getProjectByKeyword(@PathVariable String keyword){
         return projectService.getProjectsByKeyword(keyword);
     }

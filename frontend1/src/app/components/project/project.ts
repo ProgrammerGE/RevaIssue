@@ -12,6 +12,7 @@ import { UserData } from '../../interfaces/user-data';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { SignoutButton } from "../signout-button/signout-button";
 import { NavBar } from "../nav-bar/nav-bar";
+import { IssueData } from '../../interfaces/issue-data';
 
 @Component({
   selector: 'app-project',
@@ -21,30 +22,82 @@ import { NavBar } from "../nav-bar/nav-bar";
 })
 export class Project extends RevaIssueSubscriber {
   // Dummy data, needs to be grabbed later
-  issues = signal([
+  issues = signal<IssueData[]>([
     {
-      id: 101,
-      title: 'Login button unresponsive',
-      priority: 'High',
+      issueID: 101,
+      name: 'Login button unresponsive',
       description:
         'The login button on the landing page does not trigger the auth service when clicked on mobile devices.',
+      projectID: 1,
+      severity: 4,
+      priority: 3,
+      status: 'OPEN',
+      comments: [
+        {
+          author: 'System',
+          text: 'Issue created.',
+          dateCreated: '2026-01-01T10:00:00Z',
+        },
+        {
+          author: 'Chris Jacobs',
+          text: 'Hello world!.',
+          dateCreated: '2026-01-02T14:30:00Z',
+        },
+      ],
     },
     {
-      id: 102,
-      title: 'CSS Grid misalignment',
-      priority: 'Low',
+      issueID: 102,
+      name: 'CSS Grid misalignment',
       description: 'The dashboard widgets overlap when the screen resolution is set to 1440p.',
+      projectID: 1,
+      severity: 1,
+      priority: 1,
+      status: 'IN_PROGRESS',
+      comments: [],
     },
     {
-      id: 103,
-      title: 'API Timeout on Export',
-      priority: 'Medium',
+      issueID: 103,
+      name: 'API Timeout on Export',
       description:
         'Exporting the user list to CSV times out if the record count exceeds 5,000 entries.',
+      projectID: 2,
+      severity: 3,
+      priority: 2,
+      status: 'OPEN',
+      comments: [
+        {
+          author: 'Backend',
+          text: 'Likely related to missing pagination.',
+          dateCreated: '2026-01-02T14:30:00Z',
+        },
+        {
+          author: 'Chris Jacobs',
+          text: 'Hello world!.',
+          dateCreated: '2026-01-02T14:30:00Z',
+        },
+        {
+          author: 'Chris Jacobs',
+          text: 'Hello world!.',
+          dateCreated: '2026-01-02T14:30:00Z',
+        },
+        {
+          author: 'Chris Jacobs',
+          text: 'Hello world!.',
+          dateCreated: '2026-01-02T14:30:00Z',
+        },
+        {
+          author: 'Chris Jacobs',
+          text: 'Hello world!.',
+          dateCreated: '2026-01-02T14:30:00Z',
+        },
+        {
+          author: 'Chris Jacobs',
+          text: 'Hello world!.',
+          dateCreated: '2026-01-02T14:30:00Z',
+        },
+      ],
     },
   ]);
-  // This will hold the issue currently being hovered
-  hoveredIssue: any = null;
 
   // Dependency Injection
   private projectService = inject(ProjectService);
@@ -62,6 +115,11 @@ export class Project extends RevaIssueSubscriber {
 
   // TODO: Have this update based on the current user
   userRole: 'admin' | 'tester' | 'developer' = 'admin';
+
+  // This will hold the issue currently being hovered
+  hoveredIssue: IssueData | null = null;
+  // This will hold the issue that was just clicked on
+  selectedIssue: IssueData | null = null;
 
   constructor() {
     super();
@@ -91,6 +149,11 @@ export class Project extends RevaIssueSubscriber {
     this.userService.fetchUsers(this.projectId);
   }
 
+  /**
+   * Function called by project.html
+   * Triggers from clicking on Add User in the project view (admin)
+   * Creates a User_Project record in the database
+   */
   addUserToProject(): void {
     const username = this.newUser();
     const projectId = this.projectId;
@@ -98,6 +161,22 @@ export class Project extends RevaIssueSubscriber {
     if (username) {
       this.projectService.addUserToProject(projectId, username);
     }
+  }
+
+  /**
+   * Function called by project.html
+   * Triggers from clicking on users in the users list
+   * Deletes a User_Project record from the database
+   */
+  onUserClick(user: UserData) {
+    console.log('removing ', user.username);
+    const username = user.username;
+    const projectId = this.projectId;
+    this.removeUserFromProject(this.projectId, username);
+  }
+
+  private removeUserFromProject(projectId: number, username: string): void {
+    this.projectService.removeUserFromProject(projectId, username);
   }
 
   viewProject() {
@@ -122,5 +201,16 @@ export class Project extends RevaIssueSubscriber {
   //Be sure to assign this method to a button in the project html that will be clicked for "creating issues"
   addPopup() {
     this.popUpService.openPopUpIssue();
+  }
+
+  // Helper method to handle the click
+  selectIssue(issue: any) {
+    this.selectedIssue = issue;
+  }
+
+  // Logic for the preview pane:
+  // Show hover if it exists, otherwise show the sticky selected one
+  get displayIssue() {
+    return this.hoveredIssue || this.selectedIssue;
   }
 }

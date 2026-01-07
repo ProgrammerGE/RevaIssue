@@ -114,4 +114,16 @@ public class UserService {
         user_projects.setProject(project);
         return userProjectsRepository.save(user_projects);
     }
+
+    @Transactional
+    public boolean revokeProject(int projectId, String userName) {
+        try {
+            // This targets the data directly via SQL DELETE
+            userProjectsRepository.deleteByUsernameAndProjectId(userName, projectId);
+            return true;
+        } catch (Exception e) {
+            System.err.println("Revoke failed: " + e.getMessage());
+            return false;
+        }
+    }
 }
