@@ -1,5 +1,8 @@
 .hub-page {
-  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
   position: relative;
 }
 
@@ -22,4 +25,16 @@
 .audit-logs{
   margin-top: 10px;
   overflow-y: scroll;
+}
+
+.filter{ 
+  margin-top: 10px;
+  margin-right: 20%;
+}
+
+.filterInput{
+  margin-right: 20px;
+}
+.filterButton{
+  border-right: 30%;
 }

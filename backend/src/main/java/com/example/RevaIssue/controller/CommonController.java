@@ -1,5 +1,6 @@
 package com.example.RevaIssue.controller;
 
+import com.example.RevaIssue.dto.RegisterRequest;
 import com.example.RevaIssue.entity.Issue;
 import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.entity.User;
@@ -8,11 +9,9 @@ import com.example.RevaIssue.service.IssueService;
 import com.example.RevaIssue.service.ProjectService;
 import com.example.RevaIssue.service.UserService;
 import com.example.RevaIssue.util.JwtUtility;
+import com.example.RevaIssue.util.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -45,20 +44,22 @@ public class CommonController {
      */
 
     // TODO: Modify. Make it so that the only projects returned are those that are associated with the user
-    // This should be done by making a new service method
     @GetMapping("/projects")
     public List<Project> getProjects(){
         return projectService.getAllProjects();
     }
 
-    // TODO: Modify. Same as above, just check that the user is related to the project before
-    // serving it.
     @GetMapping("/projects/{id}")
     public Project getProject(@PathVariable int id){
         return projectService.getProjectById(id);
     }
 
-    // TODO: Implement. Basically, return a list of every issue with the project id as a key.
+    // TODO: Implement. Make it return all users associated with a given project.
+    @GetMapping("/projects/{id}/users")
+    public List<UserDTO> getUsersByProjectId(@PathVariable int id){
+        return userService.getAllUsersByProjectId(id);
+    }
+    
     @GetMapping("/issues/{projectId}")
     public List<Issue> getIssues(@PathVariable int projectId){ return null; }
 
@@ -67,12 +68,18 @@ public class CommonController {
     @GetMapping("/issues/")
     public Issue getIssueById(int id){ return null; }
 
-    // TODO: Implement. Make it so that it only adds relevant users to the list 
-    @GetMapping("/users")
-    public List<User> getUsers(){ return null; }
-
     @GetMapping("/issues/latest")
     public List<Issue> getMostRecentIssues() {
         return issueService.getMostRecentIssues();
+    }
+
+    @GetMapping("/issues/{keyword}")
+    public List<Issue> getIssuesByKeyword(@PathVariable String keyword){
+        return issueService.getIssuesByKeyword(keyword);
+    }
+
+    @GetMapping("/projects/{keyword}")
+    public List<Project> getProjectByKeyword(@PathVariable String keyword){
+        return projectService.getProjectsByKeyword(keyword);
     }
 }

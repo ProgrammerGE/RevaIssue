@@ -80,8 +80,8 @@ public class AdminController {
         return projectService.createProject(project);
     }
 
-    @PostMapping("projects/{projectId}/assign/")
-    public User_Projects assignProject(@PathVariable int projectId, @RequestParam UUID uuid){
-        return userService.assignProject(projectId, uuid);
+    @PostMapping("/projects/{projectId}/assign/{userName}")
+    public User_Projects assignProject(@PathVariable int projectId, @PathVariable String userName){
+        return userService.assignProject(projectId, userName);
     }
 }

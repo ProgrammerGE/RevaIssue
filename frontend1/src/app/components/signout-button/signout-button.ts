@@ -14,6 +14,7 @@ export class SignoutButton {
   }
 
   signoutRouter(){
+    localStorage.removeItem("REVAISSUE_TOKEN");
     this.router.navigate(['login']);
   }
 }

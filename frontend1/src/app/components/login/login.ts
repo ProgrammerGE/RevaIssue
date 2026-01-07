@@ -4,6 +4,7 @@ import { RouterLink, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { JwtTokenStorage } from '../../services/jwt-token-storage';
 import { TokenData } from '../../interfaces/token-data';
+import { UserService } from '../../services/user-service';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +19,10 @@ export class Login {
   httpClient = inject(HttpClient);
   router = inject(Router);
   jwtStorage = inject(JwtTokenStorage);
+
+  constructor( private userService: UserService,){
+
+  }
 
   onSubmit() {
     this.httpClient
@@ -34,6 +39,7 @@ export class Login {
           if (response.body) {
             const token = response.body.token;
             this.jwtStorage.setToken(token);
+            this.userService.getUserInfo();
             this.router.navigate(['/hubpage']);
           }
         },

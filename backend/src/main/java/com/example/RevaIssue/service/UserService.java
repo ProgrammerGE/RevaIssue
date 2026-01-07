@@ -66,6 +66,18 @@ public class UserService {
         return userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
+    public List<UserDTO> getAllUsersByProjectId(int pId) {
+        // Use the userProjectsRepository to pull all records that contain the pId into a List<User_Projects>
+
+        // Then, use the user id fields from the List<User_Projects> to request a List<User>
+
+        // Then, use the mapper to get a list of List<UserDTO>
+        return userProjectsRepository.findUsersByProjectId(pId)
+                .stream()
+                .map(userMapper::toDTO)
+                .toList();
+    }
+
     //
     public List<UserDTO> getAllUsers() {
         return userRepository.findAll()  //  List<User>
@@ -91,8 +103,8 @@ public class UserService {
         return projects;
     }
 
-    public User_Projects assignProject(int projectId, UUID uuid){
-        User user = getUserById(uuid);
+    public User_Projects assignProject(int projectId, String userName){
+        User user = getUserByUsername(userName);
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new RuntimeException("Project not found with id: " + projectId));
 

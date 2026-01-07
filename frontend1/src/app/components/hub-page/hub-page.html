@@ -1,12 +1,20 @@
+<app-nav-bar></app-nav-bar>
+
 <div class="hub-page">
   <div class="popup">
     <app-create-project></app-create-project>
   </div>
   <header class="hub-header">
-    <h2 class="welcome-message">Welcome, {{ username() }}</h2>
+    <div>
+      <h2 class="welcome-message">Welcome, {{ username() | capitalizeFirst }}</h2>
+      <span>{{ userRole() }}</span>
+    </div>
+    <div class="filter">
+    <input type="search" [(ngModel)]="searchFilter"  class="filterInput"/>
+    <button (click)="filterList()" class="filterButton"> Filter Issues </button>
+    </div>
     <input type="search" />
   </header>
-  <span>{{ userRole() }}</span>
   <section class="lists">
     <app-list-container title="Projects" [items]="projectsList()" [hasButton]="true"></app-list-container>
     <app-list-container title="Issues" [items]="issuesList()" [hasButton]="false"></app-list-container>
@@ -15,7 +23,7 @@
   <section class="audit-logs">
     <h4 style="margin-left: 10px;"> Audit Logs </h4>
     @for (item of auditLogs(); track $index) {
-        {{ item }}
+        {{ item.role }}: {{ item.username}} {{ item.action}} at {{ item.timestamp }}
     }
   </section>    
   }
