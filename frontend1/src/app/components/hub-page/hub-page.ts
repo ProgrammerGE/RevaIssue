@@ -22,6 +22,7 @@ import { Router } from '@angular/router';
   templateUrl: './hub-page.html',
   styleUrl: './hub-page.css',
 })
+
 export class HubPage extends RevaIssueSubscriber {
   username: WritableSignal<string> = signal('');
   userRole: WritableSignal<string> = signal('');
@@ -43,10 +44,7 @@ export class HubPage extends RevaIssueSubscriber {
     });
 
     effect(() => {
-      const role = this.userRole();
-      if (!role) return;
-
-      this.projectService.viewAllProjects(this.projects, role);
+      this.projectService.viewAllProjects(this.projects, this.userRole());
     });
   }
 
