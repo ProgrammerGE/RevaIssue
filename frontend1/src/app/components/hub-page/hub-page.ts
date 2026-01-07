@@ -1,17 +1,13 @@
 import { Component, computed, effect, OnInit, Signal, signal, WritableSignal } from '@angular/core';
 import { ListContainer } from '../list-container/list-container';
-import { LoginService } from '../../services/login-service';
-import { Router, RouterLink } from '@angular/router';
 import { hubListItem } from '../../interfaces/hubpage-list-item';
 import { ProjectService } from '../../services/project-service';
 import { RevaIssueSubscriber } from '../../classes/reva-issue-subscriber';
-import { RegistrationService } from '../../services/registration-service';
 import { UserService } from '../../services/user-service';
 import { CreateProject } from '../create-project/create-project';
-import { CreateIssue } from '../create-issue/create-issue';
 import { FormsModule } from '@angular/forms';
 import { AuditLogService } from '../../services/audit-log-service';
-import { AuditLog } from '../../interfaces/audit-log-data';
+import { AuditLogData } from '../../interfaces/audit-log-data';
 import { IssueService } from '../../services/issue-service';
 import { ProjectData } from '../../interfaces/project-data';
 import { IssueData } from '../../interfaces/issue-data';
@@ -26,7 +22,7 @@ import { NavBar } from "../nav-bar/nav-bar";
 export class HubPage extends RevaIssueSubscriber {
   username: WritableSignal<string> = signal('');
   userRole: WritableSignal<string> = signal('');
-  auditLogs: WritableSignal<Array<string>> = signal([]);
+  auditLogs: WritableSignal<Array<AuditLogData>> = signal([]);
   isAdmin: WritableSignal<boolean> = signal(false);
   searchFilter = '';
 
@@ -48,7 +44,6 @@ export class HubPage extends RevaIssueSubscriber {
 
       this.projectService.viewAllProjects(this.projects, role);
     });
-    this.auditLogService.getAllAuditLogs(this.auditLogs);
   }
 
   issues: WritableSignal<IssueData[]> = signal([]);
@@ -82,6 +77,7 @@ export class HubPage extends RevaIssueSubscriber {
     this.userService.getUserInfo();
     this.getIssues();
     this.isAdmin.set(this.userRole() === 'ADMIN');
+    this.auditLogService.getAllAuditLogs(this.auditLogs);
   }
 
   userLoggedIn: WritableSignal<boolean> = signal(false);
