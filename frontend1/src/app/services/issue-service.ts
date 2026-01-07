@@ -97,4 +97,16 @@ export class IssueService {
       });
   }
 
+  viewAllIssuesByKeyword(keyword: String, issues: WritableSignal<Array<IssueData>>){
+    this.httpClient
+    .get<IssueData[]>(`${this.baseUrl}/common/issues/${keyword}`)
+      .subscribe((issueList) => {
+        const newIssueList = [];
+        for (const issueObj of issueList) {
+          newIssueList.push(issueObj);
+        }
+        issues.set(newIssueList);
+      });
+  }
+
 }
