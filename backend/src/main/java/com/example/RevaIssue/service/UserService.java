@@ -114,4 +114,27 @@ public class UserService {
         user_projects.setProject(project);
         return userProjectsRepository.save(user_projects);
     }
+
+    public boolean revokeProject(int projectId, String userName) {
+        try {
+            User user = getUserByUsername(userName);
+
+            // Find the project, or return false if it doesn't exist
+            Optional<Project> projectOpt = projectRepository.findById(projectId);
+            if (projectOpt.isEmpty()) {
+                return false;
+            }
+
+            Project project = projectOpt.get();
+
+            // Perform the deletion
+            userProjectsRepository.deleteByUserAndProject(user, project);
+
+            return true;
+        } catch (Exception e) {
+            // Log the error so you know why it failed (e.g., DataIntegrityViolation)
+            System.err.println("Failed to revoke project: " + e.getMessage());
+            return false;
+        }
+    }
 }

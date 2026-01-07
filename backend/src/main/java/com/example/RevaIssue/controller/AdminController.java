@@ -84,4 +84,9 @@ public class AdminController {
     public User_Projects assignProject(@PathVariable int projectId, @PathVariable String userName){
         return userService.assignProject(projectId, userName);
     }
+
+    @DeleteMapping("/projects/{projectId}/revoke/{userName}")
+    public boolean revokeProject(@PathVariable int projectId, @PathVariable String userName){
+        return userService.revokeProject(projectId, userName);
+    }
 }
