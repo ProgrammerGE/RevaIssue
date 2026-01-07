@@ -1,5 +1,6 @@
 package com.example.RevaIssue.controller;
 
+import com.example.RevaIssue.dto.RegisterRequest;
 import com.example.RevaIssue.entity.Issue;
 import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.entity.User;
@@ -9,10 +10,7 @@ import com.example.RevaIssue.service.ProjectService;
 import com.example.RevaIssue.service.UserService;
 import com.example.RevaIssue.util.JwtUtility;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -74,5 +72,15 @@ public class CommonController {
     @GetMapping("/issues/latest")
     public List<Issue> getMostRecentIssues() {
         return issueService.getMostRecentIssues();
+    }
+
+    @GetMapping("/issues/{keyword}")
+    public List<Issue> getIssuesByKeyword(@PathVariable String keyword){
+        return issueService.getIssuesByKeyword(keyword);
+    }
+
+    @GetMapping("/projects/{keyword}")
+    public List<Project> getProjectByKeyword(@PathVariable String keyword){
+        return projectService.getProjectsByKeyword(keyword);
     }
 }

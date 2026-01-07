@@ -75,4 +75,16 @@ export class ProjectService {
         error: (err) => console.error('Error creating new project', err),
       });
   }
+
+  viewAllProjectsByKeyword(keyword: String, projects: WritableSignal<Array<ProjectData>>){
+      this.httpClient
+      .get<ProjectData[]>(`${this.baseUrl}/common/projects/${keyword}`)
+        .subscribe((projectList) => {
+          const newProjectList = [];
+          for (const projObj of projectList) {
+            newProjectList.push(projObj);
+          }
+          projects.set(newProjectList);
+        });
+    }
 }

@@ -6,7 +6,10 @@
   </div>
   <header class="hub-header">
     <h2 class="welcome-message">Welcome, {{ username() }}</h2>
-    <input type="search" />
+    <div class="filter">
+    <input type="search" [(ngModel)]="searchFilter"  class="filterInput"/>
+    <button (click)="filterList()" class="filterButton"> Filter Issues </button>
+    </div>
   </header>
   <span>{{ userRole() }}</span>
   <section class="lists">

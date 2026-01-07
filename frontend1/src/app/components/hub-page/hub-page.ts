@@ -28,6 +28,7 @@ export class HubPage extends RevaIssueSubscriber {
   userRole: WritableSignal<string> = signal('');
   auditLogs: WritableSignal<Array<string>> = signal([]);
   isAdmin: WritableSignal<boolean> = signal(false);
+  searchFilter = '';
 
   constructor(
     private userService: UserService,
@@ -84,4 +85,13 @@ export class HubPage extends RevaIssueSubscriber {
   }
 
   userLoggedIn: WritableSignal<boolean> = signal(false);
+
+  
+    /**
+     * I keep getting internal errors from this query function, I commented it out for now.
+     */
+  filterList(){
+    //this.projectService.viewAllProjectsByKeyword(this.searchFilter, this.projects);
+    //this.issueService.viewAllIssuesByKeyword(this.searchFilter, this.issues);
+  }
 }
