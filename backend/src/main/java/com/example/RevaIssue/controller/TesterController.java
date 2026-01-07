@@ -33,7 +33,10 @@ public class TesterController {
 
 
     @PostMapping("/project/{project_id}/issues")
-    public Issue createIssue(@RequestBody Issue issue){
+    public Issue createIssue(@RequestHeader (name = "Authorization") String authHeader, @RequestBody Issue issue){
+        String role = authService.getRoleFromHeader(authHeader);
+        String username = authService.getUsernameFromHeader(authHeader);
+        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("CREATED ISSUE " + issue.getName(), username, role));
         return issueService.createIssue(issue);
     }
 
