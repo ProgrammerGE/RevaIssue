@@ -61,8 +61,7 @@ public class CommonController {
     public List<UserDTO> getUsersByProjectId(@PathVariable int id){
         return userService.getAllUsersByProjectId(id);
     }
-
-    // TODO: Implement. Basically, return a list of every issue with the project id as a key.
+    
     @GetMapping("/issues/{projectId}")
     public List<Issue> getIssues(@PathVariable int projectId){ return null; }
 
