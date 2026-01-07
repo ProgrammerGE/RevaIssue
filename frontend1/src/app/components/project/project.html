@@ -46,10 +46,12 @@
       </div>
 
       <div class="issues-list">
-        @for (issue of issues(); track issue.id) {
-        <div class="issue-card" (mouseenter)="hoveredIssue = issue">
-          <span class="issue-id">#{{ issue.id }}</span>
-          <span class="issue-title">{{ issue.title }}</span>
+        @for (issue of issues(); track issue.issueID) {
+        <div class="issue-card" (mouseenter)="hoveredIssue = issue" (mouseleave)="hoveredIssue = null"
+          (click)="selectIssue(issue)" [class.active]="selectedIssue?.issueID === issue.issueID">
+
+          <span class="issue-id">#{{ issue.issueID }} </span>
+          <span class="issue-title">{{ issue.name }}</span>
           <span class="issue-priority" [attr.data-priority]="issue.priority">
             {{ issue.priority }}
           </span>
@@ -59,20 +61,55 @@
   </div>
   <!-- issue viewing pane -->
   <div class="div5">
+    <div class="view-pane-container">
+      @if (hoveredIssue || selectedIssue) {
+      @let current = hoveredIssue || selectedIssue;
 
-      <!--Second is the quick description pane. It shows the description of the issue that
-          is currently being hovered over
-          TODO: First add the issues table, then add the issue quick description.
-          Make the issues table & quick description child components of project-->
-      <div class="description-box">
-        <h4>Quick Preview</h4>
-        <hr>
-        @if (hoveredIssue) {
-        <p class="fade-in">{{ hoveredIssue.description }}</p>
-        } @else {
-        <p class="placeholder-text">Hover over an issue to see details...</p>
-        }
+      <div class="issue-details fade-in">
+        <div class="details-header">
+          <h3>{{ current.name }}</h3>
+          <span class="status-badge" [attr.data-status]="current.status">{{ current.status }}</span>
+        </div>
+
+        <div class="metrics-row">
+          <span class="metric"><strong>Priority:</strong> {{ current.priority }}</span>
+          <span class="metric"><strong>Severity:</strong> {{ current.severity }}</span>
+        </div>
+
+        <div class="description-section">
+          <h4>Description</h4>
+          <p>{{ current.description }}</p>
+        </div>
       </div>
 
+      <hr />
+
+      <div class="comments-section">
+        <h4>Comments ({{ current.comments?.length || 0 }})</h4>
+        <div class="comments-scroll-area">
+          @for (comment of current.comments; track $index) {
+          <div class="comment-item">
+            <div class="comment-meta">
+              <span class="author">{{ comment.author }}</span>
+              <span class="date">{{ comment.dateCreated }}</span>
+            </div>
+            <p class="comment-text">{{ comment.text }}</p>
+          </div>
+          } @empty {
+          <p class="no-comments">No comments yet.</p>
+          }
+        </div>
+        <div class="comment-input-placeholder">
+          <input type="text" placeholder="Add a comment..." disabled />
+          <button disabled>Send</button>
+        </div>
+      </div>
+
+      } @else {
+      <div class="empty-state">
+        <p>Select an issue to view full details and comments</p>
+      </div>
+      }
+    </div>
   </div>
 </div>

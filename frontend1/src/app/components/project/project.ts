@@ -38,6 +38,11 @@ export class Project extends RevaIssueSubscriber {
           text: 'Issue created.',
           dateCreated: '2026-01-01T10:00:00Z',
         },
+        {
+          author: 'Chris Jacobs',
+          text: 'Hello world!.',
+          dateCreated: '2026-01-02T14:30:00Z',
+        },
       ],
     },
     {
@@ -68,10 +73,6 @@ export class Project extends RevaIssueSubscriber {
       ],
     },
   ]);
-  // This will hold the issue currently being hovered
-  hoveredIssue: any = null;
-  // This will hold the issue that was just clicked on
-  selectedIssue: any = null;
 
   // Dependency Injection
   private projectService = inject(ProjectService);
@@ -89,6 +90,11 @@ export class Project extends RevaIssueSubscriber {
 
   // TODO: Have this update based on the current user
   userRole: 'admin' | 'tester' | 'developer' = 'admin';
+
+  // This will hold the issue currently being hovered
+  hoveredIssue: any = null;
+  // This will hold the issue that was just clicked on
+  selectedIssue: any = null;
 
   constructor() {
     super();
@@ -117,6 +123,7 @@ export class Project extends RevaIssueSubscriber {
     console.log('Fetching users...');
     this.userService.fetchUsers(this.projectId);
   }
+
   /**
    * Function called by project.html
    * Triggers from clicking on Add User in the project view (admin)
@@ -169,5 +176,16 @@ export class Project extends RevaIssueSubscriber {
   //Be sure to assign this method to a button in the project html that will be clicked for "creating issues"
   addPopup() {
     this.popUpService.openPopUpIssue();
+  }
+
+  // Helper method to handle the click
+  selectIssue(issue: any) {
+    this.selectedIssue = issue;
+  }
+
+  // Logic for the preview pane:
+  // Show hover if it exists, otherwise show the sticky selected one
+  get displayIssue() {
+    return this.hoveredIssue || this.selectedIssue;
   }
 }

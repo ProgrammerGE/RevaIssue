@@ -63,9 +63,18 @@
   transition: background 0.2s;
 }
 
+/* Highlight on Hover */
 .issue-card:hover {
-  background-color: #eef6ff;
-  border-color: #007bff;
+  background-color: #e2e8f0;
+  cursor: pointer;
+}
+
+/* Sticky Highlight on Click */
+.issue-card.active {
+  background-color: #d9ceff;
+  border-left: 4px solid #3b82f6;
+  /* A blue accent to show it's "selected" */
+  font-weight: bold;
 }
 
 .user-item {
