@@ -9,10 +9,12 @@ import { Observable } from 'rxjs';
 import { UserService } from '../../services/user-service';
 import { UserData } from '../../interfaces/user-data';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { SignoutButton } from "../signout-button/signout-button";
+import { NavBar } from "../nav-bar/nav-bar";
 
 @Component({
   selector: 'app-project',
-  imports: [CreateIssue],
+  imports: [CreateIssue, NavBar],
   templateUrl: './project.html',
   styleUrl: './project.css',
 })

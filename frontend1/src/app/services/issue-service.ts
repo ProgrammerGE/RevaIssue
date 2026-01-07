@@ -8,9 +8,9 @@ import { HttpClient } from '@angular/common/http';
 })
 export class IssueService {
   private issueSubject = new BehaviorSubject<IssueData>({
-    issue_id: 0,
-    issue_title: '',
-    issue_description: '',
+    issueID: 0,
+    name: '',
+    description: '',
     project_id: 0,
     severity: 0,
     priority: 0,
@@ -59,7 +59,7 @@ export class IssueService {
           if(!updatedIssue)
           this.issueSubject.next(updatedIssue);
         },
-        error: (err) => console.log(`Error updating ${issue.issue_title} details`, err),
+        error: (err) => console.log(`Error updating ${issue.name} details`, err),
       });
   }
   updateIssueStatus(
@@ -79,6 +79,18 @@ export class IssueService {
       .subscribe( issueList => {
         const newIssueList = [];
         for(const issueObj of issueList){
+          newIssueList.push(issueObj);
+        }
+        issues.set(newIssueList);
+      });
+  }
+
+    getMostRecentIssues(issues: WritableSignal<Array<IssueData>>): void {
+    this.httpClient
+      .get<IssueData[]>(`${this.baseUrl}/common/issues/latest`)
+      .subscribe((issueList) => {
+        const newIssueList = [];
+        for (const issueObj of issueList) {
           newIssueList.push(issueObj);
         }
         issues.set(newIssueList);
