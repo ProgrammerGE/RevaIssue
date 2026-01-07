@@ -1,8 +1,9 @@
 import { Injectable, WritableSignal } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ProjectData } from '../interfaces/project-data';
 import { HttpClient } from '@angular/common/http';
 import { JwtTokenStorage } from './jwt-token-storage';
+import { UserAssignment } from '../interfaces/user-assignment';
 
 @Injectable({
   providedIn: 'root',
@@ -22,9 +23,13 @@ export class ProjectService {
     return this.projectSubject;
   }
 
-  addUserToProject(projectId: number, username: string): Observable<User_Projects> {
-    // Matches your @PathVariable mapping
-    return this.http.post<User_Projects>(`api/projects/${projectId}/assign/${username}`, {});
+  addUserToProject(projectId: number, userName: string): void {
+    this.httpClient
+      .post<UserAssignment>(`${this.baseUrl}/admin/projects/${projectId}/assign/${userName}`, {
+        username: userName,
+        projectID: projectId,
+      })
+      .subscribe();
   }
 
   // TODO: user role should only be of type admin | developer | tester
