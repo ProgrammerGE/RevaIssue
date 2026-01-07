@@ -20,7 +20,7 @@
       @for (item of items(); track $index) {
         <div class="list-item">
           <input type="checkbox" />
-          {{ item.name }}
+          {{ item.name | capitalizeFirst}}
         </div>
       }
     </div>

@@ -84,6 +84,8 @@ hr {
 }
 
 .list-item {
+  display: flex;
+  gap: 8px ;
   padding: 6px;
 }
 

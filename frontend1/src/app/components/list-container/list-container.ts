@@ -2,10 +2,11 @@ import { Component, input, InputSignal, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { hubListItem } from '../../interfaces/hubpage-list-item';
 import { PopUpService } from '../../services/pop-up-service';
+import { CapitalizeFirst } from '../../pipes/capitalize-first.pipe';
 
 @Component({
   selector: 'app-list-container',
-  imports: [CommonModule],
+  imports: [CommonModule, CapitalizeFirst],
   templateUrl: './list-container.html',
   styleUrl: './list-container.css',
 })
