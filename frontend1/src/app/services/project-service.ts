@@ -22,11 +22,13 @@ export class ProjectService {
     return this.projectSubject;
   }
 
+  addUserToProject(projectId: number, username: string): Observable<User_Projects> {
+    // Matches your @PathVariable mapping
+    return this.http.post<User_Projects>(`api/projects/${projectId}/assign/${username}`, {});
+  }
+
   // TODO: user role should only be of type admin | developer | tester
-  viewAllProjects(
-    projects: WritableSignal<Array<ProjectData>>,
-    role: string
-  ): void {
+  viewAllProjects(projects: WritableSignal<Array<ProjectData>>, role: string): void {
     this.httpClient
       .get<ProjectData[]>(`${this.baseUrl}/${role}/projects`)
       .subscribe((projectList) => {
@@ -37,14 +39,6 @@ export class ProjectService {
         projects.set(newProjectList);
       });
   }
-
-  // viewAllProjects(projects: WritableSignal<ProjectData[]>): void {
-  //   this.httpClient
-  //     .get<ProjectData[]>(`${this.baseUrl}/common/projects`)
-  //     .subscribe((projectList) => {
-  //       projects.set(projectList);
-  //     });
-  // }
 
   viewProject(projectId: number): void {
     this.httpClient.get<ProjectData>(`${this.baseUrl}/common/projects/${projectId}`).subscribe({
