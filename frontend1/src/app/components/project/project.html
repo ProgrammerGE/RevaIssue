@@ -1,16 +1,19 @@
 <app-nav-bar></app-nav-bar>
 
 <div class="parent">
-        <app-create-issue></app-create-issue>
+
+  <!-- title -->
   <div class="div1">
     <!-- This will contain an element that reflects the name of the project entity -->
-    <h4>Project Title:</h4>
     <h3>{{ projectTitle() }}</h3>
   </div>
+  <!-- description -->
   <div class="div2">
     <!-- This will contain an element that says something like "Description:". This could be removed -->
-    <h4>Description:</h4>
+    <!-- <h4>Description:</h4> -->
+    <p>{{ projectDescription() }}</p>
   </div>
+  <!-- users display -->
   <div class="div3">
     <h2>Users List</h2>
     @if (userRole === 'admin') {
@@ -29,26 +32,47 @@
       }
     </div>
   </div>
+  <!-- issue viewing pane -->
   <div class="div4">
-    <p>{{ projectDescription() }}</p>
-    <!-- This will contain an element that reflects the description of the project entity -->
+      <!--First is the issues browser pane. It shows the projects issues. Users can click on them
+              to be taken to a page where they can view that issue's details. Testers have a button
+              to create issues. -->
+      issues box
+      <div class="issues-header">
+        <h4>Project Issues</h4>
+        @if (userRole === 'tester') {
+        <button class="btn-create">Create Issue</button>
+        }
+      </div>
+
+      <div class="issues-list">
+        @for (issue of issues(); track issue.id) {
+        <div class="issue-card" (mouseenter)="hoveredIssue = issue">
+          <span class="issue-id">#{{ issue.id }}</span>
+          <span class="issue-title">{{ issue.title }}</span>
+          <span class="issue-priority" [attr.data-priority]="issue.priority">
+            {{ issue.priority }}
+          </span>
+        </div>
+        }
+      </div>
   </div>
+  <!-- issue quick description -->
   <div class="div5">
-    <!--
-      Extra Space
-    This space is reserved for a two things:
 
-    First is the issues browser pane. It shows the projects issues. Users can click on them
-    to be taken to a page where they can view that issue's details. Testers have a button
-    to create issues.
+      <!--Second is the quick description pane. It shows the description of the issue that
+          is currently being hovered over
+          TODO: First add the issues table, then add the issue quick description.
+          Make the issues table & quick description child components of project-->
+      <div class="description-box">
+        <h4>Quick Preview</h4>
+        <hr>
+        @if (hoveredIssue) {
+        <p class="fade-in">{{ hoveredIssue.description }}</p>
+        } @else {
+        <p class="placeholder-text">Hover over an issue to see details...</p>
+        }
+      </div>
 
-    Second is the quick description pane. It shows the description of the issue that
-    is currently being hovered over
-     -->
-    <!--
-     TODO: First add the issues table, then add the issue quick description.
-
-     Make the issues table & quick description child components of project
-     -->
   </div>
 </div>

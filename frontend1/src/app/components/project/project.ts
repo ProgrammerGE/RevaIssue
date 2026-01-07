@@ -15,11 +15,36 @@ import { NavBar } from "../nav-bar/nav-bar";
 
 @Component({
   selector: 'app-project',
-  imports: [CreateIssue, NavBar, FormsModule],
+  imports: [NavBar, FormsModule],
   templateUrl: './project.html',
   styleUrl: './project.css',
 })
 export class Project extends RevaIssueSubscriber {
+  // Dummy data, needs to be grabbed later
+  issues = signal([
+    {
+      id: 101,
+      title: 'Login button unresponsive',
+      priority: 'High',
+      description:
+        'The login button on the landing page does not trigger the auth service when clicked on mobile devices.',
+    },
+    {
+      id: 102,
+      title: 'CSS Grid misalignment',
+      priority: 'Low',
+      description: 'The dashboard widgets overlap when the screen resolution is set to 1440p.',
+    },
+    {
+      id: 103,
+      title: 'API Timeout on Export',
+      priority: 'Medium',
+      description:
+        'Exporting the user list to CSV times out if the record count exceeds 5,000 entries.',
+    },
+  ]);
+  // This will hold the issue currently being hovered
+  hoveredIssue: any = null;
 
   // Dependency Injection
   private projectService = inject(ProjectService);
@@ -37,7 +62,6 @@ export class Project extends RevaIssueSubscriber {
 
   // TODO: Have this update based on the current user
   userRole: 'admin' | 'tester' | 'developer' = 'admin';
-
 
   constructor() {
     super();
