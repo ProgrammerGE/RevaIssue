@@ -85,8 +85,16 @@
       <hr />
 
       <div class="comments-section">
+        <div>
+          @if (userRole === 'tester') {
+            <button>Re open issue</button>
+            <button>Close issue</button>
+          } @else if (userRole === 'developer') {
+            <button>Move to in progress</button>
+            <button>Resolve Issue</button>
+          }
+        </div>
         <h4>Comments ({{ current.comments.length || 0 }})</h4>
-
         <div class="comment-input-placeholder">
           <input type="text" placeholder="Add a comment..." disabled />
           <button disabled>Send</button>
