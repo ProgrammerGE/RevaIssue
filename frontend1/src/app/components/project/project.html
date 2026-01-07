@@ -10,7 +10,16 @@
     <!-- This will contain an element that says something like "Description:". This could be removed -->
   </div>
   <div class="div3">
-    Users List
+    <h2>Users List</h2>
+    <div id="project-user-list">
+      @for (user of users(); track user.username; let i = $index) {
+      <div class="user-item">
+        <strong>{{ user.username }} {{user.role}}</strong>
+      </div>
+      } @empty {
+      <p>No users found or still loading...</p>
+      }
+    </div>
     <!-- This will contain an element that shows a list of users who are associated with this project -->
      <!--
         Here's what needs to be done:

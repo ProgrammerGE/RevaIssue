@@ -1,10 +1,14 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, inject, Signal, signal, WritableSignal } from '@angular/core';
 import { RevaIssueSubscriber } from '../../classes/reva-issue-subscriber';
 import { ProjectService } from '../../services/project-service';
 import { ProjectData } from '../../interfaces/project-data';
 import { ActivatedRoute } from '@angular/router';
 import { CreateIssue } from "../create-issue/create-issue";
 import { PopUpService } from '../../services/pop-up-service';
+import { Observable } from 'rxjs';
+import { UserService } from '../../services/user-service';
+import { UserData } from '../../interfaces/user-data';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-project',
@@ -13,31 +17,57 @@ import { PopUpService } from '../../services/pop-up-service';
   styleUrl: './project.css',
 })
 export class Project extends RevaIssueSubscriber {
+
+  // Dependency Injection
+  private projectService = inject(ProjectService);
+  private userService = inject(UserService);
+  private popUpService = inject(PopUpService);
+  private route = inject(ActivatedRoute);
+
+  // vars
   project!: ProjectData;
   projectId: number = 0;
   projectTitle: WritableSignal<string> = signal('');
   projectDescription: WritableSignal<string> = signal('');
+  users: Signal<UserData[]> = toSignal(this.userService.getUsersSubject(), { initialValue: [] });
 
+  // TODO: Have this update based on the current user
   userRole: 'admin' | 'tester' | 'developer' = 'admin';
 
-  constructor(private projectService: ProjectService, private route: ActivatedRoute, private popUpService: PopUpService) {
+
+  constructor() {
     super();
+
     this.subscription = this.projectService.getProjectSubject().subscribe((projectData) => {
-      console.log('EMIT', projectData);
+      // console.log('EMIT', projectData);
       this.projectTitle.set(projectData.projectName);
       this.projectDescription.set(projectData.projectDescription);
-      console.log('SIGNALS', this.projectTitle(), this.projectDescription());
+      // console.log('SIGNALS', this.projectTitle(), this.projectDescription());
     });
   }
 
   ngOnInit(): void {
     this.projectId = Number(this.route.snapshot.paramMap.get('id'));
-
     if (!this.projectId) {
       throw new Error('Invalid project id');
     }
-
     this.viewProject();
+
+    this.fetchAndLogUsers();
+  }
+
+  private fetchAndLogUsers(): void {
+    console.log('Fetching users...');
+    this.userService.fetchUsers();
+    // this.userService.getUsersSubject().subscribe({
+    //   next: (users: UserData[]) => {
+    //     console.log('Users received:', users);
+    //     this.users = users;
+    //   },
+    //   error: (err) => {
+    //     console.error('Failed to fetch users:', err);
+    //   },
+    // });
   }
 
   viewProject() {
@@ -60,7 +90,7 @@ export class Project extends RevaIssueSubscriber {
   }
 
   //Be sure to assign this method to a button in the project html that will be clicked for "creating issues"
-  addPopup(){
-      this.popUpService.openPopUpIssue();
+  addPopup() {
+    this.popUpService.openPopUpIssue();
   }
 }

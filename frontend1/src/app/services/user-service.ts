@@ -21,6 +21,7 @@ export class UserService {
   });
 
   // represents all users on the app. A list of UserData objects.
+  // use this for the admin when they add users to projects
   private listUserSubject = new BehaviorSubject<UserData[]>([]);
 
   private baseUrl = 'http://localhost:8080';
@@ -31,11 +32,11 @@ export class UserService {
     return this.UserSubject;
   }
 
-  getUsers() {
+  getUsersSubject() {
     return this.listUserSubject.asObservable();
   }
 
-  getAllUsers() {
+  fetchUsers() {
     const token = this.tokenStorage.getToken();
 
     this.httpClient
