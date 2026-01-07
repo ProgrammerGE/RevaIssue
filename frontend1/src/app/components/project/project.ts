@@ -5,6 +5,7 @@ import { ProjectData } from '../../interfaces/project-data';
 import { ActivatedRoute } from '@angular/router';
 import { CreateIssue } from "../create-issue/create-issue";
 import { PopUpService } from '../../services/pop-up-service';
+import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { UserService } from '../../services/user-service';
 import { UserData } from '../../interfaces/user-data';
@@ -14,7 +15,7 @@ import { NavBar } from "../nav-bar/nav-bar";
 
 @Component({
   selector: 'app-project',
-  imports: [CreateIssue, NavBar],
+  imports: [CreateIssue, NavBar, FormsModule],
   templateUrl: './project.html',
   styleUrl: './project.css',
 })
@@ -32,6 +33,7 @@ export class Project extends RevaIssueSubscriber {
   projectTitle: WritableSignal<string> = signal('');
   projectDescription: WritableSignal<string> = signal('');
   users: Signal<UserData[]> = toSignal(this.userService.getUsersSubject(), { initialValue: [] });
+  newUser: WritableSignal<string> = signal('');
 
   // TODO: Have this update based on the current user
   userRole: 'admin' | 'tester' | 'developer' = 'admin';

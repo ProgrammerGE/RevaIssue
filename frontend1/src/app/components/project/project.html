@@ -3,16 +3,22 @@
 <div class="parent">
         <app-create-issue></app-create-issue>
   <div class="div1">
+    <!-- This will contain an element that reflects the name of the project entity -->
     <h4>Project Title:</h4>
     <h3>{{ projectTitle() }}</h3>
-    <!-- This will contain an element that reflects the name of the project entity -->
   </div>
   <div class="div2">
-    <h4>Description:</h4>
     <!-- This will contain an element that says something like "Description:". This could be removed -->
+    <h4>Description:</h4>
   </div>
   <div class="div3">
     <h2>Users List</h2>
+    @if (userRole === 'admin') {
+      <!-- Show button/form for adding and removing users -->
+      <button>Add User</button>
+      <input type="text" [(ngModel)]="newUser" placeholder="Enter username" />
+    }
+    <!-- Show the user list -->
     <div id="project-user-list">
       @for (user of users(); track user.username; let i = $index) {
       <div class="user-item">
@@ -22,21 +28,6 @@
       <p>No users found or still loading...</p>
       }
     </div>
-    <!-- This will contain an element that shows a list of users who are associated with this project -->
-     <!--
-        Here's what needs to be done:
-        1) Div that shows the users
-          a) This will be scrollable
-          b) It holds <a> elements that represent users. Clicking removes them (for now)
-            i) Must get all users from that project using the user service
-        2) Div that holds the admin button(s)
-          a) Button to add user. Makes a popup come up, showing a scrollable menu of all users
-            i) Must get all users.
-            ii) Search bar for quick adding.
-     -->
-    @if (userRole === 'admin') {
-    <!-- Show buttons for adding and removing users -->
-    }
   </div>
   <div class="div4">
     <p>{{ projectDescription() }}</p>
