@@ -32,6 +32,6 @@ button {
 }
 
 #descriptionBox {
-  height: 60px;
-  width: 300px;
+  /* height: 60px; */
+  width: 90%;
 }
