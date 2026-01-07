@@ -13,11 +13,8 @@ public class User_Projects {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "User_ProjectsID", nullable = false)
-    private int ID;
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "UserProjectsID") // Removed nullable = false here as the DB generates it
-//    private Integer id; // Changed from int to Integer and "ID" to "id" (standard naming)
+//    private int ID;
+    private Integer ID; // Changed from ID to id (standard) and int to Integer
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "UserID")
