@@ -12,10 +12,11 @@ import { IssueService } from '../../services/issue-service';
 import { ProjectData } from '../../interfaces/project-data';
 import { IssueData } from '../../interfaces/issue-data';
 import { NavBar } from "../nav-bar/nav-bar";
+import { CapitalizeFirst } from '../../pipes/capitalize-first.pipe';
 
 @Component({
   selector: 'app-hub-page',
-  imports: [ListContainer, CreateProject, FormsModule, NavBar],
+  imports: [ListContainer, CreateProject, FormsModule, NavBar, CapitalizeFirst],
   templateUrl: './hub-page.html',
   styleUrl: './hub-page.css',
 })

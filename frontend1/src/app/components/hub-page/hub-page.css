@@ -1,5 +1,8 @@
 .hub-page {
-  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
   position: relative;
 }
 

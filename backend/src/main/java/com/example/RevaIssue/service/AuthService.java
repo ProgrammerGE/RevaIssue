@@ -21,7 +21,7 @@ public class AuthService {
     }
 
     public String login(LoginRequest request) {
-        User user = userService.getUserByUsername(request.username());
+        User user = userService.getUserByUsername(request.username().toLowerCase());
         if(!user.getPassword().equals(request.password())){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid Password");
         }
@@ -30,7 +30,7 @@ public class AuthService {
 
     public String register(RegisterRequest request){
         User newUser = new User();
-        newUser.setUsername(request.username());
+        newUser.setUsername(request.username().toLowerCase());
         newUser.setPassword(request.password());
         newUser.setUserRole(request.role());
         User savedUser = userService.createUser(newUser);
