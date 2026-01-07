@@ -30,8 +30,7 @@ public class ProjectService {
     public Project getProjectById(int id){ return projectRepo.getReferenceById(id); }
 
     public List<Project> getProjectsByKeyword(String keyword){
-        List<Project> projectList = projectRepo.findByKeyword(keyword);
-        return projectList;
+        return projectRepo.findByKeyword(keyword);
     }
 
     public boolean deleteProject(int projId){
