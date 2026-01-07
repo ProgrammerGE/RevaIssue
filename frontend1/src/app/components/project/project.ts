@@ -91,18 +91,6 @@ export class Project extends RevaIssueSubscriber {
     this.userService.fetchUsers(this.projectId);
   }
 
-  /**
-   * Function called by project.html
-   * Triggers from clicking on users in the users list
-   * Asks the project service to remove a user from a project
-   */
-  onUserClick(user: UserData) {
-    console.log("removing ", user.username);
-    const username = user.username;
-    const projectId = this.projectId;
-    this.projectService.removeUserFromProject(this.projectId, username);
-  }
-
   addUserToProject(): void {
     const username = this.newUser();
     const projectId = this.projectId;
@@ -110,6 +98,22 @@ export class Project extends RevaIssueSubscriber {
     if (username) {
       this.projectService.addUserToProject(projectId, username);
     }
+  }
+
+  /**
+   * Function called by project.html
+   * Triggers from clicking on users in the users list
+   * Asks the project service to remove a user from a project
+   */
+  onUserClick(user: UserData) {
+    console.log('removing ', user.username);
+    const username = user.username;
+    const projectId = this.projectId;
+    this.removeUserFromProject(this.projectId, username);
+  }
+
+  private removeUserFromProject(projectId: number, username: string): void {
+    this.projectService.removeUserFromProject(projectId, username);
   }
 
   viewProject() {
