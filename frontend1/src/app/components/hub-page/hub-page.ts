@@ -20,6 +20,7 @@ import { CapitalizeFirst } from '../../pipes/capitalize-first.pipe';
   templateUrl: './hub-page.html',
   styleUrl: './hub-page.css',
 })
+
 export class HubPage extends RevaIssueSubscriber {
   username: WritableSignal<string> = signal('');
   userRole: WritableSignal<string> = signal('');
@@ -31,7 +32,8 @@ export class HubPage extends RevaIssueSubscriber {
     private userService: UserService,
     private auditLogService: AuditLogService,
     private issueService: IssueService,
-    private projectService: ProjectService // private router: Router
+    private projectService: ProjectService,
+    // private router: Router,
   ) {
     super();
     this.subscription = this.userService.getUserSubject().subscribe((userData) => {
@@ -40,10 +42,7 @@ export class HubPage extends RevaIssueSubscriber {
     });
 
     effect(() => {
-      const role = this.userRole();
-      if (!role) return;
-
-      this.projectService.viewAllProjects(this.projects, role);
+      this.projectService.viewAllProjects(this.projects, this.userRole());
     });
   }
 
@@ -75,7 +74,6 @@ export class HubPage extends RevaIssueSubscriber {
   }
 
   ngOnInit() {
-    this.userService.getUserInfo();
     this.getIssues();
     this.isAdmin.set(this.userRole() === 'ADMIN');
     this.auditLogService.getAllAuditLogs(this.auditLogs);
