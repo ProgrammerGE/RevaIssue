@@ -54,7 +54,6 @@ export class UserService {
 
   getUserInfo() {
     const token = this.tokenStorage.getToken();
-    console.log('TOKEN VALUE:', token);
 
     this.httpClient
       .get<UserData>(`${this.baseUrl}/auth/userInfo`, {
