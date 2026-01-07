@@ -9,7 +9,7 @@ import { RegistrationService } from '../../services/registration-service';
 import { UserService } from '../../services/user-service';
 import { CreateProject } from '../create-project/create-project';
 import { CreateIssue } from '../create-issue/create-issue';
-import { FormsModule } from "@angular/forms";
+import { FormsModule } from '@angular/forms';
 import { AuditLogService } from '../../services/audit-log-service';
 import { AuditLog } from '../../interfaces/audit-log-data';
 import { IssueService } from '../../services/issue-service';
@@ -76,7 +76,9 @@ export class HubPage extends RevaIssueSubscriber {
 
   ngOnInit() {
     this.getProjects();
-    this.getIssues();    
+    this.getIssues();
+    this.userService.getUserInfo();
+
     this.isAdmin.set(this.userRole() === 'ADMIN');
   }
 
