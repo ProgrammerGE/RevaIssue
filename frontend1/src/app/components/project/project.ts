@@ -91,6 +91,15 @@ export class Project extends RevaIssueSubscriber {
     this.userService.fetchUsers(this.projectId);
   }
 
+  /**
+   * Function called by project.html
+   * Triggers from clicking on users in the users list
+   */
+  onUserClick(user: UserData) {
+    console.log(user.username);
+
+  }
+
   addUserToProject(): void {
     const username = this.newUser();
     const projectId = this.projectId;

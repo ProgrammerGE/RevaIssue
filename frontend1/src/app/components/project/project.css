@@ -67,3 +67,19 @@
   background-color: #eef6ff;
   border-color: #007bff;
 }
+
+.user-item {
+  padding: 8px;
+  transition: color 0.2s ease;
+  /* Makes the color change smooth */
+}
+
+/* Only apply hover effects if the 'is-admin' class is present */
+.user-item.is-admin {
+  cursor: pointer;
+}
+
+.user-item.is-admin:hover {
+  color: red;
+  background-color: #f9f9f9;
+}
