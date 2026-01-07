@@ -115,25 +115,14 @@ public class UserService {
         return userProjectsRepository.save(user_projects);
     }
 
+    @Transactional
     public boolean revokeProject(int projectId, String userName) {
         try {
-            User user = getUserByUsername(userName);
-
-            // Find the project, or return false if it doesn't exist
-            Optional<Project> projectOpt = projectRepository.findById(projectId);
-            if (projectOpt.isEmpty()) {
-                return false;
-            }
-
-            Project project = projectOpt.get();
-
-            // Perform the deletion
-            userProjectsRepository.deleteByUserAndProject(user, project);
-
+            // This targets the data directly via SQL DELETE
+            userProjectsRepository.deleteByUsernameAndProjectId(userName, projectId);
             return true;
         } catch (Exception e) {
-            // Log the error so you know why it failed (e.g., DataIntegrityViolation)
-            System.err.println("Failed to revoke project: " + e.getMessage());
+            System.err.println("Revoke failed: " + e.getMessage());
             return false;
         }
     }
