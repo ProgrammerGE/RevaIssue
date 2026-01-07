@@ -33,6 +33,12 @@ export class ProjectService {
       .subscribe();
   }
 
+  removeUserFromProject(projectId: number, userName: string): void {
+    this.httpClient
+      .delete(`${this.baseUrl}/admin/projects/${projectId}/revoke/${userName}`)
+      .subscribe();
+  }
+
   // TODO: user role should only be of type admin | developer | tester
   viewAllProjects(projects: WritableSignal<Array<ProjectData>>, role: string): void {
     this.httpClient
