@@ -2,13 +2,17 @@ export interface IssueData {
   issueID: number;
   name: string;
   description: string;
-  project_id: number;
+  projectID: number;
   severity: number;
   priority: number;
-  status: issueStatus;
-  comment_chain: Array<CommentChain>;
+  status: IssueStatus;
+  comments: Comment[];
 }
-//placeholder need to define how to get array of comments
-interface CommentChain {}
 
-export type issueStatus = 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED';
+export interface Comment {
+  author: string;
+  text: string;
+  dateCreated: string;
+}
+
+export type IssueStatus = 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED';

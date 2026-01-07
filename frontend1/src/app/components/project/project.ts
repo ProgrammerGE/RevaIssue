@@ -5,6 +5,7 @@ import { ProjectData } from '../../interfaces/project-data';
 import { ActivatedRoute } from '@angular/router';
 import { CreateIssue } from "../create-issue/create-issue";
 import { PopUpService } from '../../services/pop-up-service';
+import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { UserService } from '../../services/user-service';
 import { UserData } from '../../interfaces/user-data';
@@ -14,11 +15,36 @@ import { NavBar } from "../nav-bar/nav-bar";
 
 @Component({
   selector: 'app-project',
-  imports: [CreateIssue, NavBar],
+  imports: [NavBar, FormsModule],
   templateUrl: './project.html',
   styleUrl: './project.css',
 })
 export class Project extends RevaIssueSubscriber {
+  // Dummy data, needs to be grabbed later
+  issues = signal([
+    {
+      id: 101,
+      title: 'Login button unresponsive',
+      priority: 'High',
+      description:
+        'The login button on the landing page does not trigger the auth service when clicked on mobile devices.',
+    },
+    {
+      id: 102,
+      title: 'CSS Grid misalignment',
+      priority: 'Low',
+      description: 'The dashboard widgets overlap when the screen resolution is set to 1440p.',
+    },
+    {
+      id: 103,
+      title: 'API Timeout on Export',
+      priority: 'Medium',
+      description:
+        'Exporting the user list to CSV times out if the record count exceeds 5,000 entries.',
+    },
+  ]);
+  // This will hold the issue currently being hovered
+  hoveredIssue: any = null;
 
   // Dependency Injection
   private projectService = inject(ProjectService);
@@ -32,10 +58,10 @@ export class Project extends RevaIssueSubscriber {
   projectTitle: WritableSignal<string> = signal('');
   projectDescription: WritableSignal<string> = signal('');
   users: Signal<UserData[]> = toSignal(this.userService.getUsersSubject(), { initialValue: [] });
+  newUser: WritableSignal<string> = signal('');
 
   // TODO: Have this update based on the current user
   userRole: 'admin' | 'tester' | 'developer' = 'admin';
-
 
   constructor() {
     super();
@@ -50,6 +76,8 @@ export class Project extends RevaIssueSubscriber {
 
   ngOnInit(): void {
     this.projectId = Number(this.route.snapshot.paramMap.get('id'));
+    console.log('The project id is ', this.projectId);
+
     if (!this.projectId) {
       throw new Error('Invalid project id');
     }
@@ -60,16 +88,16 @@ export class Project extends RevaIssueSubscriber {
 
   private fetchAndLogUsers(): void {
     console.log('Fetching users...');
-    this.userService.fetchUsers();
-    // this.userService.getUsersSubject().subscribe({
-    //   next: (users: UserData[]) => {
-    //     console.log('Users received:', users);
-    //     this.users = users;
-    //   },
-    //   error: (err) => {
-    //     console.error('Failed to fetch users:', err);
-    //   },
-    // });
+    this.userService.fetchUsers(this.projectId);
+  }
+
+  addUserToProject(): void {
+    const username = this.newUser();
+    const projectId = this.projectId;
+
+    if (username) {
+      this.projectService.addUserToProject(projectId, username);
+    }
   }
 
   viewProject() {

@@ -11,11 +11,11 @@ export class IssueService {
     issueID: 0,
     name: '',
     description: '',
-    project_id: 0,
+    projectID: 0,
     severity: 0,
     priority: 0,
     status: 'OPEN',
-    comment_chain: [],
+    comments: [],
   });
 
   private baseUrl = 'http://localhost:8080';
@@ -39,8 +39,7 @@ export class IssueService {
       .post<IssueData>(`${this.baseUrl}/tester/projects/${projectId}/issues`, newIssue)
       .subscribe({
         next: (createdIssue) => {
-          if(!createdIssue)
-          this.issueSubject.next(createdIssue)
+          if (!createdIssue) this.issueSubject.next(createdIssue);
         },
         error: (err) =>
           console.error(`Error creating new issues for project with id: ${projectId}`, err),
@@ -56,8 +55,7 @@ export class IssueService {
       .put<IssueData>(`${this.baseUrl}/${role}/projects/${projectId}/issues/${issueId}`, issue)
       .subscribe({
         next: (updatedIssue) => {
-          if(!updatedIssue)
-          this.issueSubject.next(updatedIssue);
+          if (!updatedIssue) this.issueSubject.next(updatedIssue);
         },
         error: (err) => console.log(`Error updating ${issue.name} details`, err),
       });
@@ -74,18 +72,20 @@ export class IssueService {
     );
   }
 
-  viewAllIssues(issues: WritableSignal<Array<IssueData>>, role: 'admin' | 'developer' | 'tester') : void{
-      this.httpClient.get<IssueData[]>(`${this.baseUrl}/${role}/issues`)
-      .subscribe( issueList => {
-        const newIssueList = [];
-        for(const issueObj of issueList){
-          newIssueList.push(issueObj);
-        }
-        issues.set(newIssueList);
-      });
+  viewAllIssues(
+    issues: WritableSignal<Array<IssueData>>,
+    role: 'admin' | 'developer' | 'tester'
+  ): void {
+    this.httpClient.get<IssueData[]>(`${this.baseUrl}/${role}/issues`).subscribe((issueList) => {
+      const newIssueList = [];
+      for (const issueObj of issueList) {
+        newIssueList.push(issueObj);
+      }
+      issues.set(newIssueList);
+    });
   }
 
-    getMostRecentIssues(issues: WritableSignal<Array<IssueData>>): void {
+  getMostRecentIssues(issues: WritableSignal<Array<IssueData>>): void {
     this.httpClient
       .get<IssueData[]>(`${this.baseUrl}/common/issues/latest`)
       .subscribe((issueList) => {

@@ -36,11 +36,12 @@ export class UserService {
     return this.listUserSubject.asObservable();
   }
 
-  fetchUsers() {
+  fetchUsers(pId: number) {
     const token = this.tokenStorage.getToken();
 
     this.httpClient
-      .get<UserData[]>(`${this.baseUrl}/admin/users`, {
+      .get<UserData[]>(`${this.baseUrl}/common/projects/${pId}/users`, {
+        // .get<UserData[]>(`${this.baseUrl}/admin/users`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
