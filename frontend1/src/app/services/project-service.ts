@@ -32,6 +32,16 @@ export class ProjectService {
       .subscribe();
   }
 
+  removeUserFromProject(projectId: number, userName: string): void {
+    this.httpClient
+      .delete<UserAssignment>(`${this.baseUrl}/admin/projects/${projectId}/revoke/${userName}`, {
+      })
+      .subscribe({
+        next: (res) => console.log('Deleted:', res),
+        error: (err) => console.error('Error:', err),
+      });
+  }
+
   // TODO: user role should only be of type admin | developer | tester
   viewAllProjects(projects: WritableSignal<Array<ProjectData>>, role: string): void {
     this.httpClient
@@ -75,15 +85,15 @@ export class ProjectService {
       });
   }
 
-  viewAllProjectsByKeyword(keyword: String, projects: WritableSignal<Array<ProjectData>>){
-      this.httpClient
+  viewAllProjectsByKeyword(keyword: String, projects: WritableSignal<Array<ProjectData>>) {
+    this.httpClient
       .get<ProjectData[]>(`${this.baseUrl}/common/projects/${keyword}`)
-        .subscribe((projectList) => {
-          const newProjectList = [];
-          for (const projObj of projectList) {
-            newProjectList.push(projObj);
-          }
-          projects.set(newProjectList);
-        });
-    }
+      .subscribe((projectList) => {
+        const newProjectList = [];
+        for (const projObj of projectList) {
+          newProjectList.push(projObj);
+        }
+        projects.set(newProjectList);
+      });
+  }
 }
