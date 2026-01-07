@@ -12,6 +12,7 @@ import { UserData } from '../../interfaces/user-data';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { SignoutButton } from "../signout-button/signout-button";
 import { NavBar } from "../nav-bar/nav-bar";
+import { IssueData } from '../../interfaces/issue-data';
 
 @Component({
   selector: 'app-project',
@@ -21,30 +22,56 @@ import { NavBar } from "../nav-bar/nav-bar";
 })
 export class Project extends RevaIssueSubscriber {
   // Dummy data, needs to be grabbed later
-  issues = signal([
+  issues = signal<IssueData[]>([
     {
-      id: 101,
-      title: 'Login button unresponsive',
-      priority: 'High',
+      issueID: 101,
+      name: 'Login button unresponsive',
       description:
         'The login button on the landing page does not trigger the auth service when clicked on mobile devices.',
+      projectID: 1,
+      severity: 4,
+      priority: 3,
+      status: 'OPEN',
+      comments: [
+        {
+          author: 'System',
+          text: 'Issue created.',
+          dateCreated: '2026-01-01T10:00:00Z',
+        },
+      ],
     },
     {
-      id: 102,
-      title: 'CSS Grid misalignment',
-      priority: 'Low',
+      issueID: 102,
+      name: 'CSS Grid misalignment',
       description: 'The dashboard widgets overlap when the screen resolution is set to 1440p.',
+      projectID: 1,
+      severity: 1,
+      priority: 1,
+      status: 'IN_PROGRESS',
+      comments: [],
     },
     {
-      id: 103,
-      title: 'API Timeout on Export',
-      priority: 'Medium',
+      issueID: 103,
+      name: 'API Timeout on Export',
       description:
         'Exporting the user list to CSV times out if the record count exceeds 5,000 entries.',
+      projectID: 2,
+      severity: 3,
+      priority: 2,
+      status: 'OPEN',
+      comments: [
+        {
+          author: 'Backend',
+          text: 'Likely related to missing pagination.',
+          dateCreated: '2026-01-02T14:30:00Z',
+        },
+      ],
     },
   ]);
   // This will hold the issue currently being hovered
   hoveredIssue: any = null;
+  // This will hold the issue that was just clicked on
+  selectedIssue: any = null;
 
   // Dependency Injection
   private projectService = inject(ProjectService);
@@ -90,7 +117,11 @@ export class Project extends RevaIssueSubscriber {
     console.log('Fetching users...');
     this.userService.fetchUsers(this.projectId);
   }
-
+  /**
+   * Function called by project.html
+   * Triggers from clicking on Add User in the project view (admin)
+   * Creates a User_Project record in the database
+   */
   addUserToProject(): void {
     const username = this.newUser();
     const projectId = this.projectId;
@@ -103,7 +134,7 @@ export class Project extends RevaIssueSubscriber {
   /**
    * Function called by project.html
    * Triggers from clicking on users in the users list
-   * Asks the project service to remove a user from a project
+   * Deletes a User_Project record from the database
    */
   onUserClick(user: UserData) {
     console.log('removing ', user.username);
