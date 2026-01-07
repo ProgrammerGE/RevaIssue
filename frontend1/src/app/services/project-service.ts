@@ -34,12 +34,8 @@ export class ProjectService {
 
   removeUserFromProject(projectId: number, userName: string): void {
     this.httpClient
-      .delete<UserAssignment>(`${this.baseUrl}/admin/projects/${projectId}/revoke/${userName}`, {
-      })
-      .subscribe({
-        next: (res) => console.log('Deleted:', res),
-        error: (err) => console.error('Error:', err),
-      });
+      .delete(`${this.baseUrl}/admin/projects/${projectId}/revoke/${userName}`)
+      .subscribe();
   }
 
   // TODO: user role should only be of type admin | developer | tester
