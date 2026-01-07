@@ -30,7 +30,7 @@ public class IssueService {
         return issueRepo.findTop5ByOrderByDateCreatedDesc();
     }
 
-    public List<Issue> getIssueByKeyword(String keyword){
+    public List<Issue> getIssuesByKeyword(String keyword){
         List<Issue> issueList = issueRepo.findByKeyword(keyword);
         return issueList;
     }

@@ -1,6 +1,7 @@
 package com.example.RevaIssue.entity;
 
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -8,6 +9,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
+@NoArgsConstructor
 @Table(name = "audit_logs")
 public class AuditLog {
     /**

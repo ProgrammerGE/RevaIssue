@@ -1,9 +1,6 @@
 package com.example.RevaIssue.service;
 
-import com.example.RevaIssue.entity.AuditLog;
-import com.example.RevaIssue.entity.Project;
-import com.example.RevaIssue.entity.User;
-import com.example.RevaIssue.entity.User_Projects;
+import com.example.RevaIssue.entity.*;
 import com.example.RevaIssue.repository.ProjectRepository;
 import com.example.RevaIssue.repository.User_ProjectsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +28,11 @@ public class ProjectService {
     public List<Project> getAllProjects(){ return projectRepo.findAll(); }
 
     public Project getProjectById(int id){ return projectRepo.getReferenceById(id); }
+
+    public List<Project> getProjectsByKeyword(String keyword){
+        List<Project> projectList = projectRepo.findByKeyword(keyword);
+        return projectList;
+    }
 
     public boolean deleteProject(int projId){
         Optional<Project> projectOptional = Optional.of(projectRepo.getReferenceById(projId));
