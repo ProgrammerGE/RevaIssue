@@ -11,8 +11,13 @@ import lombok.NoArgsConstructor;
 public class User_Projects {
 
     @Id
-    @Column(name = "UserProjectsID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "User_ProjectsID", nullable = false)
     private int ID;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "UserProjectsID") // Removed nullable = false here as the DB generates it
+//    private Integer id; // Changed from int to Integer and "ID" to "id" (standard naming)
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "UserID")
