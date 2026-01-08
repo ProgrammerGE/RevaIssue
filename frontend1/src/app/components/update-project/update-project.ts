@@ -11,8 +11,8 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './update-project.css',
 })
 export class UpdateProject {
-  projectTitle: string = '';
-  projectDesc: string = '';
+  @Input() projectTitle: string = '';
+  @Input() projectDesc: string = '';
   buttonText = 'Update Project';
   buttonCancel = 'Cancel';
   isPoppedUp: WritableSignal<boolean> = signal(false);
