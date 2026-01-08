@@ -1,4 +1,4 @@
-import { Component, input, InputSignal, signal, computed, Input } from '@angular/core';
+import { Component, input, InputSignal, signal, computed, Input, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { hubListItem } from '../../interfaces/hubpage-list-item';
 import { PopUpService } from '../../services/pop-up-service';
@@ -24,6 +24,8 @@ export class ListContainer {
 
   @Input() listItems: hubListItem[] = [];
   @Input() itemClicked?: (item: hubListItem) => void;
+  @Input() userRole: string = "";
+  isAdmin: Signal<boolean> = computed(() => this.userRole.toLowerCase() === 'admin'); // Following example in hub-page.ts
 
   constructor(private popUpService: PopUpService, private router: Router) {}
 
