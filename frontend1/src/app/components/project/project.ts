@@ -123,6 +123,12 @@ export class Project extends RevaIssueSubscriber {
     this.issueService.createIssue;
   }
 
+  /**
+   *
+   * @param status The desired status of the issue
+   * @param role The role of the current user. This only affects the path of endpoint
+   *             that the issue-service.ts will send a patch request to.
+   */
   updateIssueStatus(
     status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED',
     role: 'developer' | 'tester'
@@ -145,7 +151,9 @@ export class Project extends RevaIssueSubscriber {
    * Sends a request to change the issue to 'open' if it is closed.
    * Otherwise, fails
    */
-  reopenIssue() {}
+  reopenIssue() {
+    this.updateIssueStatus('OPEN', 'tester');
+  }
 
   /**
    * Triggers from clicking the 'Close issue' button in the issue
