@@ -94,7 +94,7 @@ export class ProjectService {
 
   viewAllProjectsByKeyword(keyword: String, projects: WritableSignal<Array<ProjectData>>) {
     this.httpClient
-      .get<ProjectData[]>(`${this.baseUrl}/common/projects/${keyword}`)
+      .get<ProjectData[]>(`${this.baseUrl}/common/projects/search?keyword=${keyword}`)
       .subscribe((projectList) => {
         const newProjectList = [];
         for (const projObj of projectList) {
