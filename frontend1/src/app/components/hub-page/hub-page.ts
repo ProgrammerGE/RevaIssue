@@ -14,13 +14,12 @@ import { ProjectData } from '../../interfaces/project-data';
 import { IssueData } from '../../interfaces/issue-data';
 import { NavBar } from '../nav-bar/nav-bar';
 import { CapitalizeFirst } from '../../pipes/capitalize-first.pipe';
-import { DeleteProject } from '../delete-project/delete-project';
 import { PopUpService } from '../../services/pop-up-service';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-hub-page',
-  imports: [ListContainer, CreateProject, FormsModule, NavBar, CapitalizeFirst, DeleteProject],
+  imports: [ListContainer, CreateProject, FormsModule, NavBar, CapitalizeFirst],
   templateUrl: './hub-page.html',
   styleUrl: './hub-page.css',
 })
@@ -87,10 +86,6 @@ export class HubPage extends RevaIssueSubscriber {
       name: i.name,
       description: i.description,
     }));
-  }
-
-  addDeletePopup() {
-    this.popUpService.openDeletingPopup();
   }
 
   ngOnInit() {

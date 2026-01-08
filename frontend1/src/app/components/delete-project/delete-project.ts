@@ -24,6 +24,10 @@ export class DeleteProject {
       this.projectName.set(projectData.projectName);
     })
   }
+  
+  addDeletePopup() {
+    this.popUpService.openDeletingPopup();
+  }
 
   deleteProject(){
     this.projectService.deleteProjectByID(this.projectID);

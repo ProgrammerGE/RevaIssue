@@ -21,7 +21,8 @@
   <div class="list-container">
     @for (item of items(); track $index) {
     <div class="list-item" (click)="itemClicked ? itemClicked(item) : null" style="cursor: pointer">
-      {{ item.name | capitalizeFirst }}
+      {{ item.name | capitalizeFirst }}      
+      <app-delete-project [projectID]="item.id"></app-delete-project>
     </div>
     }
   </div>

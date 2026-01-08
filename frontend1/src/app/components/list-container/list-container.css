@@ -98,3 +98,7 @@ input[type='checkbox']:checked {
   /* Rule will be ignored if browser does not support it */
   accent-color: var(--carbon-black);
 }
+
+.delete_button{
+  float: inline-end;
+}
