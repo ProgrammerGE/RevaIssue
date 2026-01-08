@@ -70,7 +70,7 @@ export class ProjectService {
       Authorization: `Bearer ${this.tokenStorage.getToken()}`,
     };
     this.httpClient
-      .put<ProjectData>(`${this.baseUrl}/admin/projects/${projectId}`, project, { headers })
+      .patch<ProjectData>(`${this.baseUrl}/admin/projects/${projectId}`, project, { headers })
       .subscribe({
         next: (updatedProject) => this.projectSubject.next(updatedProject),
         error: (err) => console.error('Error updating project', err),

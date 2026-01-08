@@ -50,6 +50,7 @@ export class UpdateProject {
       this.isPoppedUp.set(false);
       this.projectTitle = '';
       this.projectDesc = '';
+      window.location.reload();
     }
 
     if (this.projectTitle == '') {
@@ -63,5 +64,6 @@ export class UpdateProject {
 
   cancelUpdate() {
     this.isPoppedUp.set(false);
+    window.location.reload();
   }
 }
