@@ -123,6 +123,18 @@ export class Project extends RevaIssueSubscriber {
     this.issueService.createIssue;
   }
 
+  updateIssueStatus(
+    status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED',
+    role: 'developer' | 'tester'
+  ): void {
+    let issueId = this.selectedIssue?.issueID;
+    if (issueId) {
+      this.issueService.updateIssueStatus(issueId, this.projectId, status, role);
+    } else {
+      console.error('ERROR: cannot access this.selectedIssue?.issueID');
+    }
+  }
+
   ////////////////////////////////////////////////
   // BUTTONS /////////////////////////////////////
   ////////////////////////////////////////////////
@@ -133,9 +145,7 @@ export class Project extends RevaIssueSubscriber {
    * Sends a request to change the issue to 'open' if it is closed.
    * Otherwise, fails
    */
-  reopenIssue() {
-    // TODO: implement
-  }
+  reopenIssue() {}
 
   /**
    * Triggers from clicking the 'Close issue' button in the issue
@@ -144,6 +154,7 @@ export class Project extends RevaIssueSubscriber {
    */
   closeIssue() {
     // TODO: implement
+    console.log('Closed issue!');
   }
 
   /**
@@ -158,6 +169,7 @@ export class Project extends RevaIssueSubscriber {
       from happening if the issue is closed, since developers shouldn't be able
       to re-open closed issues. Just testers.
     */
+    console.log('Started issue!');
   }
 
   /**
@@ -172,6 +184,7 @@ export class Project extends RevaIssueSubscriber {
       from happening if the issue is closed, since developers shouldn't be able
       to re-open closed issues. Just testers.
     */
+    console.log('Resolved issue!');
   }
 
   /**
