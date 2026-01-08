@@ -28,7 +28,6 @@ export class HubPage extends RevaIssueSubscriber {
   username: WritableSignal<string> = signal('');
   userRole: WritableSignal<string> = signal('');
   auditLogs: WritableSignal<Array<AuditLogData>> = signal([]);
-  // isAdmin: WritableSignal<boolean> = signal(false);
   // made isAdmin a computed signal instead of WritableSignal
   isAdmin: Signal<boolean> = computed(() => this.userRole().toLowerCase() === 'admin');
   searchFilter = '';
@@ -98,7 +97,6 @@ export class HubPage extends RevaIssueSubscriber {
     this.userService.getUserInfo();
     this.getProjects();
     this.getIssues();
-    // this.isAdmin.set(this.userRole() === 'ADMIN');
     this.auditLogService.getAllAuditLogs(this.auditLogs);
   }
 
