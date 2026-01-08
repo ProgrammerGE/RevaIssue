@@ -22,15 +22,16 @@
     @for (item of items(); track $index) {
     <div class="list-item" (click)="itemClicked ? itemClicked(item) : null" style="cursor: pointer">
       {{ item.name | capitalizeFirst }}
+    </div>
       <div class="button_delete">
         @if (isAdmin() && hasButton()) {
-          <app-delete-project [projectID]="item.id"></app-delete-project>
+          <app-delete-project [projectID]="item.id"
+                            [projectName]="item.name"></app-delete-project>
           <app-update-project [projectID]="item.id" 
                               [projectTitle]="item.name"
                               [projectDesc]="item.description"  ></app-update-project>
         }
       </div>
-    </div>
     }
   </div>
   }
