@@ -105,14 +105,14 @@
           <button (click)="resolveIssue()">Resolve Issue</button>
           }
         </div>
-        <h4>Comments ({{ current.comments.length || 0 }})</h4>
+        <h4>Comments ({{ current?.comments?.length || 0 }})</h4>
         <div class="comment-input-placeholder">
           <input type="text" placeholder="Add a comment..." disabled />
           <button disabled>Send</button>
         </div>
 
         <div class="comments-scroll-area">
-          @for (comment of current.comments.slice().reverse(); track $index) {
+          @for (comment of current?.comments?.slice()?.reverse(); track $index) {
           <div class="comment-item">
             <div class="comment-meta">
               <span class="author">{{ comment.author }}</span>
