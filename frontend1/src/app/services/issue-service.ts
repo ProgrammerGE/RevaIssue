@@ -18,6 +18,7 @@ export class IssueService {
     status: 'OPEN',
     comments: [],
   });
+  private issueListSubject = new BehaviorSubject<IssueData[]>([]);
 
   private baseUrl = 'http://localhost:8080';
 
@@ -40,10 +41,11 @@ export class IssueService {
       Authorization: `Bearer ${this.tokenStorage.getToken()}`,
     };
     this.httpClient
-      .post<IssueData>(`${this.baseUrl}/tester/projects/${projectId}/issues`, newIssue, { headers })
+      .post<IssueData>(`${this.baseUrl}/tester/project/${projectId}/issues`, newIssue, { headers })
       .subscribe({
         next: (createdIssue) => {
-          if (!createdIssue) this.issueSubject.next(createdIssue);
+          const current = this.issueListSubject.value;
+          this.issueListSubject.next([...current, createdIssue]);
         },
         error: (err) =>
           console.error(`Error creating new issues for project with id: ${projectId}`, err),
@@ -59,7 +61,9 @@ export class IssueService {
       Authorization: `Bearer ${this.tokenStorage.getToken()}`,
     };
     this.httpClient
-      .put<IssueData>(`${this.baseUrl}/${role}/projects/${projectId}/issues/${issueId}`, issue, { headers })
+      .put<IssueData>(`${this.baseUrl}/${role}/project/${projectId}/issues/${issueId}`, issue, {
+        headers,
+      })
       .subscribe({
         next: (updatedIssue) => {
           if (!updatedIssue) this.issueSubject.next(updatedIssue);
@@ -77,22 +81,22 @@ export class IssueService {
       Authorization: `Bearer ${this.tokenStorage.getToken()}`,
     };
     this.httpClient.put<IssueData>(
-      `${this.baseUrl}/${role}/projects/${projectId}/issues/${issueId}`,
-      { status }, { headers }
+      `${this.baseUrl}/${role}/project/${projectId}/issues/${issueId}`,
+      { status },
+      { headers }
     );
   }
 
-  viewAllIssues(
-    issues: WritableSignal<Array<IssueData>>,
-    role: 'admin' | 'developer' | 'tester'
-  ): void {
-    this.httpClient.get<IssueData[]>(`${this.baseUrl}/${role}/issues`).subscribe((issueList) => {
-      const newIssueList = [];
-      for (const issueObj of issueList) {
-        newIssueList.push(issueObj);
-      }
-      issues.set(newIssueList);
-    });
+  viewAllIssues(project_id: number, issues: WritableSignal<Array<IssueData>>, role: string): void {
+    this.httpClient
+      .get<IssueData[]>(`${this.baseUrl}/${role}/project/${project_id}/issues`)
+      .subscribe((issueList) => {
+        const newIssueList = [];
+        for (const issueObj of issueList) {
+          newIssueList.push(issueObj);
+        }
+        issues.set(newIssueList);
+      });
   }
 
   getMostRecentIssues(issues: WritableSignal<Array<IssueData>>): void {
@@ -107,9 +111,9 @@ export class IssueService {
       });
   }
 
-  viewAllIssuesByKeyword(keyword: String, issues: WritableSignal<Array<IssueData>>){
+  viewAllIssuesByKeyword(keyword: String, issues: WritableSignal<Array<IssueData>>) {
     this.httpClient
-    .get<IssueData[]>(`${this.baseUrl}/common/issues/${keyword}`)
+      .get<IssueData[]>(`${this.baseUrl}/common/issues/${keyword}`)
       .subscribe((issueList) => {
         const newIssueList = [];
         for (const issueObj of issueList) {
@@ -118,5 +122,4 @@ export class IssueService {
         issues.set(newIssueList);
       });
   }
-
 }

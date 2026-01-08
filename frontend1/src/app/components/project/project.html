@@ -16,7 +16,7 @@
   <div class="div3">
     <h2>Users List</h2>
     <!-- Show button/form for adding and removing users -->
-    @if (userRole === 'admin') {
+    @if (userRole() === 'admin') {
     <button (click)="addUserToProject()">Add User</button>
     <input
       type="text"
@@ -30,8 +30,8 @@
       @for (user of users(); track user.username; let i = $index) {
       <div
         class="user-item"
-        [class.is-admin]="userRole === 'admin'"
-        (click)="userRole === 'admin' ? onUserClick(user) : null"
+        [class.is-admin]="userRole() === 'admin'"
+        (click)="userRole() === 'admin' ? onUserClick(user) : null"
       >
         <strong>{{ user.username }} {{ user.role }}</strong>
       </div>
@@ -47,9 +47,9 @@
               to create issues. -->
     <div class="issues-header">
       <h4>Project Issues</h4>
-      @if (userRole === 'tester') {
+      @if (userRole() === 'tester') {
       <app-create-issue></app-create-issue>
-      <button class="btn-create">Create Issue</button>
+      <button class="btn-create" (click)="addPopup()">Create Issue</button>
       }
     </div>
 
@@ -97,10 +97,10 @@
 
       <div class="comments-section">
         <div>
-          @if (userRole === 'tester') {
+          @if (userRole() === 'tester') {
           <button>Re open issue</button>
           <button>Close issue</button>
-          } @else if (userRole === 'developer') {
+          } @else if (userRole() === 'developer') {
           <button>Move to in progress</button>
           <button>Resolve Issue</button>
           }

@@ -2,6 +2,7 @@ package com.example.RevaIssue.controller;
 
 import com.example.RevaIssue.entity.AuditLog;
 import com.example.RevaIssue.entity.Issue;
+import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.service.*;
 import com.example.RevaIssue.util.JwtUtility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +34,11 @@ public class TesterController {
 
 
     @PostMapping("/project/{project_id}/issues")
-    public Issue createIssue(@RequestBody Issue issue, @RequestHeader (name = "Authorization") String authHeader){
+    public Issue createIssue(@PathVariable("project_id") int projectId, @RequestBody Issue issue, @RequestHeader (name = "Authorization") String authHeader){
         String role = authService.getRoleFromHeader(authHeader);
         String username = authService.getUsernameFromHeader(authHeader);
+        Project project = projectService.getProjectById(projectId);
+        issue.setProject(project);
         AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("CREATED ISSUE " + issue.getName(), username, role));
         return issueService.createIssue(issue);
     }

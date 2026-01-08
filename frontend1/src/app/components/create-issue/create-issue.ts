@@ -57,6 +57,10 @@ export class CreateIssue {
         priority: Number(this.priorityInput),
       });
       this.isPoppedUp.set(false);
+      this.issueTitle = '';
+      this.issueDesc = '';
+      this.severityInput = '';
+      this.priorityInput = '';
     }
 
     if (this.issueTitle == '') {
@@ -74,14 +78,13 @@ export class CreateIssue {
     if (this.priorityInput == '') {
       this.priorityMissing = true;
     }
-
-    this.issueTitle = '';
-    this.issueDesc = '';
-    this.severityInput = '';
-    this.priorityInput = '';
   }
 
   cancelCreation() {
     this.isPoppedUp.set(false);
+    this.issueTitle = '';
+    this.issueDesc = '';
+    this.severityInput = '';
+    this.priorityInput = '';
   }
 }

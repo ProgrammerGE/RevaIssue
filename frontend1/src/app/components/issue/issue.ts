@@ -2,8 +2,8 @@ import { Component, signal, WritableSignal } from '@angular/core';
 import { IssueService } from '../../services/issue-service';
 import { RevaIssueSubscriber } from '../../classes/reva-issue-subscriber';
 import { FormsModule } from '@angular/forms';
-import { SignoutButton } from "../signout-button/signout-button";
-import { NavBar } from "../nav-bar/nav-bar";
+import { SignoutButton } from '../signout-button/signout-button';
+import { NavBar } from '../nav-bar/nav-bar';
 
 @Component({
   selector: 'app-issue',
@@ -92,5 +92,8 @@ export class Issue extends RevaIssueSubscriber {
   }
   onResolve() {
     alert('Issue marked as resolved!');
+  }
+  ngOnInit(): void {
+    this.viewIssue();
   }
 }

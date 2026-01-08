@@ -57,5 +57,7 @@ export class CreateProject {
 
   cancelCreation() {
     this.isPoppedUp.set(false);
+    this.projectTitle = '';
+    this.projectDesc = '';
   }
 }

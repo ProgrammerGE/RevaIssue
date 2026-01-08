@@ -1,4 +1,4 @@
-import { Component, inject, Signal, signal, WritableSignal } from '@angular/core';
+import { Component, effect, Inject, inject, Signal, signal, WritableSignal } from '@angular/core';
 import { RevaIssueSubscriber } from '../../classes/reva-issue-subscriber';
 import { ProjectService } from '../../services/project-service';
 import { ProjectData } from '../../interfaces/project-data';
@@ -13,6 +13,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { SignoutButton } from '../signout-button/signout-button';
 import { NavBar } from '../nav-bar/nav-bar';
 import { IssueData } from '../../interfaces/issue-data';
+import { IssueService } from '../../services/issue-service';
 
 @Component({
   selector: 'app-project',
@@ -21,89 +22,15 @@ import { IssueData } from '../../interfaces/issue-data';
   styleUrl: './project.css',
 })
 export class Project extends RevaIssueSubscriber {
-  // Dummy data, needs to be grabbed later
-  issues = signal<IssueData[]>([
-    {
-      issueID: 101,
-      name: 'Login button unresponsive',
-      description:
-        'The login button on the landing page does not trigger the auth service when clicked on mobile devices.',
-      projectID: 1,
-      severity: 4,
-      priority: 3,
-      status: 'OPEN',
-      comments: [
-        {
-          author: 'System',
-          text: 'Issue created.',
-          dateCreated: '2026-01-01T10:00:00Z',
-        },
-        {
-          author: 'Chris Jacobs',
-          text: 'Hello world!.',
-          dateCreated: '2026-01-02T14:30:00Z',
-        },
-      ],
-    },
-    {
-      issueID: 102,
-      name: 'CSS Grid misalignment',
-      description: 'The dashboard widgets overlap when the screen resolution is set to 1440p.',
-      projectID: 1,
-      severity: 1,
-      priority: 1,
-      status: 'IN_PROGRESS',
-      comments: [],
-    },
-    {
-      issueID: 103,
-      name: 'API Timeout on Export',
-      description:
-        'Exporting the user list to CSV times out if the record count exceeds 5,000 entries.',
-      projectID: 2,
-      severity: 3,
-      priority: 2,
-      status: 'OPEN',
-      comments: [
-        {
-          author: 'Backend',
-          text: 'Likely related to missing pagination.',
-          dateCreated: '2026-01-02T14:30:00Z',
-        },
-        {
-          author: 'Chris Jacobs',
-          text: 'Hello world!.',
-          dateCreated: '2026-01-02T14:30:00Z',
-        },
-        {
-          author: 'Chris Jacobs',
-          text: 'Hello world!.',
-          dateCreated: '2026-01-02T14:30:00Z',
-        },
-        {
-          author: 'Chris Jacobs',
-          text: 'Hello world!.',
-          dateCreated: '2026-01-02T14:30:00Z',
-        },
-        {
-          author: 'Chris Jacobs',
-          text: 'Hello world!.',
-          dateCreated: '2026-01-02T14:30:00Z',
-        },
-        {
-          author: 'Chris Jacobs',
-          text: 'Hello world!.',
-          dateCreated: '2026-01-02T14:30:00Z',
-        },
-      ],
-    },
-  ]);
+  // load issues for this project
+  issues = signal<IssueData[]>([]);
 
   // Dependency Injection
   private projectService = inject(ProjectService);
   private userService = inject(UserService);
   private popUpService = inject(PopUpService);
   private route = inject(ActivatedRoute);
+  private issueService = inject(IssueService);
 
   // vars
   project!: ProjectData;
@@ -113,10 +40,8 @@ export class Project extends RevaIssueSubscriber {
   users: Signal<UserData[]> = toSignal(this.userService.getUsersSubject(), { initialValue: [] });
   newUser: WritableSignal<string> = signal('');
 
-  // TODO: Have this update based on the current user
-  // userRole: 'admin' | 'tester' | 'developer' = 'tester';
-  // userRole: 'admin' | 'tester' | 'developer' = 'admin';
-  userRole: 'admin' | 'tester' | 'developer' = 'developer';
+  // updates based on the current user
+  userRole: WritableSignal<string> = signal('');
 
   // This will hold the issue currently being hovered
   hoveredIssue: IssueData | null = null;
@@ -126,12 +51,25 @@ export class Project extends RevaIssueSubscriber {
   constructor() {
     super();
 
-    this.subscription = this.projectService.getProjectSubject().subscribe((projectData) => {
-      // console.log('EMIT', projectData);
-      this.projectTitle.set(projectData.projectName);
-      this.projectDescription.set(projectData.projectDescription);
-      // console.log('SIGNALS', this.projectTitle(), this.projectDescription());
+    // sets the user to be used to set issue ability
+    this.subscription = this.userService.getUserSubject().subscribe((userData) => {
+      if (!userData?.role) return;
+      this.userRole.set(userData.role.toLowerCase());
     });
+
+    effect(() => {
+      const role = this.userRole();
+      if (!role) return;
+
+      this.issueService.viewAllIssues(this.projectId, this.issues, role);
+    });
+    // shows the current project being selected
+    this.subscription.add(
+      this.projectService.getProjectSubject().subscribe((projectData) => {
+        this.projectTitle.set(projectData.projectName);
+        this.projectDescription.set(projectData.projectDescription);
+      })
+    );
   }
 
   ngOnInit(): void {
@@ -144,6 +82,7 @@ export class Project extends RevaIssueSubscriber {
     this.viewProject();
 
     this.fetchAndLogUsers();
+    this.userService.getUserInfo();
   }
 
   private fetchAndLogUsers(): void {
@@ -200,7 +139,6 @@ export class Project extends RevaIssueSubscriber {
     });
   }
 
-  //Be sure to assign this method to a button in the project html that will be clicked for "creating issues"
   addPopup() {
     this.popUpService.openPopUpIssue();
   }
@@ -214,5 +152,9 @@ export class Project extends RevaIssueSubscriber {
   // Show hover if it exists, otherwise show the sticky selected one
   get displayIssue() {
     return this.hoveredIssue || this.selectedIssue;
+  }
+
+  createIssue() {
+    this.issueService.createIssue;
   }
 }
