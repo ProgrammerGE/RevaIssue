@@ -4,10 +4,11 @@ import { hubListItem } from '../../interfaces/hubpage-list-item';
 import { PopUpService } from '../../services/pop-up-service';
 import { CapitalizeFirst } from '../../pipes/capitalize-first.pipe';
 import { Router } from '@angular/router';
+import { DeleteProject } from '../delete-project/delete-project';
 
 @Component({
   selector: 'app-list-container',
-  imports: [CommonModule, CapitalizeFirst],
+  imports: [CommonModule, CapitalizeFirst, DeleteProject],
   templateUrl: './list-container.html',
   styleUrl: './list-container.css',
 })

@@ -3,8 +3,6 @@
 <div class="hub-page">
   <div class="popup">
     <app-create-project></app-create-project>
-    <app-delete-project [projectID]="1"></app-delete-project>
-    <!-- Need to grab Project ID-->
   </div>
   <header class="hub-header">
     <div>
@@ -15,12 +13,6 @@
       <input type="search" [(ngModel)]="searchFilter" class="filterInput" />
       <button (click)="filterList()" class="filterButton">Filter Issues</button>
     </div>
-    <section class="delete_button">
-      <!-- pull didn't include the addDeletePopup() so I (Elijah) implemented it lmk if it needs to be changed or push the change -->
-      <button (click)="addDeletePopup()">
-        Delete Project(s) <img src="assets/icons/trash.svg" />
-      </button>
-    </section>
   </header>
   <section class="lists">
     <app-list-container
