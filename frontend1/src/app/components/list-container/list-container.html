@@ -25,6 +25,7 @@
       <div class="button_delete">
         @if (isAdmin() && hasButton()) {
           <app-delete-project [projectID]="item.id"></app-delete-project>
+          <app-update-project [projectID]="item.id"></app-update-project>
         }
       </div>
     </div>

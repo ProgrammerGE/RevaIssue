@@ -10,7 +10,7 @@ import { ProjectService } from '../../services/project-service';
 })
 export class DeleteProject {  
   @Input()
-  projectID: number = 1;
+  projectID: number = 0;
   projectName: WritableSignal<string> = signal('');
   buttonText = 'Delete Project';
   buttonCancel = 'Cancel';
