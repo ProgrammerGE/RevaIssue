@@ -40,13 +40,9 @@ export class Project extends RevaIssueSubscriber {
   users: Signal<UserData[]> = toSignal(this.userService.getUsersSubject(), { initialValue: [] });
   newUser: WritableSignal<string> = signal('');
 
-  // updates based on the current user
-  userRole: WritableSignal<string> = signal('');
-
-  // This will hold the issue currently being hovered
-  hoveredIssue: IssueData | null = null;
-  // This will hold the issue that was just clicked on
-  selectedIssue: IssueData | null = null;
+  userRole: WritableSignal<string> = signal(''); // updates based on the current user
+  hoveredIssue: IssueData | null = null; // The issue currently being hovered over
+  selectedIssue: IssueData | null = null; // The issue that was last clicked on
 
   constructor() {
     super();
@@ -113,6 +109,10 @@ export class Project extends RevaIssueSubscriber {
     });
   }
 
+  ////////////////////////////////////////////////
+  // ISSUES //////////////////////////////////////
+  ////////////////////////////////////////////////
+
   // Logic for the preview pane:
   // Show hover if it exists, otherwise show the sticky selected one
   get displayIssue() {
@@ -123,6 +123,12 @@ export class Project extends RevaIssueSubscriber {
     this.issueService.createIssue;
   }
 
+  /**
+   * This method causes the currently selected issue in the app to update its status.
+   * @param status The status for the issue to be set to
+   * @param role The role of the current user. This only affects the path of endpoint
+   *             that the issue-service.ts will send a patch request to.
+   */
   updateIssueStatus(
     status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED',
     role: 'developer' | 'tester'
@@ -145,7 +151,9 @@ export class Project extends RevaIssueSubscriber {
    * Sends a request to change the issue to 'open' if it is closed.
    * Otherwise, fails
    */
-  reopenIssue() {}
+  reopenIssue() {
+    this.updateIssueStatus('OPEN', 'tester');
+  }
 
   /**
    * Triggers from clicking the 'Close issue' button in the issue
@@ -153,8 +161,7 @@ export class Project extends RevaIssueSubscriber {
    * Sends a request to change the issue to 'closed'
    */
   closeIssue() {
-    // TODO: implement
-    console.log('Closed issue!');
+    this.updateIssueStatus('CLOSED', 'tester');
   }
 
   /**
@@ -163,13 +170,7 @@ export class Project extends RevaIssueSubscriber {
    * Sends a request to change the issue to 'in progress'.
    */
   startProgress() {
-    // TODO: implement
-    /*
-      consider having a check on the server side to prevent the transaction
-      from happening if the issue is closed, since developers shouldn't be able
-      to re-open closed issues. Just testers.
-    */
-    console.log('Started issue!');
+    this.updateIssueStatus('IN_PROGRESS', 'developer');
   }
 
   /**
@@ -178,13 +179,7 @@ export class Project extends RevaIssueSubscriber {
    * Sends a request to change the issue to 'resolved'.
    */
   resolveIssue() {
-    // TODO: implement
-    /*
-      consider having a check on the server side to prevent the transaction
-      from happening if the issue is closed, since developers shouldn't be able
-      to re-open closed issues. Just testers.
-    */
-    console.log('Resolved issue!');
+    this.updateIssueStatus('RESOLVED', 'developer');
   }
 
   /**
