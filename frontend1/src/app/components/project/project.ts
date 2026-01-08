@@ -128,6 +128,53 @@ export class Project extends RevaIssueSubscriber {
   ////////////////////////////////////////////////
 
   /**
+   * Triggers from clicking the 'Re-open issue' button in the issue
+   * pane of the project view (tester)
+   * Sends a request to change the issue to 'open' if it is closed.
+   * Otherwise, fails
+   */
+  reopenIssue() {
+    // TODO: implement
+  }
+
+  /**
+   * Triggers from clicking the 'Close issue' button in the issue
+   * pane of the project view (tester)
+   * Sends a request to change the issue to 'closed'
+   */
+  closeIssue() {
+    // TODO: implement
+  }
+
+  /**
+   * Triggers from clicking the 'Move to in progress' button in the issue
+   * pane of the project view (developer)
+   * Sends a request to change the issue to 'in progress'.
+   */
+  startProgress() {
+    // TODO: implement
+    /*
+      consider having a check on the server side to prevent the transaction
+      from happening if the issue is closed, since developers shouldn't be able
+      to re-open closed issues. Just testers.
+    */
+  }
+
+  /**
+   * Triggers from clicking the 'Resolve Issue' button in the issue
+   * pane of the project view (developer)
+   * Sends a request to change the issue to 'resolved'.
+   */
+  resolveIssue() {
+    // TODO: implement
+    /*
+      consider having a check on the server side to prevent the transaction
+      from happening if the issue is closed, since developers shouldn't be able
+      to re-open closed issues. Just testers.
+    */
+  }
+
+  /**
    * Triggers from clicking an issue in the project view
    * Changes the page's selectedIssue to be what the user clicked on
    * @param issue the issue to be selected
