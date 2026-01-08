@@ -40,13 +40,9 @@ export class Project extends RevaIssueSubscriber {
   users: Signal<UserData[]> = toSignal(this.userService.getUsersSubject(), { initialValue: [] });
   newUser: WritableSignal<string> = signal('');
 
-  // updates based on the current user
-  userRole: WritableSignal<string> = signal('');
-
-  // This will hold the issue currently being hovered
-  hoveredIssue: IssueData | null = null;
-  // This will hold the issue that was just clicked on
-  selectedIssue: IssueData | null = null;
+  userRole: WritableSignal<string> = signal(''); // updates based on the current user
+  hoveredIssue: IssueData | null = null; // The issue currently being hovered over
+  selectedIssue: IssueData | null = null; // The issue that was last clicked on
 
   constructor() {
     super();
@@ -112,6 +108,10 @@ export class Project extends RevaIssueSubscriber {
       projectDescription: this.projectDescription(),
     });
   }
+
+  ////////////////////////////////////////////////
+  // ISSUES //////////////////////////////////////
+  ////////////////////////////////////////////////
 
   // Logic for the preview pane:
   // Show hover if it exists, otherwise show the sticky selected one
