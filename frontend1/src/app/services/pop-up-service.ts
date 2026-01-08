@@ -43,7 +43,7 @@ export class PopUpService {
     this.popUpSubjectIssue.next(true);
     this.popUpSubjectProject.next(false);
     this.popUpSubjectDelete.next(false);
-    this.popUpSubjectIssue.next(false);
+    this.popUpSubjectUpdate.next(false);
   }
   
   

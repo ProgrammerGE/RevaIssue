@@ -44,6 +44,7 @@ export class CreateProject {
       this.isPoppedUp.set(false);
       this.projectTitle = '';
       this.projectDesc = '';
+      window.location.reload();
     }
 
     if (this.projectTitle == '') {
@@ -59,5 +60,6 @@ export class CreateProject {
     this.isPoppedUp.set(false);
     this.projectTitle = '';
     this.projectDesc = '';
+    window.location.reload();
   }
 }

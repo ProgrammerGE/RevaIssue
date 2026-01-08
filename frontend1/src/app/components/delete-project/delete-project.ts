@@ -29,10 +29,12 @@ export class DeleteProject {
   deleteProject(){
     this.projectService.deleteProjectByID(this.projectID);
     this.isPoppedUp.set(false);
+    window.location.reload();
   }  
 
   cancelCreation() {
     this.isPoppedUp.set(false);
+    window.location.reload();
   }
 
 }

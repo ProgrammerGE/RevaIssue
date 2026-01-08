@@ -90,7 +90,7 @@ public class AdminController {
         return projectService.deleteProject(projectId);
     }
 
-    @PutMapping("/projects/{projectId}")
+    @PatchMapping("/projects/{projectId}")
     public Project updateProject(@PathVariable int projectId,
                                  @RequestBody Project project,
                                  @RequestHeader (name = "Authorization") String authHeader){
