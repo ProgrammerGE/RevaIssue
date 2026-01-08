@@ -63,7 +63,5 @@ export class UpdateProject {
 
   cancelUpdate() {
     this.isPoppedUp.set(false);
-    this.projectTitle = '';
-    this.projectDesc = '';
   }
 }

@@ -6,7 +6,7 @@
 @if (isPoppedUp()){
 <div class="parent">
   <div class="proj_warning">
-    <h4 style="color: red">Are you sure you want to delete these projects?</h4>
+    <h4 style="color: red">Are you sure you want to delete project: {{projectName}}</h4>
   </div>
   <div class="deletion_buttons">    
     <button (click)="deleteProject()">{{ buttonText }}</button>
