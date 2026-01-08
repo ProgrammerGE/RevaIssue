@@ -16,6 +16,7 @@ import { NavBar } from '../nav-bar/nav-bar';
 import { CapitalizeFirst } from '../../pipes/capitalize-first.pipe';
 import { DeleteProject } from '../delete-project/delete-project';
 import { PopUpService } from '../../services/pop-up-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-hub-page',
@@ -23,7 +24,6 @@ import { PopUpService } from '../../services/pop-up-service';
   templateUrl: './hub-page.html',
   styleUrl: './hub-page.css',
 })
-
 export class HubPage extends RevaIssueSubscriber {
   username: WritableSignal<string> = signal('');
   userRole: WritableSignal<string> = signal('');
@@ -32,13 +32,17 @@ export class HubPage extends RevaIssueSubscriber {
   searchFilter = '';
 
   constructor(
+    private router: Router,
     private userService: UserService,
     private auditLogService: AuditLogService,
     private issueService: IssueService,
-    private projectService: ProjectService // private router: Router
+    private projectService: ProjectService,
+    private popUpService: PopUpService
   ) {
     super();
     this.subscription = this.userService.getUserSubject().subscribe((userData) => {
+      if (!userData) return;
+
       this.username.set(userData.username);
       this.userRole.set(userData.role.toLowerCase());
     });
@@ -84,6 +88,10 @@ export class HubPage extends RevaIssueSubscriber {
     }));
   }
 
+  addDeletePopup() {
+    this.popUpService.openDeletingPopup();
+  }
+
   ngOnInit() {
     this.userService.getUserInfo();
     this.getProjects();
@@ -94,11 +102,10 @@ export class HubPage extends RevaIssueSubscriber {
 
   userLoggedIn: WritableSignal<boolean> = signal(false);
 
-  
-    /**
-     * I keep getting internal errors from this query function, I commented it out for now.
-     */
-  filterList(){
+  /**
+   * I keep getting internal errors from this query function, I commented it out for now.
+   */
+  filterList() {
     //this.projectService.viewAllProjectsByKeyword(this.searchFilter, this.projects);
     //this.issueService.viewAllIssuesByKeyword(this.searchFilter, this.issues);
   }

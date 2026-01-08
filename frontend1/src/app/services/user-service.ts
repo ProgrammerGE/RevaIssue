@@ -15,10 +15,7 @@ export class UserService {
   // get all users in a project method (to be used by users of that project only)
 
   // represents the current user (you)
-  private UserSubject = new BehaviorSubject<UserData>({
-    username: '',
-    role: '',
-  });
+  private userSubject = new BehaviorSubject<UserData | null>(null);
 
   // represents all users on the app. A list of UserData objects.
   // use this for the admin when they add users to projects
@@ -29,7 +26,7 @@ export class UserService {
   constructor(private httpClient: HttpClient, private tokenStorage: JwtTokenStorage) {}
 
   getUserSubject() {
-    return this.UserSubject;
+    return this.userSubject;
   }
 
   getUsersSubject() {
@@ -64,7 +61,7 @@ export class UserService {
       .subscribe({
         next: (userInfo) => {
           console.log('User info received:', userInfo);
-          this.UserSubject.next(userInfo);
+          this.userSubject.next(userInfo);
         },
         error: (err) => console.error('error finding user', err),
       });
