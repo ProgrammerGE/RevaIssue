@@ -61,7 +61,7 @@ export class Project extends RevaIssueSubscriber {
       const role = this.userRole();
       if (!role) return;
 
-      this.issueService.viewAllIssues(this.issues, role);
+      this.issueService.viewAllIssues(this.projectId, this.issues, role);
     });
     // shows the current project being selected
     this.subscription.add(
@@ -152,5 +152,9 @@ export class Project extends RevaIssueSubscriber {
   // Show hover if it exists, otherwise show the sticky selected one
   get displayIssue() {
     return this.hoveredIssue || this.selectedIssue;
+  }
+
+  createIssue() {
+    this.issueService.createIssue;
   }
 }
