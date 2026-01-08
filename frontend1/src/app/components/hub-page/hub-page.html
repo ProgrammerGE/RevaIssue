@@ -36,7 +36,7 @@
       [hasButton]="false"
     ></app-list-container>
   </section>
-  @if(!isAdmin()){
+  @if(isAdmin()){
   <section class="audit-logs">
     <h4 style="margin-left: 10px">Audit Logs</h4>
     @for (item of auditLogs(); track $index) {

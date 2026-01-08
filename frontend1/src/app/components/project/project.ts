@@ -139,7 +139,6 @@ export class Project extends RevaIssueSubscriber {
     });
   }
 
-  //Be sure to assign this method to a button in the project html that will be clicked for "creating issues"
   addPopup() {
     this.popUpService.openPopUpIssue();
   }
