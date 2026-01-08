@@ -2,6 +2,7 @@ import { Injectable, WritableSignal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { IssueData } from '../interfaces/issue-data';
 import { HttpClient } from '@angular/common/http';
+import { JwtTokenStorage } from './jwt-token-storage';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,7 @@ export class IssueService {
 
   private baseUrl = 'http://localhost:8080';
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient, private tokenStorage: JwtTokenStorage) {}
 
   getIssueSubject() {
     return this.issueSubject;
@@ -35,8 +36,11 @@ export class IssueService {
       });
   }
   createIssue(projectId: number, newIssue: Partial<IssueData>): void {
+    const headers = {
+      Authorization: `Bearer ${this.tokenStorage.getToken()}`,
+    };
     this.httpClient
-      .post<IssueData>(`${this.baseUrl}/tester/projects/${projectId}/issues`, newIssue)
+      .post<IssueData>(`${this.baseUrl}/tester/projects/${projectId}/issues`, newIssue, { headers })
       .subscribe({
         next: (createdIssue) => {
           if (!createdIssue) this.issueSubject.next(createdIssue);
@@ -51,8 +55,11 @@ export class IssueService {
     role: 'admin' | 'developer' | 'tester',
     issue: Partial<IssueData>
   ): void {
+    const headers = {
+      Authorization: `Bearer ${this.tokenStorage.getToken()}`,
+    };
     this.httpClient
-      .put<IssueData>(`${this.baseUrl}/${role}/projects/${projectId}/issues/${issueId}`, issue)
+      .put<IssueData>(`${this.baseUrl}/${role}/projects/${projectId}/issues/${issueId}`, issue, { headers })
       .subscribe({
         next: (updatedIssue) => {
           if (!updatedIssue) this.issueSubject.next(updatedIssue);
@@ -66,9 +73,12 @@ export class IssueService {
     status: string,
     role: 'developer' | 'tester'
   ): void {
+    const headers = {
+      Authorization: `Bearer ${this.tokenStorage.getToken()}`,
+    };
     this.httpClient.put<IssueData>(
       `${this.baseUrl}/${role}/projects/${projectId}/issues/${issueId}`,
-      { status }
+      { status }, { headers }
     );
   }
 

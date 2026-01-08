@@ -14,11 +14,12 @@ import { ProjectData } from '../../interfaces/project-data';
 import { IssueData } from '../../interfaces/issue-data';
 import { NavBar } from '../nav-bar/nav-bar';
 import { CapitalizeFirst } from '../../pipes/capitalize-first.pipe';
-import { Router } from '@angular/router';
+import { DeleteProject } from '../delete-project/delete-project';
+import { PopUpService } from '../../services/pop-up-service';
 
 @Component({
   selector: 'app-hub-page',
-  imports: [ListContainer, CreateProject, FormsModule, NavBar, CapitalizeFirst],
+  imports: [ListContainer, CreateProject, FormsModule, NavBar, CapitalizeFirst, DeleteProject],
   templateUrl: './hub-page.html',
   styleUrl: './hub-page.css',
 })
@@ -34,8 +35,7 @@ export class HubPage extends RevaIssueSubscriber {
     private userService: UserService,
     private auditLogService: AuditLogService,
     private issueService: IssueService,
-    private projectService: ProjectService,
-    private router: Router
+    private projectService: ProjectService // private router: Router
   ) {
     super();
     this.subscription = this.userService.getUserSubject().subscribe((userData) => {
@@ -94,10 +94,11 @@ export class HubPage extends RevaIssueSubscriber {
 
   userLoggedIn: WritableSignal<boolean> = signal(false);
 
-  /**
-   * I keep getting internal errors from this query function, I commented it out for now.
-   */
-  filterList() {
+  
+    /**
+     * I keep getting internal errors from this query function, I commented it out for now.
+     */
+  filterList(){
     //this.projectService.viewAllProjectsByKeyword(this.searchFilter, this.projects);
     //this.issueService.viewAllIssuesByKeyword(this.searchFilter, this.issues);
   }

@@ -25,17 +25,23 @@ export class ProjectService {
   }
 
   addUserToProject(projectId: number, userName: string): void {
+    const headers = {
+      Authorization: `Bearer ${this.tokenStorage.getToken()}`,
+    };
     this.httpClient
       .post<UserAssignment>(`${this.baseUrl}/admin/projects/${projectId}/assign/${userName}`, {
         username: userName,
         projectID: projectId,
-      })
+      }, { headers })
       .subscribe();
   }
 
   removeUserFromProject(projectId: number, userName: string): void {
+    const headers = {
+      Authorization: `Bearer ${this.tokenStorage.getToken()}`,
+    };
     this.httpClient
-      .delete(`${this.baseUrl}/admin/projects/${projectId}/revoke/${userName}`)
+      .delete(`${this.baseUrl}/admin/projects/${projectId}/revoke/${userName}`, { headers })
       .subscribe();
   }
 
@@ -60,8 +66,11 @@ export class ProjectService {
   }
 
   updateProject(projectId: number, project: Partial<ProjectData>): void {
+    const headers = {
+      Authorization: `Bearer ${this.tokenStorage.getToken()}`,
+    };
     this.httpClient
-      .put<ProjectData>(`${this.baseUrl}/admin/projects/${projectId}`, project)
+      .put<ProjectData>(`${this.baseUrl}/admin/projects/${projectId}`, project, { headers })
       .subscribe({
         next: (updatedProject) => this.projectSubject.next(updatedProject),
         error: (err) => console.error('Error updating project', err),
@@ -93,5 +102,13 @@ export class ProjectService {
         }
         projects.set(newProjectList);
       });
+  }
+
+  deleteProjectByID(projectId: number): void{
+    const headers = {
+      Authorization: `Bearer ${this.tokenStorage.getToken()}`,
+    };
+    this.httpClient.delete(`${this.baseUrl}/admin/projects/${projectId}`, {headers})
+    .subscribe();
   }
 }
