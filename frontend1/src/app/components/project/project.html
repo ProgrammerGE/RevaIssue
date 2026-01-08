@@ -98,11 +98,11 @@
       <div class="comments-section">
         <div>
           @if (userRole() === 'tester') {
-          <button>Re open issue</button>
-          <button>Close issue</button>
+          <button (click)="reopenIssue()">Re-open issue</button>
+          <button (click)="closeIssue()">Close issue</button>
           } @else if (userRole() === 'developer') {
-          <button>Move to in progress</button>
-          <button>Resolve Issue</button>
+          <button (click)="startProgress()">Move to in progress</button>
+          <button (click)="resolveIssue()">Resolve Issue</button>
           }
         </div>
         <h4>Comments ({{ current.comments.length || 0 }})</h4>
