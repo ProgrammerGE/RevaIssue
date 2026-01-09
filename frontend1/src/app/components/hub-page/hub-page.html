@@ -1,6 +1,21 @@
-<app-nav-bar></app-nav-bar>
-
 <div class="hub-page">
+  <app-nav-bar></app-nav-bar>
+  @if(isSearchPopupActive()){
+  <app-popup-wrapper>
+    <div class="overlay" (click)="closePopup()"></div>
+    <div class="search-popup">
+      <button class="close-popup-btn" (click)="closePopup()">
+        <img src="/assets/icons/x.svg" />
+      </button>
+      <input class="search-input" type="text" placeholder="Search for issues" (input)="searchInput($event)" />
+      @for(issue of searchResults(); track $index){
+      <a class="search-result-item" [routerLink]="['/projects', issue.project?.projectID]">
+        {{issue.name}}
+      </a>
+      }
+    </div>
+  </app-popup-wrapper>
+  }
   <div class="popup">
     <app-create-project></app-create-project>
   </div>
@@ -9,10 +24,7 @@
       <h2 class="welcome-message">Welcome, {{ username() | capitalizeFirst }}</h2>
       <span>{{ userRole() }}</span>
     </div>
-    <div class="filter">
-      <input type="search" [(ngModel)]="searchFilter" class="filterInput" />
-      <button (click)="filterList()" class="filterButton">Filter Issues</button>
-    </div>
+    <app-search-bar [(active)]="isSearchPopupActive"></app-search-bar>
   </header>
   <section class="lists">
     <app-list-container
@@ -24,7 +36,7 @@
     >
     </app-list-container>
     <app-list-container
-      title="Issues"
+      title="Recent Issues"
       [items]="issuesList()"
       [hasButton]="false"
     ></app-list-container>

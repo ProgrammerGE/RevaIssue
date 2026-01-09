@@ -116,7 +116,7 @@ export class IssueService {
 
   viewAllIssuesByKeyword(keyword: String, issues: WritableSignal<Array<IssueData>>) {
     this.httpClient
-      .get<IssueData[]>(`${this.baseUrl}/common/issues/${keyword}`)
+    .get<IssueData[]>(`${this.baseUrl}/common/issues/search?keyword=${keyword}`)
       .subscribe((issueList) => {
         const newIssueList = [];
         for (const issueObj of issueList) {

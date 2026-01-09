@@ -51,7 +51,7 @@ button {
 }
 
 .item-count {
-  opacity: 0.5;
+  color: gray;
 }
 
 .add-button {

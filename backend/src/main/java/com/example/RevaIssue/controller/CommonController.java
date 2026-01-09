@@ -73,8 +73,8 @@ public class CommonController {
         return issueService.getMostRecentIssues();
     }
 
-    @GetMapping("/issues/{keyword}")
-    public List<Issue> getIssuesByKeyword(@PathVariable String keyword){
+    @GetMapping("/issues/search")
+    public List<Issue> getIssuesByKeyword(@RequestParam String keyword){
         return issueService.getIssuesByKeyword(keyword);
     }
 
