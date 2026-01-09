@@ -71,10 +71,13 @@ export class IssueService {
         error: (err) => console.log(`Error updating ${issue.name} details`, err),
       });
   }
+
+  // TODO: Modify to make a patch request instead of put.
+  // Then, modify the url to match the spring endpoint.
   updateIssueStatus(
     issueId: number,
     projectId: number,
-    status: string,
+    status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED',
     role: 'developer' | 'tester'
   ): void {
     const headers = {

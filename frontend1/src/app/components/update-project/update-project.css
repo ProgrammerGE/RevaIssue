@@ -6,7 +6,7 @@
   position: absolute;
   left: 25%;
   top: 50%;
-  background-color: hsl(30, 6%, 93%);
+  background-color: #f8f8f8;
   width: 50%;
   text-align: center;
   /* padding-top: 20%; */
@@ -14,21 +14,24 @@
   border-radius: 40px;
 }
 
-.proj_warning {
+.proj_name {
   grid-column: span 2 / span 2;
   grid-column-start: 2;
   grid-row-start: 2;
 }
 
-.deletion_buttons {
+.proj_description {
   grid-column: span 2 / span 2;
   grid-row: span 2 / span 2;
   grid-column-start: 2;
   grid-row-start: 3;
 }
 
-
 button {
   margin-top: 10px;
 }
 
+#descriptionBox {
+  /* height: 60px; */
+  width: 90%;
+}

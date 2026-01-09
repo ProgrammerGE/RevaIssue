@@ -48,7 +48,7 @@ export class ProjectService {
   // TODO: user role should only be of type admin | developer | tester
   viewAllProjects(projects: WritableSignal<Array<ProjectData>>, role: string): void {
     this.httpClient
-      .get<ProjectData[]>(`${this.baseUrl}/${role}/projects`)
+      .get<ProjectData[]>(`${this.baseUrl}/common/projects`)
       .subscribe((projectList) => {
         const newProjectList = [];
         for (const projectObj of projectList) {
@@ -70,7 +70,7 @@ export class ProjectService {
       Authorization: `Bearer ${this.tokenStorage.getToken()}`,
     };
     this.httpClient
-      .put<ProjectData>(`${this.baseUrl}/admin/projects/${projectId}`, project, { headers })
+      .patch<ProjectData>(`${this.baseUrl}/admin/projects/${projectId}`, project, { headers })
       .subscribe({
         next: (updatedProject) => this.projectSubject.next(updatedProject),
         error: (err) => console.error('Error updating project', err),

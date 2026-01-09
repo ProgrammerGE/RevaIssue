@@ -71,7 +71,7 @@ export class Project extends RevaIssueSubscriber {
       const issue = this.selectedIssue();
       if (!issue) return;
 
-      // Load co mments for this issue
+      // Load comments for this issue
       this.commentService.loadComments(issue.issueID);
       console.log('comments loaded...');
 
@@ -106,32 +106,6 @@ export class Project extends RevaIssueSubscriber {
     this.userService.fetchUsers(this.projectId);
   }
 
-  /**
-   * Function called by project.html
-   * Triggers from clicking on Add User in the project view (admin)
-   * Creates a User_Project record in the database
-   */
-  addUserToProject(): void {
-    const username = this.newUser();
-    const projectId = this.projectId;
-
-    if (username) {
-      this.projectService.addUserToProject(projectId, username);
-    }
-  }
-
-  /**
-   * Function called by project.html
-   * Triggers from clicking on users in the users list
-   * Deletes a User_Project record from the database
-   */
-  onUserClick(user: UserData) {
-    console.log('removing ', user.username);
-    const username = user.username;
-    const projectId = this.projectId;
-    this.removeUserFromProject(this.projectId, username);
-  }
-
   private removeUserFromProject(projectId: number, username: string): void {
     this.projectService.removeUserFromProject(projectId, username);
   }
@@ -155,14 +129,9 @@ export class Project extends RevaIssueSubscriber {
     });
   }
 
-  addPopup() {
-    this.popUpService.openPopUpIssue();
-  }
-
-  // Helper method to handle the click
-  selectIssue(issue: IssueData) {
-    this.selectedIssue.set(issue);
-  }
+  ////////////////////////////////////////////////
+  // ISSUES //////////////////////////////////////
+  ////////////////////////////////////////////////
 
   // Logic for the preview pane:
   // Show hover if it exists, otherwise show the sticky selected one
@@ -184,5 +153,105 @@ export class Project extends RevaIssueSubscriber {
     this.commentService.addComment(issue.issueID, text);
     this.newComment.set('');
     console.log('comment sent');
+  }
+
+  /**
+   * This method causes the currently selected issue in the app to update its status.
+   * @param status The status for the issue to be set to
+   * @param role The role of the current user. This only affects the path of endpoint
+   *             that the issue-service.ts will send a patch request to.
+   */
+  updateIssueStatus(
+    status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED',
+    role: 'developer' | 'tester'
+  ): void {
+    let issueId = this.selectedIssue()?.issueID;
+    if (issueId) {
+      this.issueService.updateIssueStatus(issueId, this.projectId, status, role);
+    } else {
+      console.error('ERROR: cannot access this.selectedIssue?.issueID');
+    }
+  }
+
+  ////////////////////////////////////////////////
+  // BUTTONS /////////////////////////////////////
+  ////////////////////////////////////////////////
+
+  /**
+   * Triggers from clicking the 'Re-open issue' button in the issue
+   * pane of the project view (tester)
+   * Sends a request to change the issue to 'open' if it is closed.
+   * Otherwise, fails
+   */
+  reopenIssue() {
+    this.updateIssueStatus('OPEN', 'tester');
+  }
+
+  /**
+   * Triggers from clicking the 'Close issue' button in the issue
+   * pane of the project view (tester)
+   * Sends a request to change the issue to 'closed'
+   */
+  closeIssue() {
+    this.updateIssueStatus('CLOSED', 'tester');
+  }
+
+  /**
+   * Triggers from clicking the 'Move to in progress' button in the issue
+   * pane of the project view (developer)
+   * Sends a request to change the issue to 'in progress'.
+   */
+  startProgress() {
+    this.updateIssueStatus('IN_PROGRESS', 'developer');
+  }
+
+  /**
+   * Triggers from clicking the 'Resolve Issue' button in the issue
+   * pane of the project view (developer)
+   * Sends a request to change the issue to 'resolved'.
+   */
+  resolveIssue() {
+    this.updateIssueStatus('RESOLVED', 'developer');
+  }
+
+  /**
+   * Triggers from clicking an issue in the project view
+   * Changes the page's selectedIssue to be what the user clicked on
+   * @param issue the issue to be selected
+   */
+  selectIssue(issue: IssueData) {
+    this.selectedIssue.set(issue);
+  }
+
+  /**
+   * Triggers from clicking Create Issue in the project view (tester)
+   * Opens a popup issue dialog box
+   */
+  addPopup() {
+    this.popUpService.openPopUpIssue();
+  }
+
+  /**
+   * Triggers from clicking on Add User in the project view (admin)
+   * Creates a User_Project record in the database
+   */
+  addUserToProject(): void {
+    const username = this.newUser();
+    const projectId = this.projectId;
+
+    if (username) {
+      this.projectService.addUserToProject(projectId, username);
+    }
+  }
+
+  /**
+   * Triggers from clicking on users in the users list
+   * Deletes a User_Project record from the database
+   */
+  onUserClick(user: UserData) {
+    console.log('removing ', user.username);
+    const username = user.username;
+    const projectId = this.projectId;
+    this.removeUserFromProject(this.projectId, username);
   }
 }

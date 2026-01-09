@@ -1,0 +1,32 @@
+<div class="update_button">
+        <button (click)="addUpdatePopup()">
+          <img src="assets/icons/pencil.svg" />
+        </button>
+</div>
+@if (isPoppedUp()){
+<div class="parent">
+  <div class="proj_name">
+    @if (titleMissing) {
+    <h4 style="color: red">Enter a title name for the project</h4>
+    }
+    <p>Project Name</p>
+    <input type="text" placeholder="Project Title" [(ngModel)]="projectTitle" />
+  </div>
+  <div class="proj_description">
+    @if (descriptionMissing) {
+    <h4 style="color: red">Enter a description</h4>
+    }
+    <p>Project Description</p>
+    <textarea
+      type="text"
+      placeholder="Project Description"
+      id="descriptionBox"
+      [(ngModel)]="projectDesc"
+      rows="10"
+    ></textarea>
+    <button (click)="updateProject()">{{ buttonText }}</button>
+    <button (click)="cancelUpdate()">{{ buttonCancel }}</button>
+  </div>
+</div>
+
+}
