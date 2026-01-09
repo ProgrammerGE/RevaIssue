@@ -64,19 +64,19 @@ export class Issue extends RevaIssueSubscriber {
   }
 
   setInProgress(): void {
-    this.issueService.updateIssueStatus(this.issueId, this.projectId, 'IN_PROGRESS', 'developer');
+    this.issueService.updateIssueStatus(this.issueId, /*this.projectId,*/ 'IN_PROGRESS', 'developer');
   }
 
   resolveIssue(): void {
-    this.issueService.updateIssueStatus(this.issueId, this.projectId, 'RESOLVED', 'developer');
+    this.issueService.updateIssueStatus(this.issueId, /*this.projectId,*/ 'RESOLVED', 'developer');
   }
 
   closeIssue(): void {
-    this.issueService.updateIssueStatus(this.issueId, this.projectId, 'CLOSED', 'tester');
+    this.issueService.updateIssueStatus(this.issueId, /*this.projectId,*/ 'CLOSED', 'tester');
   }
 
   reopenIssue(): void {
-    this.issueService.updateIssueStatus(this.issueId, this.projectId, 'OPEN', 'tester');
+    this.issueService.updateIssueStatus(this.issueId, /*this.projectId,*/ 'OPEN', 'tester');
   }
 
   // --- button logic ---
