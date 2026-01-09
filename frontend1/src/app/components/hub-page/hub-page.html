@@ -1,20 +1,13 @@
+<app-nav-bar></app-nav-bar>
 <div class="hub-page">
-  <app-nav-bar></app-nav-bar>
-  @if(isSearchPopupActive()){
-  <app-popup-wrapper>
-    <div class="overlay" (click)="closePopup()"></div>
-    <div class="search-popup">
-      <button class="close-popup-btn" (click)="closePopup()">
-        <img src="/assets/icons/x.svg" />
-      </button>
-      <input class="search-input" type="text" placeholder="Search for issues" (input)="searchInput($event)" />
+  @if(isSearchPopupActive()){  
+    <app-search-popup [(isPopupActive)]="isSearchPopupActive" [(inputValue)]="searchPopupValue" placeholder="Search Issues">
       @for(issue of searchResults(); track $index){
       <a class="search-result-item" [routerLink]="['/projects', issue.project?.projectID]">
         {{issue.name}}
       </a>
       }
-    </div>
-  </app-popup-wrapper>
+    </app-search-popup>
   }
   <div class="popup">
     <app-create-project></app-create-project>
@@ -27,19 +20,10 @@
     <app-search-bar [(active)]="isSearchPopupActive"></app-search-bar>
   </header>
   <section class="lists">
-    <app-list-container
-      title="Projects"
-      [items]="projectsList()"
-      [hasButton]="true"
-      [itemClicked]="goToProject"
-      [userRole] = "userRole()"
-    >
+    <app-list-container title="Projects" [items]="projectsList()" [hasButton]="true" [itemClicked]="goToProject"
+      [userRole]="userRole()">
     </app-list-container>
-    <app-list-container
-      title="Recent Issues"
-      [items]="issuesList()"
-      [hasButton]="false"
-    ></app-list-container>
+    <app-list-container title="Recent Issues" [items]="issuesList()" [hasButton]="false"></app-list-container>
   </section>
   @if(isAdmin()){
   <section class="audit-logs">

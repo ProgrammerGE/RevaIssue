@@ -6,7 +6,7 @@
 input {
   background-image: url("/assets/icons/search.svg");
   background-repeat: no-repeat;
-  background-position: left center;
+  background-position: 4px center;
   padding: 8px 30px;
   border: 1px solid black;
   border-radius: 4px;
