@@ -8,6 +8,8 @@ import com.example.RevaIssue.service.ProjectService;
 import com.example.RevaIssue.service.UserService;
 import com.example.RevaIssue.util.JwtUtility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,33 +44,33 @@ public class DeveloperController {
     }
 
     @PatchMapping("/project/issues/{issue_id}/in-progress")
-    public Issue moveToInProgress(
+    public ResponseEntity<Issue>  moveToInProgress(
             @RequestHeader (name = "Authorization") String authHeader,
             @PathVariable("issue_id") Long issueId
     ) {
-        String role = getRoleFromHeader(authHeader);
+        String role = getRoleFromHeader(authHeader).toLowerCase();
         String username = getUsernameFromHeader(authHeader);
         String issueName = issueService.getIssue(issueId).getName();
-        if(!role.equalsIgnoreCase("developer")){
-            return null;
+        if(!role.equals("developer")){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("MOVED ISSUE " + issueName + " TO IN_PROGRESS", username, role));
-        return issueService.updateIssueStatus(issueId, "IN_PROGRESS", role);
+        return ResponseEntity.ok(issueService.updateIssueStatus(issueId, "IN_PROGRESS", role));
     }
 
     @PatchMapping("/project/issues/{issue_id}/resolve")
-    public Issue resolveIssue(
+    public ResponseEntity<Issue> resolveIssue(
             @RequestHeader (name = "Authorization") String authHeader,
             @PathVariable("issue_id") Long issueId
     ) {
-        String role = getRoleFromHeader(authHeader);
+        String role = getRoleFromHeader(authHeader).toLowerCase();
         String username = getUsernameFromHeader(authHeader);
         String issueName = issueService.getIssue(issueId).getName();
-        if(!role.equalsIgnoreCase("developer")){
-            return null;
+        if(!role.equals("developer")){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("MOVED ISSUE " + issueName + " TO RESOLVED", username, role));
-        return issueService.updateIssueStatus(issueId, "RESOLVED", role);
+        return ResponseEntity.ok(issueService.updateIssueStatus(issueId, "RESOLVED", role));
     }
     @GetMapping("/project/{project_id}/issues")
     public List<Issue> issueList(@PathVariable("project_id") Long projectId){

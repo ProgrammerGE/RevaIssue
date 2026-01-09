@@ -58,10 +58,7 @@ export class IssueService {
           console.error(`Error creating new issues for project with id: ${projectId}`, err),
       });
   }
-  updateIssue(
-    issueId: number,
-    issue: Partial<IssueData>
-  ): void {
+  updateIssue(issueId: number, issue: Partial<IssueData>): void {
     const headers = {
       Authorization: `Bearer ${this.tokenStorage.getToken()}`,
     };
@@ -77,25 +74,8 @@ export class IssueService {
       });
   }
 
-  // updateIssueStatus(
-  //   issueId: number,
-  //   projectId: number,
-  //   status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED',
-  //   role: 'developer' | 'tester'
-  // ): void {
-  //   const headers = {
-  //     Authorization: `Bearer ${this.tokenStorage.getToken()}`,
-  //   };
-  //   this.httpClient.put<IssueData>(
-  //     `${this.baseUrl}/${role}/project/${projectId}/issues/${issueId}`,
-  //     { status },
-  //     { headers }
-  //   );
-  // }
-
   updateIssueStatus(
     issueId: number,
-    // projectId: number,
     status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED',
     role: 'developer' | 'tester'
   ): void {
@@ -118,8 +98,7 @@ export class IssueService {
       .subscribe({
         next: (updatedIssue) => {
           console.log('Update successful');
-          // Logic to update your local state goes here
-          // e.g., this.selectedIssue.set(updatedIssue);
+          this.issueSubject.next(updatedIssue);
         },
         error: (err) => {
           console.error('Update failed', err);
@@ -153,7 +132,7 @@ export class IssueService {
 
   viewAllIssuesByKeyword(keyword: String, issues: WritableSignal<Array<IssueData>>) {
     this.httpClient
-    .get<IssueData[]>(`${this.baseUrl}/common/issues/search?keyword=${keyword}`)
+      .get<IssueData[]>(`${this.baseUrl}/common/issues/search?keyword=${keyword}`)
       .subscribe((issueList) => {
         const newIssueList = [];
         for (const issueObj of issueList) {

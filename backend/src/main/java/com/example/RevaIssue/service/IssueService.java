@@ -100,6 +100,7 @@ public class IssueService {
 
     public Issue updateIssueStatus(Long issueId, String status, String role){
 
+        role = role.toUpperCase();
         // Developer only status updates
         if (status.equals("IN_PROGRESS") && !role.equals("DEVELOPER")) {
             throw new RuntimeException("Only developers can move issues to In Progress");
