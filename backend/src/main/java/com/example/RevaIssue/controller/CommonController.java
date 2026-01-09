@@ -1,13 +1,12 @@
 package com.example.RevaIssue.controller;
 
+import com.example.RevaIssue.dto.CommentRequest;
 import com.example.RevaIssue.dto.RegisterRequest;
 import com.example.RevaIssue.entity.Issue;
 import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.entity.User;
-import com.example.RevaIssue.service.AuditLogService;
-import com.example.RevaIssue.service.IssueService;
-import com.example.RevaIssue.service.ProjectService;
-import com.example.RevaIssue.service.UserService;
+import com.example.RevaIssue.helper.Comment;
+import com.example.RevaIssue.service.*;
 import com.example.RevaIssue.util.JwtUtility;
 import com.example.RevaIssue.util.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +27,8 @@ public class CommonController {
     private ProjectService projectService;
     @Autowired
     private AuditLogService auditLogService;
+    @Autowired
+    private CommentService commentService;
 
     /*
     The following 'get/post/etc requests' should be available to all user types:
@@ -81,5 +82,17 @@ public class CommonController {
     @GetMapping("/projects/search")
     public List<Project> getProjectByKeyword(@RequestParam String keyword){
         return projectService.getProjectsByKeyword(keyword);
+    }
+
+    @GetMapping("/issues/{issue_id}/comments")
+    public  List<Comment> getIssueComments(@PathVariable("issue_id") Long issueId){
+        return commentService.getCommentsByIssue(issueId);
+    }
+
+    @PostMapping("issues/{issue_id}/comments")
+    public Comment addIssueComment(
+            @PathVariable("issue_id") Long issueId,
+            @RequestBody CommentRequest request){
+        return commentService.addComment(issueId, request.text());
     }
 }

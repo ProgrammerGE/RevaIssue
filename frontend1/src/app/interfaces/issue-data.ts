@@ -1,3 +1,5 @@
+import { CommentData } from './comment-data';
+
 export interface IssueData {
   issueID: number;
   name: string;
@@ -6,13 +8,7 @@ export interface IssueData {
   severity: number;
   priority: number;
   status: IssueStatus;
-  comments: Comment[];
-}
-
-export interface Comment {
-  author: string;
-  text: string;
-  dateCreated: string;
+  comments: CommentData[];
 }
 
 export type IssueStatus = 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED';

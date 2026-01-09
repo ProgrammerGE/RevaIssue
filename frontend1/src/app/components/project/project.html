@@ -60,11 +60,12 @@
         (mouseenter)="hoveredIssue = issue"
         (mouseleave)="hoveredIssue = null"
         (click)="selectIssue(issue)"
-        [class.active]="selectedIssue?.issueID === issue.issueID"
+        [class.active]="selectedIssue()?.issueID === issue.issueID"
       >
-        <span class="issue-id">#{{ issue.issueID }} </span>
-        <span class="issue-title">{{ issue.name }}</span>
+        <!-- <span class="issue-id">id:{{ issue.issueID }} </span> -->
+        <span class="issue-title">{{ issue.name }} </span>
         <span class="issue-priority" [attr.data-priority]="issue.priority">
+          Priority level
           {{ issue.priority }}
         </span>
       </div>
@@ -74,7 +75,7 @@
   <!-- issue viewing pane -->
   <div class="div5">
     <div class="view-pane-container">
-      @if (hoveredIssue || selectedIssue) { @let current = (hoveredIssue || selectedIssue)!;
+      @if (hoveredIssue || selectedIssue()) { @let current = (hoveredIssue || selectedIssue())!;
 
       <div class="issue-details fade-in">
         <div class="details-header">
@@ -105,23 +106,23 @@
           <button>Resolve Issue</button>
           }
         </div>
-        <h4>Comments ({{ current.comments.length || 0 }})</h4>
+        <h4>Comments</h4>
         <div class="comment-input-placeholder">
-          <input type="text" placeholder="Add a comment..." disabled />
-          <button disabled>Send</button>
+          <input type="text" placeholder="Add a comment..." [(ngModel)]="newComment" />
+          <button (click)="addCommentToIssue()">Send</button>
         </div>
 
         <div class="comments-scroll-area">
-          @for (comment of current.comments.slice().reverse(); track $index) {
+          @for (comment of comments(); track $index) {
           <div class="comment-item">
             <div class="comment-meta">
-              <span class="author">{{ comment.author }}</span>
-              <span class="date">{{ comment.dateCreated }}</span>
+              <span class="author">{{ comment.author_id }}</span>
+              <span class="date">{{ comment.timeLogged }}</span>
             </div>
             <p class="comment-text">{{ comment.text }}</p>
           </div>
           } @empty {
-          <p class="no-comments">No comments yet.</p>
+          <p class="no-comments">Be first to comment!</p>
           }
         </div>
       </div>

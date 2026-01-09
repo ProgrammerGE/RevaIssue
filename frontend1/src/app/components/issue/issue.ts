@@ -4,6 +4,8 @@ import { RevaIssueSubscriber } from '../../classes/reva-issue-subscriber';
 import { FormsModule } from '@angular/forms';
 import { SignoutButton } from '../signout-button/signout-button';
 import { NavBar } from '../nav-bar/nav-bar';
+import { CommentService } from '../../services/comment-service';
+import { CommentData } from '../../interfaces/comment-data';
 
 @Component({
   selector: 'app-issue',
@@ -23,13 +25,13 @@ export class Issue extends RevaIssueSubscriber {
 
   issueStatus: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED' = 'OPEN';
 
-  issueComments: Comment[] = [];
+  issueComments: CommentData[] = [];
 
   // --- UI logic ---
   userRole: 'tester' | 'developer' | 'admin' = 'tester';
   isEditing: boolean = false;
 
-  constructor(private issueService: IssueService) {
+  constructor(private issueService: IssueService, private commentService: CommentService) {
     super();
     this.subscription = this.issueService.getIssueSubject().subscribe((issueData) => {
       this.issueTitle.set(issueData.name);
@@ -38,6 +40,12 @@ export class Issue extends RevaIssueSubscriber {
       this.issueSeverity = issueData.severity;
       this.issueStatus = issueData.status;
       this.issueId = issueData.issueID;
+
+      this.commentService.loadComments(this.issueId);
+
+      this.commentService.getCommentsSubject().subscribe((comments) => {
+        this.issueComments = comments;
+      });
     });
   }
 
@@ -95,5 +103,14 @@ export class Issue extends RevaIssueSubscriber {
   }
   ngOnInit(): void {
     this.viewIssue();
+    this.commentService.getCommentsSubject().subscribe((comments) => {
+      this.issueComments = comments;
+    });
+
+    this.commentService.loadComments(this.issueId);
+  }
+
+  addComment(commentText: string): void {
+    this.commentService.addComment(this.issueId, commentText);
   }
 }
