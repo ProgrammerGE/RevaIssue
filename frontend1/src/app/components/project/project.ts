@@ -54,6 +54,10 @@ export class Project extends RevaIssueSubscriber {
   // This will hold the issue that was just clicked on
   selectedIssue: WritableSignal<IssueData | null> = signal(null);
 
+  statusInput: string = '';
+  severityInput: string = '';
+  priorityInput: string = '';
+
   constructor() {
     super();
 
@@ -230,6 +234,17 @@ export class Project extends RevaIssueSubscriber {
    */
   addPopup() {
     this.popUpService.openPopUpIssue();
+  }
+
+  filterIssues(){
+      this.issueService.viewAllIssuesByFilter(this.issues, this.statusInput, Number(this.severityInput), Number(this.priorityInput));
+  }
+
+  resetFilter(){
+    const role = this.userRole();
+      if (!role) return;
+
+      this.issueService.viewAllIssues(this.projectId, this.issues, role);
   }
 
   /**

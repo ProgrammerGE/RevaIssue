@@ -138,6 +138,17 @@ export class IssueService {
         issues.set(newIssueList);
       });
   }
+  viewAllIssuesByFilter(issues: WritableSignal<Array<IssueData>>, status: string, severity: number, priority: number): void {
+    this.httpClient
+      .get<IssueData[]>(`${this.baseUrl}/common/issues/filter/${status}/${severity}/${priority}`)
+      .subscribe((issueList) => {
+        const newIssueList = [];
+        for (const issueObj of issueList) {
+          newIssueList.push(issueObj);
+        }
+        issues.set(newIssueList);
+      });
+  }
 
   getMostRecentIssues(issues: WritableSignal<Array<IssueData>>): void {
     this.httpClient
