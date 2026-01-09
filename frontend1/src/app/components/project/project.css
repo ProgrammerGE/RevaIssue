@@ -252,6 +252,7 @@
   margin-bottom: 8px; /* Standard margin again */
 }
 
+/* PRIORITY */
 .issue-priority {
   display: inline-block;
   background-color: blue;
@@ -261,4 +262,56 @@
   font-size: 0.85rem;
   font-weight: 600;
   line-height: 1;
+  margin-top: 4px;
+}
+.issue-priority[data-priority='LOW'] {
+  background-color: green;
+}
+
+.issue-priority[data-priority='MEDIUM'] {
+  background-color: orange;
+}
+
+.issue-priority[data-priority='HIGH'] {
+  background-color: red;
+}
+
+/* STATUS */
+.issue-status {
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-right: 8px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.issue-status[data-status='OPEN'] {
+  background-color: #007bff;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.issue-status[data-status='IN_PROGRESS'] {
+  background-color: orange;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.issue-status[data-status='RESOLVED'] {
+  background-color: green;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.issue-status[data-status='CLOSED'] {
+  background-color: gray;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 999px;
 }

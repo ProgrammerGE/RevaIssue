@@ -85,10 +85,14 @@
         (click)="selectIssue(issue)"
         [class.active]="selectedIssue()?.issueID === issue.issueID"
       >
-        <!-- <span class="issue-id">id:{{ issue.issueID }} </span> -->
+        <span class="issue-status" [attr.data-status]="issue.status">
+          {{ issue.status }}
+        </span>
+
         <span class="issue-title">{{ issue.name }} </span>
-        <span class="issue-priority" [attr.data-priority]="issue.priority">
-          Priority level
+
+        <span class="issue-priority" [attr.data-priority]="issue.priority"
+          >Priority:
           {{ issue.priority }}
         </span>
         <span class="button_update">

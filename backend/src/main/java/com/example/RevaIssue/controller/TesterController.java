@@ -6,6 +6,8 @@ import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.service.*;
 import com.example.RevaIssue.util.JwtUtility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,27 +46,27 @@ public class TesterController {
     }
 
     @PatchMapping("/project/issues/{issue_id}/close")
-    public Issue closeIssue(@PathVariable("issue_id") Long issueId, @RequestHeader (name = "Authorization") String authHeader){
-        String role = authService.getRoleFromHeader(authHeader);
+    public ResponseEntity<Issue> closeIssue(@PathVariable("issue_id") Long issueId, @RequestHeader (name = "Authorization") String authHeader){
+        String role = authService.getRoleFromHeader(authHeader).toLowerCase();
         String username = authService.getUsernameFromHeader(authHeader);
         String issueName = issueService.getIssue(issueId).getName();
-        if(!role.equalsIgnoreCase("tester")){
-            return null;
+        if(!role.equals("tester")){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("CLOSED ISSUE " + issueName, username, role));
-        return issueService.updateIssueStatus(issueId, "CLOSED", role);
+        return ResponseEntity.ok(issueService.updateIssueStatus(issueId, "CLOSED", role));
     }
 
     @PatchMapping("/project/issues/{issue_id}/open")
-    public Issue reopenIssue(@PathVariable("issue_id") Long issueId, @RequestHeader (name = "Authorization") String authHeader){
-        String role = authService.getRoleFromHeader(authHeader);
+    public ResponseEntity<Issue> reopenIssue(@PathVariable("issue_id") Long issueId, @RequestHeader (name = "Authorization") String authHeader){
+        String role = authService.getRoleFromHeader(authHeader).toLowerCase();
         String username = authService.getUsernameFromHeader(authHeader);
         String issueName = issueService.getIssue(issueId).getName();
-        if(!role.equalsIgnoreCase("tester")){
-            return null;
+        if(!role.equals("tester")){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("OPENED ISSUE " + issueName, username, role));
-        return issueService.updateIssueStatus(issueId, "OPEN", role);
+        return ResponseEntity.ok(issueService.updateIssueStatus(issueId, "OPENED", role));
     }
     @GetMapping("/project/{project_id}/issues")
     public List<Issue> issueList(@PathVariable("project_id") Long projectId){
