@@ -8,47 +8,6 @@
 
 }
 
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  backdrop-filter: brightness(0.5) blur(2px);
-  background: rgba(0,0,0,0.2);
-  z-index: 9998;
-}
-
-.search-popup {
-  position: fixed;
-  top: 10%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-  border: 2px solid var(--carbon-black);
-  border-radius: 4px;
-  padding: 32px;
-  gap: 8px;
-  max-height: 64rem;
-  width: calc(100vw - 12rem);
-  box-sizing: border-box;
-  overflow: hidden;
-  z-index: 9999;
-}
-
-
-.close-popup-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  background-color: transparent;
-  width: fit-content;
-  align-self: flex-end;
-}
-
 .hub-header {
   display: flex;
   justify-content: space-between;
@@ -80,4 +39,19 @@
 }
 .filterButton{
   border-right: 30%;
+}
+
+.search-result-item {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  color: var(--carbon-black);
+  padding: 8px;
+  box-sizing: border-box;
+  border-left: 2px solid black;
+}
+
+.search-result-item:hover {
+  font-weight: 900;
+  border-color: var(--spicy-paprika);
 }

@@ -18,6 +18,7 @@ import { PopUpService } from '../../services/pop-up-service';
 import { Router, RouterLink } from '@angular/router';
 import { PopupWrapper } from '../popup-wrapper/popup-wrapper';
 import { SearchBar } from '../search-bar/search-bar';
+import { SearchPopup } from '../search-popup/search-popup';
 
 @Component({
   selector: 'app-hub-page',
@@ -30,6 +31,7 @@ import { SearchBar } from '../search-bar/search-bar';
     PopupWrapper,
     SearchBar,
     RouterLink,
+    SearchPopup,
   ],
   templateUrl: './hub-page.html',
   styleUrl: './hub-page.css',
@@ -41,7 +43,7 @@ export class HubPage extends RevaIssueSubscriber {
   // made isAdmin a computed signal instead of WritableSignal
   isAdmin: Signal<boolean> = computed(() => this.userRole().toLowerCase() === 'admin');
   searchFilter = '';
-  searchValue = signal('');
+  searchPopupValue = model('');
   isSearchPopupActive = model(false);
   searchResults: WritableSignal<IssueData[]> = signal([]);
 
@@ -64,6 +66,17 @@ export class HubPage extends RevaIssueSubscriber {
     effect(() => {
       this.projectService.viewAllProjects(this.projects, this.userRole());
     });
+
+    effect(() => {
+      const value = this.searchPopupValue()?.trim();
+
+      if (value) {
+        this.issueService.viewAllIssuesByKeyword(value, this.searchResults);
+      } else {
+        this.searchResults.set([]);
+      }
+    });
+    
   }
 
   issues: WritableSignal<IssueData[]> = signal([]);
@@ -109,20 +122,29 @@ export class HubPage extends RevaIssueSubscriber {
   }
 
   searchInput(e: Event) {
-    const input = e.target as HTMLInputElement;
-    this.searchValue.set(input.value);
-    if (this.searchValue()?.trim()) {
-      this.issueService.viewAllIssuesByKeyword(input.value, this.searchResults);
+    if (this.searchPopupValue()?.trim()) {
+      this.issueService.viewAllIssuesByKeyword(this.searchPopupValue(), this.searchResults);
     } else {
       this.searchResults.set([]);
     }
   }
 
+  private onKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      this.isSearchPopupActive.set(false);
+    }
+  };
+
   ngOnInit() {
+    window.addEventListener('keydown', this.onKeyDown);
     this.userService.getUserInfo();
     this.getProjects();
     this.getIssues();
     this.auditLogService.getAllAuditLogs(this.auditLogs);
+  }
+
+  override ngOnDestroy(): void {
+    window.removeEventListener('keydown', this.onKeyDown);
   }
 
   userLoggedIn: WritableSignal<boolean> = signal(false);
