@@ -66,9 +66,9 @@ button {
   height: 1.1rem;
 }
 
-.add-button:hover {
-  /* background-color: var(--dust-grey); */
-}
+/* .add-button:hover {
+  background-color: var(--dust-grey);
+} */
 
 .add-button:active {
   opacity: 0.5;
@@ -87,6 +87,7 @@ hr {
   display: flex;
   gap: 8px ;
   padding: 6px;
+  cursor: pointer;
 }
 
 .list-item:hover {
