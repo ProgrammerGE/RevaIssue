@@ -1,9 +1,6 @@
 package com.example.RevaIssue.controller;
 
-import com.example.RevaIssue.entity.AuditLog;
-import com.example.RevaIssue.entity.Project;
-import com.example.RevaIssue.entity.User;
-import com.example.RevaIssue.entity.User_Projects;
+import com.example.RevaIssue.entity.*;
 import com.example.RevaIssue.repository.IssueRepository;
 import com.example.RevaIssue.repository.ProjectRepository;
 import com.example.RevaIssue.repository.UserRepository;
@@ -119,5 +116,9 @@ public class AdminController {
         String projectName = projectService.getProjectById(projectId).getProjectName();
         AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("REMOVED " + userName + " FROM " + projectName, adminName, role));
         return userService.revokeProject(projectId, userName);
+    }
+    @GetMapping("/project/{project_id}/issues")
+    public List<Issue> issueList(@PathVariable("project_id") Long projectId){
+        return issueService.getIssuesByProject(projectId);
     }
 }
