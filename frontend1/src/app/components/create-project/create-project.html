@@ -1,4 +1,7 @@
-@if (isPoppedUp()){
+<button class="addNewBtn" title="Add new" (click)="addPopup()">
+   <img src="assets/icons/plus.svg" />
+</button>
+@if (isPoppedUp){
 <div class="parent">
   <div class="proj_name">
     @if (titleMissing) {

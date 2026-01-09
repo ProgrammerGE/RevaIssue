@@ -15,7 +15,7 @@ export class UpdateProject {
   @Input() projectDesc: string = '';
   buttonText = 'Update Project';
   buttonCancel = 'Cancel';
-  isPoppedUp: WritableSignal<boolean> = signal(false);
+  @Input() isPoppedUp: boolean = false;
 
   titleMissing: boolean = false;
   descriptionMissing: boolean = false;
@@ -27,14 +27,10 @@ export class UpdateProject {
     private popUpService: PopUpService,
     private projectService: ProjectService,
     private router: Router
-  ) {
-    this.popUpService.getPopUpUpdateSubject().subscribe((popUpSetting) => {
-      this.isPoppedUp.set(popUpSetting);
-    });
-  }
+  ) { }
 
   addUpdatePopup() {
-    this.popUpService.openUpdatePopup();
+    this.isPoppedUp = true;
   }
 
   updateProject(){
@@ -47,7 +43,7 @@ export class UpdateProject {
         projectName: this.projectTitle,
         projectDescription: this.projectDesc,
       });
-      this.isPoppedUp.set(false);
+      this.isPoppedUp = false;
       this.projectTitle = '';
       this.projectDesc = '';
       window.location.reload();
@@ -63,7 +59,7 @@ export class UpdateProject {
   }
 
   cancelUpdate() {
-    this.isPoppedUp.set(false);
+    this.isPoppedUp = false;
     window.location.reload();
   }
 }

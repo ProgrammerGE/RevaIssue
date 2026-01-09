@@ -48,8 +48,7 @@
     <div class="issues-header">
       <h4>Project Issues</h4>
       @if (userRole() === 'tester') {
-      <app-create-issue></app-create-issue>
-      <button class="btn-create" (click)="addPopup()">Create Issue</button>
+      <app-create-issue [isPoppedUp]="false"></app-create-issue>
       }
       <div class="filter_status">
         <select name="status" [(ngModel)]="statusInput">
@@ -93,14 +92,13 @@
           {{ issue.priority }}
         </span>
         <span class="button_update">
-          <app-update-issue
-            [issueTitle]="issue.name"
-            [issueDesc]="issue.description"
-            [severityInput]="issue.severity.toString()"
-            [priorityInput]="issue.priority.toString()"
-            [issueID]="issue.issueID"
-          ></app-update-issue>
-        </span>
+          <app-update-issue [issueTitle]="issue.name"
+                            [issueDesc]="issue.description"
+                            [severityInput]="issue.severity.toString()"
+                            [priorityInput]="issue.priority.toString()"
+                            [issueID]="issue.issueID"
+                            [isPoppedUp]="false"></app-update-issue>
+      </span>
       </div>
       }
     </div>

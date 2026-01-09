@@ -1,6 +1,9 @@
 <!-- This component will be a popup window that will show up in the
      Tester's view (viewing a project). It is the dialogue window for creating a new issue. -->
-@if(isPoppedUp()){
+<div class="create_button">        
+      <button class="btn-create" (click)="addPopup()">Create Issue</button>
+</div>
+@if(isPoppedUp){
 <div class="parent">
   <div class="issue_title">
     <!-- Just the title of the popup that appears when making a new issue -->
