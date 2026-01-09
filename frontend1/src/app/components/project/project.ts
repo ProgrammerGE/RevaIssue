@@ -135,7 +135,7 @@ export class Project extends RevaIssueSubscriber {
   ): void {
     let issueId = this.selectedIssue?.issueID;
     if (issueId) {
-      this.issueService.updateIssueStatus(issueId, this.projectId, status, role);
+      this.issueService.updateIssueStatus(issueId, /*this.projectId,*/ status, role);
     } else {
       console.error('ERROR: cannot access this.selectedIssue?.issueID');
     }
