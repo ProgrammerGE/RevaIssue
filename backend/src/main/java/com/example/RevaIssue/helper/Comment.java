@@ -1,48 +1,39 @@
 package com.example.RevaIssue.helper;
 
-import lombok.Setter;
-
+import com.example.RevaIssue.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import com.example.RevaIssue.entity.Issue;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * This class is to represent the Comment Chain for the Issue Entity
  */
-
+@Data
+@NoArgsConstructor
+@Entity
+@Table(name = "comments")
 public class Comment implements Serializable {
 
-    @Setter
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long comment_id;
+
+    @Column(nullable = false, length = 2000)
     private String text;
-    @Setter
-    private Date time_stamp;
-    @Setter
-    private Comment last_comment;
-    @Setter
-    private Comment next_comment;
-    private ArrayList<Comment> replies;
 
-    public String getText() {
-        return text;
-    }
+    @Column(name = "created_at")
+    private LocalDateTime timeLogged;
 
-    public Date getTime_stamp() {
-        return time_stamp;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "issue_id", nullable = false)
+    @JsonIgnore
+    private Issue issue;
 
-    public Comment getLast_comment() {
-        return last_comment;
-    }
 
-    public Comment getNext_comment() {
-        return next_comment;
-    }
 
-    public ArrayList<Comment> getReplies() {
-        return replies;
-    }
 
-    public void addingReply(Comment reply) {
-        this.replies.add(reply);
-    }
 }

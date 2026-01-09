@@ -14,6 +14,8 @@ import { SignoutButton } from '../signout-button/signout-button';
 import { NavBar } from '../nav-bar/nav-bar';
 import { IssueData } from '../../interfaces/issue-data';
 import { IssueService } from '../../services/issue-service';
+import { CommentService } from '../../services/comment-service';
+import { CommentData } from '../../interfaces/comment-data';
 import { UpdateIssue } from '../update-issue/update-issue';
 
 @Component({
@@ -32,6 +34,7 @@ export class Project extends RevaIssueSubscriber {
   private popUpService = inject(PopUpService);
   private route = inject(ActivatedRoute);
   private issueService = inject(IssueService);
+  private commentService = inject(CommentService);
 
   // vars
   project!: ProjectData;
@@ -40,10 +43,16 @@ export class Project extends RevaIssueSubscriber {
   projectDescription: WritableSignal<string> = signal('');
   users: Signal<UserData[]> = toSignal(this.userService.getUsersSubject(), { initialValue: [] });
   newUser: WritableSignal<string> = signal('');
+  newComment: WritableSignal<string> = signal('');
+  comments = signal<CommentData[]>([]);
 
-  userRole: WritableSignal<string> = signal(''); // updates based on the current user
-  hoveredIssue: IssueData | null = null; // The issue currently being hovered over
-  selectedIssue: IssueData | null = null; // The issue that was last clicked on
+  // updates based on the current user
+  userRole: WritableSignal<string> = signal('');
+
+  // This will hold the issue currently being hovered
+  hoveredIssue: IssueData | null = null;
+  // This will hold the issue that was just clicked on
+  selectedIssue: WritableSignal<IssueData | null> = signal(null);
 
   statusInput: string = '';
   severityInput: string = '';
@@ -63,6 +72,17 @@ export class Project extends RevaIssueSubscriber {
       if (!role) return;
 
       this.issueService.viewAllIssues(this.projectId, this.issues, role);
+
+      const issue = this.selectedIssue();
+      if (!issue) return;
+
+      // Load comments for this issue
+      this.commentService.loadComments(issue.issueID);
+      console.log('comments loaded...');
+
+      this.commentService.getCommentsSubject().subscribe((comments) => {
+        this.comments.set(comments);
+      });
     });
     // shows the current project being selected
     this.subscription.add(
@@ -121,11 +141,23 @@ export class Project extends RevaIssueSubscriber {
   // Logic for the preview pane:
   // Show hover if it exists, otherwise show the sticky selected one
   get displayIssue() {
-    return this.hoveredIssue || this.selectedIssue;
+    return this.hoveredIssue || this.selectedIssue();
   }
 
   createIssue() {
     this.issueService.createIssue;
+  }
+
+  addCommentToIssue() {
+    if (!this.selectedIssue()) return;
+    const issue = this.selectedIssue();
+    if (!issue) return;
+    const text = this.newComment();
+    if (!text.trim()) return;
+
+    this.commentService.addComment(issue.issueID, text);
+    this.newComment.set('');
+    console.log('comment sent');
   }
 
   /**
@@ -138,7 +170,7 @@ export class Project extends RevaIssueSubscriber {
     status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED',
     role: 'developer' | 'tester'
   ): void {
-    let issueId = this.selectedIssue?.issueID;
+    let issueId = this.selectedIssue()?.issueID;
     if (issueId) {
       this.issueService.updateIssueStatus(issueId, /*this.projectId,*/ status, role);
     } else {
@@ -192,8 +224,8 @@ export class Project extends RevaIssueSubscriber {
    * Changes the page's selectedIssue to be what the user clicked on
    * @param issue the issue to be selected
    */
-  selectIssue(issue: any) {
-    this.selectedIssue = issue;
+  selectIssue(issue: IssueData) {
+    this.selectedIssue.set(issue);
   }
 
   /**

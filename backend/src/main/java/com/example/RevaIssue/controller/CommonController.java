@@ -1,10 +1,12 @@
 package com.example.RevaIssue.controller;
 
+import com.example.RevaIssue.dto.CommentRequest;
 import com.example.RevaIssue.dto.RegisterRequest;
 import com.example.RevaIssue.entity.AuditLog;
 import com.example.RevaIssue.entity.Issue;
 import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.entity.User;
+import com.example.RevaIssue.helper.Comment;
 import com.example.RevaIssue.service.*;
 import com.example.RevaIssue.util.JwtUtility;
 import com.example.RevaIssue.util.UserDTO;
@@ -26,6 +28,8 @@ public class CommonController {
     private ProjectService projectService;
     @Autowired
     private AuditLogService auditLogService;
+    @Autowired
+    private CommentService commentService;
     @Autowired
     private AuthService authService;
 
@@ -83,6 +87,17 @@ public class CommonController {
         return projectService.getProjectsByKeyword(keyword);
     }
 
+    @GetMapping("/issues/{issue_id}/comments")
+    public  List<Comment> getIssueComments(@PathVariable("issue_id") Long issueId){
+        return commentService.getCommentsByIssue(issueId);
+    }
+
+    @PostMapping("issues/{issue_id}/comments")
+    public Comment addIssueComment(
+            @PathVariable("issue_id") Long issueId,
+            @RequestBody CommentRequest request){
+        return commentService.addComment(issueId, request.text());
+            }
     @PatchMapping("/issues/{issue_id}")
     public Issue updateIssue(@PathVariable("issue_id") Long issueId,
                              @RequestBody Issue issue,

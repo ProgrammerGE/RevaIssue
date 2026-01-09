@@ -60,7 +60,6 @@
   /* Ensures it fills the entire vertical span */
 }
 
-
 /* Styling the Issue Cards inside div4 */
 .issue-card {
   padding: 12px;
@@ -129,7 +128,6 @@
   min-height: 0;
 }
 
-
 .comments-scroll-area {
   flex-grow: 1;
   overflow-y: auto;
@@ -179,8 +177,6 @@
   flex: 1;
   padding: 8px;
 }
-
-
 
 /* Ensure the parent div5 has a defined height,
    usually something like height: calc(100vh - header_height) */
@@ -239,7 +235,7 @@
 }
 
 .comments-scroll-area {
-  flex: 1 1 auto;   /* Take up the rest of the space */
+  flex: 1 1 auto; /* Take up the rest of the space */
   overflow-y: auto; /* Standard vertical scroll */
   border: 1px solid #eee;
   padding: 10px;
@@ -254,4 +250,15 @@
   border-radius: 4px;
   padding: 12px;
   margin-bottom: 8px; /* Standard margin again */
+}
+
+.issue-priority {
+  display: inline-block;
+  background-color: blue;
+  color: #fff;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1;
 }
