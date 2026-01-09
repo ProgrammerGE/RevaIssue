@@ -48,9 +48,32 @@
     <div class="issues-header">
       <h4>Project Issues</h4>
       @if (userRole() === 'tester') {
-      <app-create-issue></app-create-issue>
-      <button class="btn-create" (click)="addPopup()">Create Issue</button>
+      <app-create-issue [isPoppedUp]="false"></app-create-issue>
       }
+      <div class="filter_status">
+        <select name="status" [(ngModel)]="statusInput">
+          <option value="Open">OPEN</option>
+          <option value="In Progress">IN PROGRESS</option>
+          <option value="Resolved">RESOLVED</option> 
+          <option value="Close">CLOSED</option>       
+        </select> 
+    </div>   
+      <select name="filter_priority" [(ngModel)]="priorityInput">
+        <option value="1">Low</option>
+        <option value="2">Medium</option>
+        <option value="3">High</option>
+      </select>
+    </div>
+    <div>
+      <select name="filter_severity" [(ngModel)]="severityInput">
+        <option value="1">Low</option>
+        <option value="2">Medium</option>
+        <option value="3">High</option>
+      </select>
+    </div>
+    <div>
+      <button class="btn-filter" (click)="filterIssues()">Filter Issues</button>
+      <button class="btn-filter_rest" (click)="resetFilter()">Reset Filter</button>
     </div>
 
     <div class="issues-list">
@@ -73,14 +96,13 @@
           {{ issue.priority }}
         </span>
         <span class="button_update">
-          <app-update-issue
-            [issueTitle]="issue.name"
-            [issueDesc]="issue.description"
-            [severityInput]="issue.severity.toString()"
-            [priorityInput]="issue.priority.toString()"
-            [issueID]="issue.issueID"
-          ></app-update-issue>
-        </span>
+          <app-update-issue [issueTitle]="issue.name"
+                            [issueDesc]="issue.description"
+                            [severityInput]="issue.severity.toString()"
+                            [priorityInput]="issue.priority.toString()"
+                            [issueID]="issue.issueID"
+                            [isPoppedUp]="false"></app-update-issue>
+      </span>
       </div>
       }
     </div>

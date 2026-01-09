@@ -14,26 +14,23 @@ export class DeleteProject {
   @Input() projectName: string = '';
   buttonText = 'Delete Project';
   buttonCancel = 'Cancel';
-  isPoppedUp: WritableSignal<boolean> = signal(false);
+  @Input() isPoppedUp: boolean = false;
 
   constructor(private popUpService: PopUpService, private projectService: ProjectService){
-    this.popUpService.getPopUpDeleteSubject().subscribe((popUpSetting) => {
-      this.isPoppedUp.set(popUpSetting);
-    });
   }
   
   addDeletePopup() {
-    this.popUpService.openDeletingPopup();
+    this.isPoppedUp = true;
   }
 
   deleteProject(){
     this.projectService.deleteProjectByID(this.projectID);
-    this.isPoppedUp.set(false);
+    this.isPoppedUp = false;
     window.location.reload();
   }  
 
   cancelCreation() {
-    this.isPoppedUp.set(false);
+    this.isPoppedUp = false;
     window.location.reload();
   }
 

@@ -109,4 +109,11 @@ public class CommonController {
         AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("UPDATED " + issueName + "DETAILS", userName, role));
         return issueService.updateIssue(issueId, issue);
     }
+
+    @GetMapping("/issues/filter/{status}/{severity}/{priority}")
+    public List<Issue> getIssuesByFilter(@PathVariable String status,
+                                         @PathVariable int severity,
+                                         @PathVariable int priority){
+        return issueService.getIssuesByFilter(status, severity, priority);
+    }
 }

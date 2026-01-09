@@ -16,4 +16,7 @@ public interface IssueRepository extends JpaRepository<Issue, Long> {
     @Query("SELECT i FROM Issue i WHERE i.description LIKE %:keyword% OR i.name LIKE %:keyword%")
     List<Issue> findByKeyword(@Param("keyword") String keyword);
     List<Issue> findTop5ByOrderByDateCreatedDesc();
+    @Query("SELECT i FROM Issue i WHERE i.status = :status AND i.severity = :severity AND i.priority = :priority")
+    List<Issue> findByFilter(@Param("status") String status, @Param("severity") int severity,
+                             @Param("priority") int priority);
 }

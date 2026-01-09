@@ -37,6 +37,11 @@ public class IssueService {
         return issueList;
     }
 
+    public List<Issue> getIssuesByFilter(String status, int severity, int priority){
+        List<Issue> issueList = issueRepo.findByFilter(status, severity, priority);
+        return issueList;
+    }
+
     public int getSeverityById(Long issueId) {
         Issue targetIssue = issueRepo.getReferenceById(issueId);
         return targetIssue.getSeverity();
