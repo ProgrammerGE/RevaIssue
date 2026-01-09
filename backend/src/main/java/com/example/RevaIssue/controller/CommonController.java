@@ -1,13 +1,11 @@
 package com.example.RevaIssue.controller;
 
 import com.example.RevaIssue.dto.RegisterRequest;
+import com.example.RevaIssue.entity.AuditLog;
 import com.example.RevaIssue.entity.Issue;
 import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.entity.User;
-import com.example.RevaIssue.service.AuditLogService;
-import com.example.RevaIssue.service.IssueService;
-import com.example.RevaIssue.service.ProjectService;
-import com.example.RevaIssue.service.UserService;
+import com.example.RevaIssue.service.*;
 import com.example.RevaIssue.util.JwtUtility;
 import com.example.RevaIssue.util.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +26,8 @@ public class CommonController {
     private ProjectService projectService;
     @Autowired
     private AuditLogService auditLogService;
+    @Autowired
+    private AuthService authService;
 
     /*
     The following 'get/post/etc requests' should be available to all user types:
@@ -81,5 +81,17 @@ public class CommonController {
     @GetMapping("/projects/search")
     public List<Project> getProjectByKeyword(@RequestParam String keyword){
         return projectService.getProjectsByKeyword(keyword);
+    }
+
+    @PatchMapping("/issues/{issue_id}")
+    public Issue updateIssue(@PathVariable("issue_id") Long issueId,
+                             @RequestBody Issue issue,
+                             @RequestHeader (name = "Authorization") String authHeader
+                             ){
+        String role = authService.getRoleFromHeader(authHeader);
+        String userName = authService.getUsernameFromHeader(authHeader);
+        String issueName = issueService.getIssue(issueId).getName();
+        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("UPDATED " + issueName + "DETAILS", userName, role));
+        return issueService.updateIssue(issueId, issue);
     }
 }

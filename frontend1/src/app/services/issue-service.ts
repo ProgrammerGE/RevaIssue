@@ -53,15 +53,13 @@ export class IssueService {
   }
   updateIssue(
     issueId: number,
-    projectId: number,
-    role: 'admin' | 'developer' | 'tester',
     issue: Partial<IssueData>
   ): void {
     const headers = {
       Authorization: `Bearer ${this.tokenStorage.getToken()}`,
     };
     this.httpClient
-      .put<IssueData>(`${this.baseUrl}/${role}/project/${projectId}/issues/${issueId}`, issue, {
+      .patch<IssueData>(`${this.baseUrl}/common/issues/${issueId}`, issue, {
         headers,
       })
       .subscribe({
@@ -83,7 +81,7 @@ export class IssueService {
     const headers = {
       Authorization: `Bearer ${this.tokenStorage.getToken()}`,
     };
-    this.httpClient.put<IssueData>(
+    this.httpClient.patch<IssueData>(
       `${this.baseUrl}/${role}/project/${projectId}/issues/${issueId}`,
       { status },
       { headers }
