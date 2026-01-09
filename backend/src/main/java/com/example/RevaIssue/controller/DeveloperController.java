@@ -41,7 +41,7 @@ public class DeveloperController {
         return jwtUtility.extractUsername(token);
     }
 
-    @PatchMapping("/project/{project_id}/issues/{issue_id}/in-progress")
+    @PatchMapping("/project/issues/{issue_id}/in-progress")
     public Issue moveToInProgress(
             @RequestHeader (name = "Authorization") String authHeader,
             @PathVariable("issue_id") Long issueId
@@ -56,7 +56,7 @@ public class DeveloperController {
         return issueService.updateIssueStatus(issueId, "IN_PROGRESS", role);
     }
 
-    @PatchMapping("/project/{project_id}/issues/{issue_id}/resolve")
+    @PatchMapping("/project/issues/{issue_id}/resolve")
     public Issue resolveIssue(
             @RequestHeader (name = "Authorization") String authHeader,
             @PathVariable("issue_id") Long issueId

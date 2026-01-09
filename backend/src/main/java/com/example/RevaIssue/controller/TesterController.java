@@ -43,7 +43,7 @@ public class TesterController {
         return issueService.createIssue(issue);
     }
 
-    @PatchMapping("/project/{project_id}/issues/{issue_id}/close")
+    @PatchMapping("/project/issues/{issue_id}/close")
     public Issue closeIssue(@PathVariable("issue_id") Long issueId, @RequestHeader (name = "Authorization") String authHeader){
         String role = authService.getRoleFromHeader(authHeader);
         String username = authService.getUsernameFromHeader(authHeader);
@@ -55,7 +55,7 @@ public class TesterController {
         return issueService.updateIssueStatus(issueId, "CLOSED", role);
     }
 
-    @PatchMapping("/project/{project_id}/issues/{issue_id}/open")
+    @PatchMapping("/project/issues/{issue_id}/open")
     public Issue reopenIssue(@PathVariable("issue_id") Long issueId, @RequestHeader (name = "Authorization") String authHeader){
         String role = authService.getRoleFromHeader(authHeader);
         String username = authService.getUsernameFromHeader(authHeader);

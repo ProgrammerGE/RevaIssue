@@ -1,4 +1,4 @@
-import { Component, computed, effect, OnInit, Signal, signal, WritableSignal } from '@angular/core';
+import { Component, computed, effect, model, OnInit, Signal, signal, WritableSignal } from '@angular/core';
 import { ListContainer } from '../list-container/list-container';
 import { hubListItem } from '../../interfaces/hubpage-list-item';
 import { ProjectService } from '../../services/project-service';
@@ -15,11 +15,24 @@ import { IssueData } from '../../interfaces/issue-data';
 import { NavBar } from '../nav-bar/nav-bar';
 import { CapitalizeFirst } from '../../pipes/capitalize-first.pipe';
 import { PopUpService } from '../../services/pop-up-service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { PopupWrapper } from '../popup-wrapper/popup-wrapper';
+import { SearchBar } from '../search-bar/search-bar';
+import { SearchPopup } from '../search-popup/search-popup';
 
 @Component({
   selector: 'app-hub-page',
-  imports: [ListContainer, CreateProject, FormsModule, NavBar, CapitalizeFirst],
+  imports: [
+    ListContainer,
+    CreateProject,
+    FormsModule,
+    NavBar,
+    CapitalizeFirst,
+    PopupWrapper,
+    SearchBar,
+    RouterLink,
+    SearchPopup,
+  ],
   templateUrl: './hub-page.html',
   styleUrl: './hub-page.css',
 })
@@ -30,6 +43,9 @@ export class HubPage extends RevaIssueSubscriber {
   // made isAdmin a computed signal instead of WritableSignal
   isAdmin: Signal<boolean> = computed(() => this.userRole().toLowerCase() === 'admin');
   searchFilter = '';
+  searchPopupValue = model('');
+  isSearchPopupActive = model(false);
+  searchResults: WritableSignal<IssueData[]> = signal([]);
 
   constructor(
     private router: Router,
@@ -50,6 +66,17 @@ export class HubPage extends RevaIssueSubscriber {
     effect(() => {
       this.projectService.viewAllProjects(this.projects, this.userRole());
     });
+
+    effect(() => {
+      const value = this.searchPopupValue()?.trim();
+
+      if (value) {
+        this.issueService.viewAllIssuesByKeyword(value, this.searchResults);
+      } else {
+        this.searchResults.set([]);
+      }
+    });
+    
   }
 
   issues: WritableSignal<IssueData[]> = signal([]);
@@ -64,10 +91,12 @@ export class HubPage extends RevaIssueSubscriber {
   goToProject = (item: hubListItem) => {
     this.router.navigate(['/projects', item.id]);
   };
+
   getProjects() {
     this.projectService.viewAllProjects(this.projects, this.userRole());
     this.projectsList = this.projectsList;
   }
+
   getIssues() {
     this.issueService.getMostRecentIssues(this.issues);
   }
@@ -88,11 +117,34 @@ export class HubPage extends RevaIssueSubscriber {
     }));
   }
 
+  closePopup() {
+    this.isSearchPopupActive.set(false);
+  }
+
+  searchInput(e: Event) {
+    if (this.searchPopupValue()?.trim()) {
+      this.issueService.viewAllIssuesByKeyword(this.searchPopupValue(), this.searchResults);
+    } else {
+      this.searchResults.set([]);
+    }
+  }
+
+  private onKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      this.isSearchPopupActive.set(false);
+    }
+  };
+
   ngOnInit() {
+    window.addEventListener('keydown', this.onKeyDown);
     this.userService.getUserInfo();
     this.getProjects();
     this.getIssues();
     this.auditLogService.getAllAuditLogs(this.auditLogs);
+  }
+
+  override ngOnDestroy(): void {
+    window.removeEventListener('keydown', this.onKeyDown);
   }
 
   userLoggedIn: WritableSignal<boolean> = signal(false);

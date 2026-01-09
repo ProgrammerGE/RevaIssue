@@ -1,6 +1,18 @@
 <app-nav-bar></app-nav-bar>
-
 <div class="hub-page">
+  @if(isSearchPopupActive()){
+  <app-search-popup
+    [(isPopupActive)]="isSearchPopupActive"
+    [(inputValue)]="searchPopupValue"
+    placeholder="Search Issues"
+  >
+    @for(issue of searchResults(); track $index){
+    <a class="search-result-item" [routerLink]="['/projects', issue.project?.projectID]">
+      {{ issue.name }}
+    </a>
+    }
+  </app-search-popup>
+  }
   <div class="popup">
     <app-create-project></app-create-project>
   </div>
@@ -9,10 +21,7 @@
       <h2 class="welcome-message">Welcome, {{ username() | capitalizeFirst }}</h2>
       <span>{{ userRole() }}</span>
     </div>
-    <div class="filter">
-      <input type="search" [(ngModel)]="searchFilter" class="filterInput" />
-      <button (click)="filterList()" class="filterButton">Filter Issues</button>
-    </div>
+    <app-search-bar [(active)]="isSearchPopupActive"></app-search-bar>
   </header>
   <section class="lists">
     <app-list-container
@@ -20,11 +29,11 @@
       [items]="projectsList()"
       [hasButton]="true"
       [itemClicked]="goToProject"
-      [userRole] = "userRole()"
+      [userRole]="userRole()"
     >
     </app-list-container>
     <app-list-container
-      title="Issues"
+      title="Recent Issues"
       [items]="issuesList()"
       [hasButton]="false"
       [itemClicked]="goToProject"

@@ -68,6 +68,15 @@
           Priority level
           {{ issue.priority }}
         </span>
+        <span class="button_update">
+          <app-update-issue
+            [issueTitle]="issue.name"
+            [issueDesc]="issue.description"
+            [severityInput]="issue.severity.toString()"
+            [priorityInput]="issue.priority.toString()"
+            [issueID]="issue.issueID"
+          ></app-update-issue>
+        </span>
       </div>
       }
     </div>
@@ -122,7 +131,7 @@
             <p class="comment-text">{{ comment.text }}</p>
           </div>
           } @empty {
-          <p class="no-comments">Be first to comment!</p>
+          <p class="no-comments"></p>
           }
         </div>
       </div>

@@ -22,6 +22,13 @@ export class IssueService {
 
   private baseUrl = 'http://localhost:8080';
 
+  statusMap: Record<string, string> = {
+    OPEN: 'open',
+    IN_PROGRESS: 'in-progress',
+    RESOLVED: 'resolve',
+    CLOSED: 'close',
+  };
+
   constructor(private httpClient: HttpClient, private tokenStorage: JwtTokenStorage) {}
 
   getIssueSubject() {
@@ -53,15 +60,13 @@ export class IssueService {
   }
   updateIssue(
     issueId: number,
-    projectId: number,
-    role: 'admin' | 'developer' | 'tester',
     issue: Partial<IssueData>
   ): void {
     const headers = {
       Authorization: `Bearer ${this.tokenStorage.getToken()}`,
     };
     this.httpClient
-      .put<IssueData>(`${this.baseUrl}/${role}/project/${projectId}/issues/${issueId}`, issue, {
+      .patch<IssueData>(`${this.baseUrl}/common/issues/${issueId}`, issue, {
         headers,
       })
       .subscribe({
@@ -72,22 +77,54 @@ export class IssueService {
       });
   }
 
-  // TODO: Modify to make a patch request instead of put.
-  // Then, modify the url to match the spring endpoint.
+  // updateIssueStatus(
+  //   issueId: number,
+  //   projectId: number,
+  //   status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED',
+  //   role: 'developer' | 'tester'
+  // ): void {
+  //   const headers = {
+  //     Authorization: `Bearer ${this.tokenStorage.getToken()}`,
+  //   };
+  //   this.httpClient.put<IssueData>(
+  //     `${this.baseUrl}/${role}/project/${projectId}/issues/${issueId}`,
+  //     { status },
+  //     { headers }
+  //   );
+  // }
+
   updateIssueStatus(
     issueId: number,
-    projectId: number,
+    // projectId: number,
     status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED',
     role: 'developer' | 'tester'
   ): void {
     const headers = {
       Authorization: `Bearer ${this.tokenStorage.getToken()}`,
     };
-    this.httpClient.put<IssueData>(
-      `${this.baseUrl}/${role}/project/${projectId}/issues/${issueId}`,
-      { status },
-      { headers }
-    );
+
+    const action = this.statusMap[status];
+    if (!action) {
+      console.error('ERROR: no status chosen. aborting.');
+      return;
+    }
+
+    this.httpClient
+      .patch<IssueData>(
+        `${this.baseUrl}/${role}/project/issues/${issueId}/${action}`,
+        { status },
+        { headers }
+      )
+      .subscribe({
+        next: (updatedIssue) => {
+          console.log('Update successful');
+          // Logic to update your local state goes here
+          // e.g., this.selectedIssue.set(updatedIssue);
+        },
+        error: (err) => {
+          console.error('Update failed', err);
+        },
+      });
   }
 
   viewAllIssues(project_id: number, issues: WritableSignal<Array<IssueData>>, role: string): void {
@@ -116,7 +153,7 @@ export class IssueService {
 
   viewAllIssuesByKeyword(keyword: String, issues: WritableSignal<Array<IssueData>>) {
     this.httpClient
-      .get<IssueData[]>(`${this.baseUrl}/common/issues/${keyword}`)
+    .get<IssueData[]>(`${this.baseUrl}/common/issues/search?keyword=${keyword}`)
       .subscribe((issueList) => {
         const newIssueList = [];
         for (const issueObj of issueList) {

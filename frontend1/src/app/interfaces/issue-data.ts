@@ -9,6 +9,13 @@ export interface IssueData {
   priority: number;
   status: IssueStatus;
   comments: CommentData[];
+  project?: Project;
+}
+
+export interface Project {
+  projectDescription: string;
+  projectID: 1;
+  projectName: string;
 }
 
 export type IssueStatus = 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED';

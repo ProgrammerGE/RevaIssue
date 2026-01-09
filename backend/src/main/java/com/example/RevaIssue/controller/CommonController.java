@@ -2,6 +2,7 @@ package com.example.RevaIssue.controller;
 
 import com.example.RevaIssue.dto.CommentRequest;
 import com.example.RevaIssue.dto.RegisterRequest;
+import com.example.RevaIssue.entity.AuditLog;
 import com.example.RevaIssue.entity.Issue;
 import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.entity.User;
@@ -29,6 +30,8 @@ public class CommonController {
     private AuditLogService auditLogService;
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private AuthService authService;
 
     /*
     The following 'get/post/etc requests' should be available to all user types:
@@ -74,8 +77,8 @@ public class CommonController {
         return issueService.getMostRecentIssues();
     }
 
-    @GetMapping("/issues/{keyword}")
-    public List<Issue> getIssuesByKeyword(@PathVariable String keyword){
+    @GetMapping("/issues/search")
+    public List<Issue> getIssuesByKeyword(@RequestParam String keyword){
         return issueService.getIssuesByKeyword(keyword);
     }
 
@@ -94,5 +97,16 @@ public class CommonController {
             @PathVariable("issue_id") Long issueId,
             @RequestBody CommentRequest request){
         return commentService.addComment(issueId, request.text());
+            }
+    @PatchMapping("/issues/{issue_id}")
+    public Issue updateIssue(@PathVariable("issue_id") Long issueId,
+                             @RequestBody Issue issue,
+                             @RequestHeader (name = "Authorization") String authHeader
+                             ){
+        String role = authService.getRoleFromHeader(authHeader);
+        String userName = authService.getUsernameFromHeader(authHeader);
+        String issueName = issueService.getIssue(issueId).getName();
+        AuditLog auditLog = auditLogService.createAuditLog(new AuditLog("UPDATED " + issueName + "DETAILS", userName, role));
+        return issueService.updateIssue(issueId, issue);
     }
 }
