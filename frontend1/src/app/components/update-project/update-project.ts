@@ -1,43 +1,49 @@
-import { Component, isWritableSignal, signal, WritableSignal } from '@angular/core';
-import { ProjectService } from '../../services/project-service';
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Component, Input, signal, WritableSignal } from '@angular/core';
 import { PopUpService } from '../../services/pop-up-service';
+import { ProjectService } from '../../services/project-service';
+import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-create-project',
+  selector: 'app-update-project',
   imports: [FormsModule],
-  templateUrl: './create-project.html',
-  styleUrl: './create-project.css',
+  templateUrl: './update-project.html',
+  styleUrl: './update-project.css',
 })
-export class CreateProject {
-  projectTitle: string = '';
-  projectDesc: string = '';
-  buttonText = 'Create Project';
+export class UpdateProject {
+  @Input() projectTitle: string = '';
+  @Input() projectDesc: string = '';
+  buttonText = 'Update Project';
   buttonCancel = 'Cancel';
   isPoppedUp: WritableSignal<boolean> = signal(false);
 
   titleMissing: boolean = false;
   descriptionMissing: boolean = false;
 
+  @Input()
+  projectID: number = 0;
+
   constructor(
     private popUpService: PopUpService,
     private projectService: ProjectService,
     private router: Router
   ) {
-    this.popUpService.getPopUpProjectSubject().subscribe((popUpSetting) => {
+    this.popUpService.getPopUpUpdateSubject().subscribe((popUpSetting) => {
       this.isPoppedUp.set(popUpSetting);
     });
   }
 
-  createProject() {
+  addUpdatePopup() {
+    this.popUpService.openUpdatePopup();
+  }
+
+  updateProject(){
     //Following the same format as on the project.ts file
     this.titleMissing = false;
     this.descriptionMissing = false;
 
     if (this.projectTitle != '' && this.projectDesc != '') {
-      this.projectService.createProject({
+      this.projectService.updateProject( this.projectID, {
         projectName: this.projectTitle,
         projectDescription: this.projectDesc,
       });
@@ -56,10 +62,8 @@ export class CreateProject {
     }
   }
 
-  cancelCreation() {
+  cancelUpdate() {
     this.isPoppedUp.set(false);
-    this.projectTitle = '';
-    this.projectDesc = '';
     window.location.reload();
   }
 }

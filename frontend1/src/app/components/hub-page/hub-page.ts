@@ -1,4 +1,4 @@
-import { Component, computed, effect, OnInit, Signal, signal, WritableSignal } from '@angular/core';
+import { Component, computed, effect, model, OnInit, Signal, signal, WritableSignal } from '@angular/core';
 import { ListContainer } from '../list-container/list-container';
 import { hubListItem } from '../../interfaces/hubpage-list-item';
 import { ProjectService } from '../../services/project-service';
@@ -14,13 +14,23 @@ import { ProjectData } from '../../interfaces/project-data';
 import { IssueData } from '../../interfaces/issue-data';
 import { NavBar } from '../nav-bar/nav-bar';
 import { CapitalizeFirst } from '../../pipes/capitalize-first.pipe';
-import { DeleteProject } from '../delete-project/delete-project';
 import { PopUpService } from '../../services/pop-up-service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { PopupWrapper } from '../popup-wrapper/popup-wrapper';
+import { SearchBar } from '../search-bar/search-bar';
 
 @Component({
   selector: 'app-hub-page',
-  imports: [ListContainer, CreateProject, FormsModule, NavBar, CapitalizeFirst, DeleteProject],
+  imports: [
+    ListContainer,
+    CreateProject,
+    FormsModule,
+    NavBar,
+    CapitalizeFirst,
+    PopupWrapper,
+    SearchBar,
+    RouterLink,
+  ],
   templateUrl: './hub-page.html',
   styleUrl: './hub-page.css',
 })
@@ -31,6 +41,9 @@ export class HubPage extends RevaIssueSubscriber {
   // made isAdmin a computed signal instead of WritableSignal
   isAdmin: Signal<boolean> = computed(() => this.userRole().toLowerCase() === 'admin');
   searchFilter = '';
+  searchValue = signal('');
+  isSearchPopupActive = model(false);
+  searchResults: WritableSignal<IssueData[]> = signal([]);
 
   constructor(
     private router: Router,
@@ -65,10 +78,12 @@ export class HubPage extends RevaIssueSubscriber {
   goToProject = (item: hubListItem) => {
     this.router.navigate(['/projects', item.id]);
   };
+
   getProjects() {
     this.projectService.viewAllProjects(this.projects, this.userRole());
     this.projectsList = this.projectsList;
   }
+
   getIssues() {
     this.issueService.getMostRecentIssues(this.issues);
   }
@@ -89,8 +104,18 @@ export class HubPage extends RevaIssueSubscriber {
     }));
   }
 
-  addDeletePopup() {
-    this.popUpService.openDeletingPopup();
+  closePopup() {
+    this.isSearchPopupActive.set(false);
+  }
+
+  searchInput(e: Event) {
+    const input = e.target as HTMLInputElement;
+    this.searchValue.set(input.value);
+    if (this.searchValue()?.trim()) {
+      this.issueService.viewAllIssuesByKeyword(input.value, this.searchResults);
+    } else {
+      this.searchResults.set([]);
+    }
   }
 
   ngOnInit() {

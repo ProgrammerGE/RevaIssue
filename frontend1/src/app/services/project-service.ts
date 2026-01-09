@@ -70,7 +70,7 @@ export class ProjectService {
       Authorization: `Bearer ${this.tokenStorage.getToken()}`,
     };
     this.httpClient
-      .put<ProjectData>(`${this.baseUrl}/admin/projects/${projectId}`, project, { headers })
+      .patch<ProjectData>(`${this.baseUrl}/admin/projects/${projectId}`, project, { headers })
       .subscribe({
         next: (updatedProject) => this.projectSubject.next(updatedProject),
         error: (err) => console.error('Error updating project', err),
@@ -94,7 +94,7 @@ export class ProjectService {
 
   viewAllProjectsByKeyword(keyword: String, projects: WritableSignal<Array<ProjectData>>) {
     this.httpClient
-      .get<ProjectData[]>(`${this.baseUrl}/common/projects/${keyword}`)
+      .get<ProjectData[]>(`${this.baseUrl}/common/projects/search?keyword=${keyword}`)
       .subscribe((projectList) => {
         const newProjectList = [];
         for (const projObj of projectList) {

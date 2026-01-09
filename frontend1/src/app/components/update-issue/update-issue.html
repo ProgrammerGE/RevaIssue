@@ -1,0 +1,65 @@
+<!-- The formatting is similar to the format of the "create-issues" template,
+      but instead we are updating the currently set data.-->
+<div class="update_button">
+        <button (click)="addUpdatePopup()">
+          <img src="assets/icons/pencil.svg" />
+        </button>
+</div>
+@if(isPoppedUp()){
+<div class="parent">
+  <div class="issue_title">
+    <!-- Just the title of the popup that appears when making a new issue -->
+    @if (titleMissing) {
+    <h4 style="color: red">Enter your issue's title</h4>
+    }
+    <p>Issue Title</p>
+
+    <input type="text" placeholder="Issue Title" [(ngModel)]="issueTitle" />
+  </div>
+  <div class="issue_desc" id="descriptionBox">
+    <!-- Holds the description of the issue -->
+    @if (descriptionMissing) {
+    <h4 style="color: red">Your issue must have a description</h4>
+    }
+    <p>Issue Description</p>
+    <textarea
+      type="text"
+      placeholder="Issue Description"
+      class="description"
+      [(ngModel)]="issueDesc"
+      rows="5"
+    ></textarea>
+  </div>
+
+  <div class="issue_severity">
+    <!-- Could be a dropdown, buttons, etc to set the severity -->
+    @if (severityMissing) {
+    <h4 style="color: red">You must select the severity of the issue</h4>
+    }
+    <p>Severity</p>
+    <select name="severity" [(ngModel)]="severityInput">
+      <option value="1">Low</option>
+      <option value="2">Medium</option>
+      <option value="3">High</option>
+    </select>
+  </div>
+  <div class="issue_priority">
+    <!-- Could be a dropdown, buttons, etc to set the priority -->
+    @if (priorityMissing) {
+    <h4 style="color: red">You must select the priority of the issue</h4>
+    }
+    <p>Priority</p>
+
+    <select name="priority" [(ngModel)]="priorityInput">
+      <option value="1">Low</option>
+      <option value="2">Medium</option>
+      <option value="3">High</option>
+    </select>
+  </div>
+  <div class="issue_buttons">
+    <!-- This will hold (2) buttons, Confirm and Cancel -->
+    <button (click)="updateIssue()">{{ buttonText }}</button>
+    <button (click)="cancelUpdate()">{{ buttonCancel }}</button>
+  </div>
+</div>
+}

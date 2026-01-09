@@ -10,8 +10,8 @@ import java.util.Date;
 import java.util.UUID;
 
 @Data
-@Entity
 @NoArgsConstructor
+@Entity
 @Table(name = "audit_logs")
 public class AuditLog {
     /**

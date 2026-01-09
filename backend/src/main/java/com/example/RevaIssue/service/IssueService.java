@@ -2,6 +2,7 @@ package com.example.RevaIssue.service;
 
 import com.example.RevaIssue.entity.AuditLog;
 import com.example.RevaIssue.entity.Issue;
+import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.helper.Comment;
 import com.example.RevaIssue.repository.AuditLogRepository;
 import com.example.RevaIssue.repository.IssueRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -56,6 +58,19 @@ public class IssueService {
         List<Issue> issues = issueRepo.findByProjectProjectID(projectId);
         // return the list
         return issues;
+    }
+
+    public Issue updateIssue(Long issueId, Issue updatedIssue){
+        Optional<Issue> issueOptional = Optional.of(issueRepo.getReferenceById(issueId));
+        if(issueOptional.isPresent()){
+            Issue issueUpdate = issueOptional.get();
+            issueUpdate.setName(updatedIssue.getName());
+            issueUpdate.setDescription(updatedIssue.getDescription());
+            issueUpdate.setSeverity(updatedIssue.getSeverity());
+            issueUpdate.setPriority(updatedIssue.getPriority());
+            this.issueRepo.save(issueUpdate);
+        }
+        return this.issueRepo.getReferenceById(issueId);
     }
 
     // TODO: updating the issue's description, comment, severity, and priority, status

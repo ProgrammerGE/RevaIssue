@@ -10,8 +10,8 @@ import { ProjectService } from '../../services/project-service';
 })
 export class DeleteProject {  
   @Input()
-  projectID: number = 1;
-  projectName: WritableSignal<string> = signal('');
+  projectID: number = 0;
+  @Input() projectName: string = '';
   buttonText = 'Delete Project';
   buttonCancel = 'Cancel';
   isPoppedUp: WritableSignal<boolean> = signal(false);
@@ -20,18 +20,21 @@ export class DeleteProject {
     this.popUpService.getPopUpDeleteSubject().subscribe((popUpSetting) => {
       this.isPoppedUp.set(popUpSetting);
     });
-    this.projectService.getProjectSubject().subscribe(projectData => {
-      this.projectName.set(projectData.projectName);
-    })
+  }
+  
+  addDeletePopup() {
+    this.popUpService.openDeletingPopup();
   }
 
   deleteProject(){
     this.projectService.deleteProjectByID(this.projectID);
     this.isPoppedUp.set(false);
+    window.location.reload();
   }  
 
   cancelCreation() {
     this.isPoppedUp.set(false);
+    window.location.reload();
   }
 
 }
