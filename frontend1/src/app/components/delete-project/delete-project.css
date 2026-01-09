@@ -27,8 +27,8 @@
   grid-row-start: 3;
 }
 
-
 button {
-  margin-top: 10px;
+  background-color: transparent ;
+  border: none;
 }
 
