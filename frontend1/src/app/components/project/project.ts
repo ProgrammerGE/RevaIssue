@@ -45,6 +45,10 @@ export class Project extends RevaIssueSubscriber {
   hoveredIssue: IssueData | null = null; // The issue currently being hovered over
   selectedIssue: IssueData | null = null; // The issue that was last clicked on
 
+  statusInput: string = '';
+  severityInput: string = '';
+  priorityInput: string = '';
+
   constructor() {
     super();
 
@@ -198,6 +202,17 @@ export class Project extends RevaIssueSubscriber {
    */
   addPopup() {
     this.popUpService.openPopUpIssue();
+  }
+
+  filterIssues(){
+      this.issueService.viewAllIssuesByFilter(this.issues, this.statusInput, Number(this.severityInput), Number(this.priorityInput));
+  }
+
+  resetFilter(){
+    const role = this.userRole();
+      if (!role) return;
+
+      this.issueService.viewAllIssues(this.projectId, this.issues, role);
   }
 
   /**
