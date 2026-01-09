@@ -50,16 +50,16 @@
 
 #login-submit-btn {
   border: none;
-  background-color: var(--spicy-paprika);
   color: white;
+  background-color: var(--carbon-black);
   width: 100%;
   padding: 1rem 0 1rem 0;
   border-radius: 4px;
   font-weight: 500;
 }
 
-#login-submit-btn {
-
+#login-submit-btn:active {
+  opacity: 0.9;
 }
 
 #login-submit-btn:disabled {
