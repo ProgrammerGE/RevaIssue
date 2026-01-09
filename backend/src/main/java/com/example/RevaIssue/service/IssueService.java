@@ -121,21 +121,5 @@ public class IssueService {
         return issueRepo.getReferenceById(issueId);
     }
 
-    public Issue updateIssueComment(Long issueId, String comment){
-        Issue targetIssue = issueRepo.getReferenceById(issueId);
-        targetIssue.getComment().setText(comment);
-        issueRepo.save(targetIssue);
-        return targetIssue;
-    }
-
-    public Comment createIssueComment(Long issueId, Comment comment){
-        Issue targetIssue = issueRepo.getReferenceById(issueId);
-        targetIssue.setComment(comment);
-        return targetIssue.getComment();
-    }
-
-    public Comment getIssueComment(Long issueId){
-        return issueRepo.getReferenceById(issueId).getComment();
-    }
 
 }

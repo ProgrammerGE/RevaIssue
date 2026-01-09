@@ -162,4 +162,5 @@ export class IssueService {
         issues.set(newIssueList);
       });
   }
+  viewCommentsByIssue(issueID: number) {}
 }

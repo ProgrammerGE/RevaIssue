@@ -33,10 +33,6 @@ public class Issue {
     @Column(name = "priority")
     private Integer priority;
 
-    //Comment Chain
-    @Column(name = "comment_chain")
-    private Comment comment;
-
     @Column(name = "status")
     private String status = "Open"; // "Open", "In Progress", "Resolved", "Close"
 
