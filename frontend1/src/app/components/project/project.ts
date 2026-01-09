@@ -14,10 +14,11 @@ import { SignoutButton } from '../signout-button/signout-button';
 import { NavBar } from '../nav-bar/nav-bar';
 import { IssueData } from '../../interfaces/issue-data';
 import { IssueService } from '../../services/issue-service';
+import { UpdateIssue } from '../update-issue/update-issue';
 
 @Component({
   selector: 'app-project',
-  imports: [NavBar, FormsModule, CreateIssue],
+  imports: [NavBar, FormsModule, CreateIssue, UpdateIssue],
   templateUrl: './project.html',
   styleUrl: './project.css',
 })

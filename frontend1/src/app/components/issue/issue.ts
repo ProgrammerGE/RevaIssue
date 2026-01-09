@@ -55,7 +55,7 @@ export class Issue extends RevaIssueSubscriber {
   }
 
   updateIssue(): void {
-    this.issueService.updateIssue(this.issueId, this.projectId, this.userRole, {
+    this.issueService.updateIssue(this.issueId, {
       name: this.issueTitle(),
       description: this.issueDescription(),
       priority: this.issuePriority,

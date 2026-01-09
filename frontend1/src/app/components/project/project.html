@@ -67,6 +67,13 @@
         <span class="issue-priority" [attr.data-priority]="issue.priority">
           {{ issue.priority }}
         </span>
+        <span class="button_update">
+          <app-update-issue [issueTitle]="issue.name"
+                            [issueDesc]="issue.description"
+                            [severityInput]="issue.severity.toString()"
+                            [priorityInput]="issue.priority.toString()"
+                            [issueID]="issue.issueID"></app-update-issue>
+      </span>
       </div>
       }
     </div>
