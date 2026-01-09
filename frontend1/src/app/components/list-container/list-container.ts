@@ -6,10 +6,11 @@ import { CapitalizeFirst } from '../../pipes/capitalize-first.pipe';
 import { Router } from '@angular/router';
 import { DeleteProject } from '../delete-project/delete-project';
 import { UpdateProject } from '../update-project/update-project';
+import { CreateProject } from "../create-project/create-project";
 
 @Component({
   selector: 'app-list-container',
-  imports: [CommonModule, CapitalizeFirst, DeleteProject, UpdateProject],
+  imports: [CommonModule, CapitalizeFirst, DeleteProject, UpdateProject, CreateProject],
   templateUrl: './list-container.html',
   styleUrl: './list-container.css',
 })
@@ -34,7 +35,4 @@ export class ListContainer {
     this.isExpanded.update((v) => !v);
   }
 
-  addPopup() {
-    this.popUpService.openPopUpProject();
-  }
 }

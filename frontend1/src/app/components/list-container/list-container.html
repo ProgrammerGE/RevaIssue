@@ -10,9 +10,9 @@
       </div>
     </div>
     @if(hasButton()){
-    <button class="addNewBtn" title="Add new" (click)="addPopup()">
-      <img src="assets/icons/plus.svg" />
-    </button>
+      <div class="popup">
+        <app-create-project [isPoppedUp]="false"></app-create-project>
+      </div>
     }
   </div>
   <hr />
@@ -26,7 +26,7 @@
       <div class="button_delete">
         @if (isAdmin() && hasButton()) {
           <app-delete-project [projectID]="item.id"
-                            [projectName]="item.name"></app-delete-project>
+                              [projectName]="item.name"></app-delete-project>
           <app-update-project [projectID]="item.id" 
                               [projectTitle]="item.name"
                               [projectDesc]="item.description"  ></app-update-project>

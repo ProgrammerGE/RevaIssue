@@ -1,4 +1,4 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, Input, signal, WritableSignal } from '@angular/core';
 import { PopUpService } from '../../services/pop-up-service';
 import { IssueService } from '../../services/issue-service';
 import { Router } from '@angular/router';
@@ -18,7 +18,7 @@ export class CreateIssue {
   severityInput: string = '';
   priorityInput: string = '';
 
-  isPoppedUp: WritableSignal<boolean> = signal(false);
+  @Input() isPoppedUp: boolean = false;
   projectID: WritableSignal<number> = signal(0);
   buttonText = 'Create Issue';
   buttonCancel = 'Cancel';
@@ -34,12 +34,13 @@ export class CreateIssue {
     private router: Router,
     private projectService: ProjectService
   ) {
-    this.popUpService.getPopUpIssueSubject().subscribe((popUpSetting) => {
-      this.isPoppedUp.set(popUpSetting);
-    });
     this.projectService.getProjectSubject().subscribe((projectData) => {
       this.projectID.set(projectData.projectID);
     });
+  }
+
+  addPopup() {
+      this.isPoppedUp = true;
   }
 
   createIssue() {
@@ -56,7 +57,7 @@ export class CreateIssue {
         severity: Number(this.severityInput),
         priority: Number(this.priorityInput),
       });
-      this.isPoppedUp.set(false);
+      this.isPoppedUp = false;
       this.issueTitle = '';
       this.issueDesc = '';
       this.severityInput = '';
@@ -81,7 +82,7 @@ export class CreateIssue {
   }
 
   cancelCreation() {
-    this.isPoppedUp.set(false);
+    this.isPoppedUp = false;
     this.issueTitle = '';
     this.issueDesc = '';
     this.severityInput = '';

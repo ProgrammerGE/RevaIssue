@@ -21,7 +21,7 @@ export class UpdateIssue {
   @Input() priorityInput: string = '';
   @Input() issueID: number = 0;
 
-  isPoppedUp: WritableSignal<boolean> = signal(false);
+  @Input() isPoppedUp: boolean = false;
   buttonText = 'Update Issue';
   buttonCancel = 'Cancel';
 
@@ -35,14 +35,10 @@ export class UpdateIssue {
     private issueService: IssueService,
     private router: Router,
     private projectService: ProjectService
-  ) {
-    this.popUpService.getPopUpUpdateSubject().subscribe((popUpSetting) => {
-      this.isPoppedUp.set(popUpSetting);
-    });
-  }
+  ) {}
 
   addUpdatePopup() {
-    this.popUpService.openUpdatePopup();
+    this.isPoppedUp = true;
   }
 
   updateIssue() {
@@ -59,7 +55,7 @@ export class UpdateIssue {
         severity: Number(this.severityInput),
         priority: Number(this.priorityInput),
       });
-      this.isPoppedUp.set(false);
+      this.isPoppedUp = false;
       this.issueTitle = '';
       this.issueDesc = '';
       this.severityInput = '';
@@ -85,7 +81,7 @@ export class UpdateIssue {
   }
 
   cancelUpdate() {
-    this.isPoppedUp.set(false);
+    this.isPoppedUp = false;
     window.location.reload();
   }
 }

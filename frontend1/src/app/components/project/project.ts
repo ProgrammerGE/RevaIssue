@@ -200,9 +200,6 @@ export class Project extends RevaIssueSubscriber {
    * Triggers from clicking Create Issue in the project view (tester)
    * Opens a popup issue dialog box
    */
-  addPopup() {
-    this.popUpService.openPopUpIssue();
-  }
 
   filterIssues(){
       this.issueService.viewAllIssuesByFilter(this.issues, this.statusInput, Number(this.severityInput), Number(this.priorityInput));
