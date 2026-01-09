@@ -20,18 +20,18 @@
   @if (isExpanded()) {
   <div class="list-container">
     @for (item of items(); track $index) {
-    <div class="list-item" (click)="itemClicked ? itemClicked(item) : null" style="cursor: pointer">
-      {{ item.name | capitalizeFirst }}
-    </div>
-      <div class="button_delete">
+    <div class="list-item" style="cursor: pointer">
+      <div class="list-item-link" (click)="itemClicked ? itemClicked(item) : null">
+        {{ item.name | capitalizeFirst }}
+      </div>
+      <div class="button-delete">
         @if (isAdmin() && hasButton()) {
-          <app-delete-project [projectID]="item.id"
-                              [projectName]="item.name"></app-delete-project>
-          <app-update-project [projectID]="item.id" 
-                              [projectTitle]="item.name"
-                              [projectDesc]="item.description"  ></app-update-project>
+        <app-delete-project [projectID]="item.id" [projectName]="item.name"></app-delete-project>
+        <app-update-project [projectID]="item.id" [projectTitle]="item.name"
+          [projectDesc]="item.description"></app-update-project>
         }
       </div>
+    </div>
     }
   </div>
   }
