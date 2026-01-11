@@ -7,14 +7,9 @@
   z-index: 9998;   
   animation: overlayFade 200ms linear forwards;
   background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(2px);
-  opacity: 0;
 }
-
-@keyframes overlayFade {
-  to {
-    opacity: 1;
-  }
+  backdrop-filter: blur(4px);
+  z-index: 9998;    
 }
 
 .search-container {
@@ -33,21 +28,22 @@
   z-index: 9999;
   align-items: center;
   border-radius: 4px;
-  border: none;
+  border: 1px solid black;
 }
 
-.search-input{
+.search-input {
   font-size: 1.5rem;
   width: 100%;
-  padding: 8px;
-  border: 2px solid black;
-  border-radius: 4px;
+  border: none;
+  border-bottom: 1px solid black;
   box-sizing: border-box;
+  outline: none;
 }
 
 .search-input::placeholder{
   color: rgb(173, 167, 167);
 }
+
 
 .escape-tooltip {
   height: fit-content;
