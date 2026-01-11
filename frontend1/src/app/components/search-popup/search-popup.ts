@@ -33,7 +33,7 @@ export class SearchPopup {
     this.inputValue.set(input.value);
   }
 
-  closePopup() {
+  onCloseClick() {
     this.isPopupActive.set(false);
   }
 }

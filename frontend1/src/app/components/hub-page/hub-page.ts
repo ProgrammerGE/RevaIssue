@@ -76,7 +76,6 @@ export class HubPage extends RevaIssueSubscriber {
         this.searchResults.set([]);
       }
     });
-    
   }
 
   issues: WritableSignal<IssueData[]> = signal([]);
@@ -117,10 +116,6 @@ export class HubPage extends RevaIssueSubscriber {
     }));
   }
 
-  closePopup() {
-    this.isSearchPopupActive.set(false);
-  }
-
   searchInput(e: Event) {
     if (this.searchPopupValue()?.trim()) {
       this.issueService.viewAllIssuesByKeyword(this.searchPopupValue(), this.searchResults);
@@ -129,31 +124,12 @@ export class HubPage extends RevaIssueSubscriber {
     }
   }
 
-  private onKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      this.isSearchPopupActive.set(false);
-    }
-  };
-
   ngOnInit() {
-    window.addEventListener('keydown', this.onKeyDown);
     this.userService.getUserInfo();
     this.getProjects();
     this.getIssues();
     this.auditLogService.getAllAuditLogs(this.auditLogs);
   }
 
-  override ngOnDestroy(): void {
-    window.removeEventListener('keydown', this.onKeyDown);
-  }
-
   userLoggedIn: WritableSignal<boolean> = signal(false);
-
-  /**
-   * I keep getting internal errors from this query function, I commented it out for now.
-   */
-  filterList() {
-    //this.projectService.viewAllProjectsByKeyword(this.searchFilter, this.projects);
-    //this.issueService.viewAllIssuesByKeyword(this.searchFilter, this.issues);
-  }
 }
