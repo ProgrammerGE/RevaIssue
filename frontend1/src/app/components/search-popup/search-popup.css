@@ -4,10 +4,6 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 9998;   
-  animation: overlayFade 200ms linear forwards;
-  background-color: rgba(0, 0, 0, 0.5);
-}
   backdrop-filter: blur(4px);
   z-index: 9998;    
 }
