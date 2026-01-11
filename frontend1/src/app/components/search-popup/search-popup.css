@@ -4,9 +4,17 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  backdrop-filter: brightness(0.5) blur(2px);
-  background: rgba(0,0,0,0.2);
-  z-index: 9998;    
+  z-index: 9998;   
+  animation: overlayFade 200ms linear forwards;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+}
+
+@keyframes overlayFade {
+  to {
+    opacity: 1;
+  }
 }
 
 .search-container {

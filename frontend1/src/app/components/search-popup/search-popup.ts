@@ -1,4 +1,12 @@
-import { Component, input, model, ModelSignal } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  ElementRef,
+  input,
+  model,
+  ModelSignal,
+  viewChild,
+} from '@angular/core';
 import { PopupWrapper } from '../popup-wrapper/popup-wrapper';
 import { RouterLink } from '@angular/router';
 
@@ -9,17 +17,23 @@ import { RouterLink } from '@angular/router';
   styleUrl: './search-popup.css',
 })
 export class SearchPopup {
-  placeholder = input("Search");
+  placeholder = input('Search');
   isPopupActive = model(false);
-  inputValue: ModelSignal<string> = model("");
+  inputValue: ModelSignal<string> = model('');
+  searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
+
+  constructor() {
+    afterNextRender(() => {
+      this.searchInput()?.nativeElement.focus();
+    });
+  }
 
   onType(e: Event) {
     const input = e.target as HTMLInputElement;
     this.inputValue.set(input.value);
   }
 
-  closePopup(){
+  closePopup() {
     this.isPopupActive.set(false);
   }
-
 }
