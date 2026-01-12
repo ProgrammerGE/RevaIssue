@@ -46,6 +46,14 @@ export class HubPage extends RevaIssueSubscriber {
   searchPopupValue = model('');
   isSearchPopupActive = model(false);
   searchResults: WritableSignal<IssueData[]> = signal([]);
+  issues: WritableSignal<IssueData[]> = signal([]);
+  issuesList: Signal<hubListItem[]> = computed(() => {
+    return this.mapIssues(this.issues());
+  });
+  projects: WritableSignal<ProjectData[]> = signal([]);
+  projectsList: Signal<hubListItem[]> = computed(() => {
+    return this.mapProject(this.projects());
+  });
 
   constructor(
     private router: Router,
@@ -78,14 +86,12 @@ export class HubPage extends RevaIssueSubscriber {
     });
   }
 
-  issues: WritableSignal<IssueData[]> = signal([]);
-  issuesList: Signal<hubListItem[]> = computed(() => {
-    return this.mapIssues(this.issues());
-  });
-  projects: WritableSignal<ProjectData[]> = signal([]);
-  projectsList: Signal<hubListItem[]> = computed(() => {
-    return this.mapProject(this.projects());
-  });
+  ngOnInit() {
+    this.userService.getUserInfo();
+    this.getProjects();
+    this.getIssues();
+    this.auditLogService.getAllAuditLogs(this.auditLogs);
+  }
 
   goToProject = (item: hubListItem) => {
     this.router.navigate(['/projects', item.id]);
@@ -123,13 +129,5 @@ export class HubPage extends RevaIssueSubscriber {
       this.searchResults.set([]);
     }
   }
-
-  ngOnInit() {
-    this.userService.getUserInfo();
-    this.getProjects();
-    this.getIssues();
-    this.auditLogService.getAllAuditLogs(this.auditLogs);
-  }
-
   userLoggedIn: WritableSignal<boolean> = signal(false);
 }
