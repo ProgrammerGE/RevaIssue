@@ -31,6 +31,20 @@ button {
   margin-top: 10px;
 }
 
+.add-button {
+  padding: 8px;
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+}
+
+.add-button > img {
+  height: 1.1rem;
+}
+
 #descriptionBox {
   /* height: 60px; */
   width: 90%;

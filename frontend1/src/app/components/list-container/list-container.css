@@ -54,7 +54,7 @@ button {
   color: gray;
 }
 
-.add-button {
+/* .add-button {
   padding: 8px;
   display: flex;
   gap: 2px;
@@ -67,12 +67,12 @@ button {
 }
 
 .add-button:hover {
-  /* background-color: var(--dust-grey); */
+  background-color: var(--dust-grey);
 }
 
 .add-button:active {
   opacity: 0.5;
-}
+} */
 
 hr {
   border: 1px solid var(--dust-grey);
@@ -90,8 +90,8 @@ hr {
 }
 
 .list-item:hover {
-  color: var(--floral-white);
-  background-color: var(--spicy-paprika);
+  color: var(--carbon-black);
+  background-color: rgb(233, 233, 233);
 }
 
 input[type='checkbox']:checked {
@@ -102,3 +102,12 @@ input[type='checkbox']:checked {
 .delete_button{
   float: inline-end;
 }
+
+.list-item-link {
+  flex-grow: 1;
+}
+
+.button-delete {
+  display: flex;
+}
+

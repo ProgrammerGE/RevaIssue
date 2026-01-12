@@ -27,11 +27,12 @@
   grid-row-start: 3;
 }
 
-button {
-  margin-top: 10px;
-}
-
 #descriptionBox {
   /* height: 60px; */
   width: 90%;
+}
+
+button {
+  background-color: transparent ;
+  border: none;
 }

@@ -8,7 +8,7 @@
   >
     @for(issue of searchResults(); track $index){
     <a class="search-result-item" [routerLink]="['/projects', issue.project?.projectID]">
-      {{ issue.name }}
+      {{ issue.name | capitalizeFirst }}
     </a>
     }
   </app-search-popup>
