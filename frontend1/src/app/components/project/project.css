@@ -255,7 +255,7 @@
 /* PRIORITY */
 .issue-priority {
   display: inline-block;
-  background-color: blue;
+  background-color: red;
   color: #fff;
   border-radius: 999px;
   padding: 4px 10px;
@@ -314,4 +314,16 @@
   color: white;
   padding: 2px 8px;
   border-radius: 999px;
+}
+
+.issue-severity {
+  display: inline-block;
+  background-color: purple;
+  color: #fff;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1;
+  margin-top: 4px;
 }
