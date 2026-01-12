@@ -122,12 +122,5 @@ export class HubPage extends RevaIssueSubscriber {
     }));
   }
 
-  searchInput(e: Event) {
-    if (this.searchPopupValue()?.trim()) {
-      this.issueService.viewAllIssuesByKeyword(this.searchPopupValue(), this.searchResults);
-    } else {
-      this.searchResults.set([]);
-    }
-  }
   userLoggedIn: WritableSignal<boolean> = signal(false);
 }
