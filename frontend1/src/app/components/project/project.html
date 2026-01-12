@@ -54,10 +54,10 @@
         <select name="status" [(ngModel)]="statusInput">
           <option value="Open">OPEN</option>
           <option value="In Progress">IN PROGRESS</option>
-          <option value="Resolved">RESOLVED</option> 
-          <option value="Close">CLOSED</option>       
-        </select> 
-    </div>   
+          <option value="Resolved">RESOLVED</option>
+          <option value="Close">CLOSED</option>
+        </select>
+      </div>
       <select name="filter_priority" [(ngModel)]="priorityInput">
         <option value="1">Low</option>
         <option value="2">Medium</option>
@@ -95,14 +95,19 @@
           >Priority:
           {{ issue.priority }}
         </span>
+        <span class="issue-severity" [attr.data-severity]="issue.severity"
+          >Severity:
+          {{ issue.severity }}
+        </span>
         <span class="button_update">
-          <app-update-issue [issueTitle]="issue.name"
-                            [issueDesc]="issue.description"
-                            [severityInput]="issue.severity.toString()"
-                            [priorityInput]="issue.priority.toString()"
-                            [issueID]="issue.issueID"
-                            [isPoppedUp]="false"></app-update-issue>
-      </span>
+          <app-update-issue
+            [issueTitle]="issue.name"
+            [issueDesc]="issue.description"
+            [severityInput]="issue.severity.toString()"
+            [priorityInput]="issue.priority.toString()"
+            [issueID]="issue.issueID"
+          ></app-update-issue>
+        </span>
       </div>
       }
     </div>
