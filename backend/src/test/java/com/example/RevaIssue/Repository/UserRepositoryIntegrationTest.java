@@ -27,7 +27,7 @@ public class UserRepositoryIntegrationTest {
      * Taken from Eric's example
      */
     @Test
-    void findByUsernameAndPasswordPositiveTest() {
+    void findByUsernamePositiveTest() {
         User user = new User();
 //        avoid setting the UUID in your test, will cause an error
 //        user.setUserId(UUID.randomUUID());
@@ -42,7 +42,7 @@ public class UserRepositoryIntegrationTest {
     }
 
     @Test
-    void findByUsernameAndPasswordNegativeTest() {
+    void findByUsernameNegativeTest() {
         Optional<User> found = userRepository.findByUsername("wronguser");
         assertFalse(found.isPresent());
     }
