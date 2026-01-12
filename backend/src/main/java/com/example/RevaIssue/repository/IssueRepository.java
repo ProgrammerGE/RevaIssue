@@ -11,7 +11,6 @@ import java.util.List;
 
 @Repository
 public interface IssueRepository extends JpaRepository<Issue, Long> {
-    List<Issue> findByProject(Project project);
     List<Issue> findByProjectProjectID(Long projectId);
     @Query("SELECT i FROM Issue i WHERE i.description LIKE %:keyword% OR i.name LIKE %:keyword%")
     List<Issue> findByKeyword(@Param("keyword") String keyword);
