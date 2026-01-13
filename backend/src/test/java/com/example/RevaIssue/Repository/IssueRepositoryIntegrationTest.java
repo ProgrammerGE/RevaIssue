@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,16 +54,17 @@ public class IssueRepositoryIntegrationTest {
 
     @Test
     void findByProjectIdNegativeTest() {
-        // a brand new project would have no issues
+        List<Issue> issues = new ArrayList<Issue>();
+        // Step 1: look for issues in a project that doesn't exist:
+        issues = issueRepository.findByProjectProjectID((long)9999);
+        assertTrue(issues.isEmpty());
+        // Step 2: look for issues in a project that shouldn't have any:
         Project project = new Project();
         project.setProjectName("projectName");
         project.setProjectDescription("projectDescription");
-        projectRepository.save(project);
+        project = projectRepository.save(project);
 
-        // TODO: implement
-
-
-
-
+        issues = issueRepository.findByProjectProjectID((long)project.getProjectID());
+        assertTrue(issues.isEmpty());
     }
 }
