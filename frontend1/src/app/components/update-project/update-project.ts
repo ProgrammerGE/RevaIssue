@@ -1,65 +1,37 @@
-import { Component, Input, signal, WritableSignal } from '@angular/core';
-import { PopUpService } from '../../services/pop-up-service';
+import { Component, Input, model, output } from '@angular/core';
 import { ProjectService } from '../../services/project-service';
-import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { PopupWrapper } from '../popup-wrapper/popup-wrapper';
+import { ProjectUpdate } from '../../interfaces/project-update';
 
 @Component({
   selector: 'app-update-project',
-  imports: [FormsModule],
+  imports: [FormsModule, PopupWrapper],
   templateUrl: './update-project.html',
   styleUrl: './update-project.css',
 })
 export class UpdateProject {
   @Input() projectTitle: string = '';
   @Input() projectDesc: string = '';
-  buttonText = 'Update Project';
-  buttonCancel = 'Cancel';
-  @Input() isPoppedUp: boolean = false;
-
   titleMissing: boolean = false;
   descriptionMissing: boolean = false;
+  isPopupActive = model(false);
+  updateEvent = output<ProjectUpdate>();
 
-  @Input()
-  projectID: number = 0;
+  constructor(private projectService: ProjectService) {}
 
-  constructor(
-    private popUpService: PopUpService,
-    private projectService: ProjectService,
-    private router: Router
-  ) { }
-
-  addUpdatePopup() {
-    this.isPoppedUp = true;
+  clickCancel() {
+    this.isPopupActive.set(false);
   }
 
-  updateProject(){
-    //Following the same format as on the project.ts file
-    this.titleMissing = false;
-    this.descriptionMissing = false;
-
-    if (this.projectTitle != '' && this.projectDesc != '') {
-      this.projectService.updateProject( this.projectID, {
-        projectName: this.projectTitle,
-        projectDescription: this.projectDesc,
-      });
-      this.isPoppedUp = false;
-      this.projectTitle = '';
-      this.projectDesc = '';
-      window.location.reload();
-    }
-
+  clickUpdate() {
     if (this.projectTitle == '') {
       this.titleMissing = true;
     }
-
     if (this.projectDesc == '') {
       this.descriptionMissing = true;
+      return;
     }
-  }
-
-  cancelUpdate() {
-    this.isPoppedUp = false;
-    window.location.reload();
+    this.updateEvent.emit({ title: this.projectTitle, description: this.projectDesc });
   }
 }

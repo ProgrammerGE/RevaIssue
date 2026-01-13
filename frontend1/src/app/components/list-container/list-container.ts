@@ -1,12 +1,11 @@
-import { Component, input, InputSignal, signal, computed, Input, Signal } from '@angular/core';
+import { Component, input, InputSignal, signal, computed, Input, Signal, model, ModelSignal, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { hubListItem } from '../../interfaces/hubpage-list-item';
-import { PopUpService } from '../../services/pop-up-service';
 import { CapitalizeFirst } from '../../pipes/capitalize-first.pipe';
-import { Router } from '@angular/router';
 import { DeleteProject } from '../delete-project/delete-project';
 import { UpdateProject } from '../update-project/update-project';
 import { CreateProject } from "../create-project/create-project";
+import { HubMenuContext } from '../../interfaces/hub-menu-context';
 
 @Component({
   selector: 'app-list-container',
@@ -18,21 +17,27 @@ export class ListContainer {
   [x: string]: any;
   title = input<string>('Title');
   isExpanded = signal(true);
+  //TODO: Refactor, id, can be null until updated
   items: InputSignal<hubListItem[]> = input([
     { id: 999, name: 'placeholder title', description: 'placeholder description' },
   ]);
   itemCount = computed(() => this.items().length);
   hasButton: InputSignal<boolean> = input(true);
-
+  // showContext = model(false);
+  contextMenuRequested = output<HubMenuContext>();
   @Input() listItems: hubListItem[] = [];
   @Input() itemClicked?: (item: hubListItem) => void;
-  @Input() userRole: string = "";
+  @Input() userRole: string = '';
   isAdmin: Signal<boolean> = computed(() => this.userRole.toLowerCase() === 'admin'); // Following example in hub-page.ts
 
-  constructor(private popUpService: PopUpService, private router: Router) {}
+  constructor() {}
 
   expandList() {
     this.isExpanded.update((v) => !v);
   }
 
+  onContext(event: MouseEvent, item: hubListItem) {
+    event.preventDefault();
+    this.contextMenuRequested.emit({ xPos: event.clientX, yPos: event.clientY, item: item })
+  }
 }

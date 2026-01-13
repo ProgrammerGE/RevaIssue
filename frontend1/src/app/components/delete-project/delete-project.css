@@ -1,17 +1,11 @@
 .parent {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(5, 1fr);
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
   gap: 8px;
-  position: absolute;
-  left: 25%;
-  top: 50%;
   background-color: hsl(30, 6%, 93%);
-  width: 50%;
   text-align: center;
-  /* padding-top: 20%; */
-  /* overflow: auto; */
-  border-radius: 40px;
+  border-radius: 4px;
 }
 
 .proj_warning {
@@ -29,6 +23,5 @@
 
 button {
   background-color: transparent ;
-  border: none;
 }
 
