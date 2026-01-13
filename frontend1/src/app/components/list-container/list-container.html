@@ -1,5 +1,5 @@
 <section class="lists-container">
-  <div class="tool-bar">
+  <div class="toolbar">
     <div class="">
       <button [class.isExpanded]="isExpanded()" class="toggleExpandBtn">
         <img src="assets/icons/expand.svg" (click)="expandList()" />
@@ -10,9 +10,9 @@
       </div>
     </div>
     @if(hasButton()){
-      <div class="popup">
-        <app-create-project [isPoppedUp]="false"></app-create-project>
-      </div>
+    <div class="popup">
+      <app-create-project [isPoppedUp]="false"></app-create-project>
+    </div>
     }
   </div>
   <hr />
@@ -20,16 +20,9 @@
   @if (isExpanded()) {
   <div class="list-container">
     @for (item of items(); track $index) {
-    <div class="list-item" style="cursor: pointer">
+    <div class="list-item" style="cursor: pointer" (contextmenu)="onContext($event, item)">
       <div class="list-item-link" (click)="itemClicked ? itemClicked(item) : null">
         {{ item.name | capitalizeFirst }}
-      </div>
-      <div class="button-delete">
-        @if (isAdmin() && hasButton()) {
-        <app-delete-project [projectID]="item.id" [projectName]="item.name"></app-delete-project>
-        <app-update-project [projectID]="item.id" [projectTitle]="item.name"
-          [projectDesc]="item.description"></app-update-project>
-        }
       </div>
     </div>
     }
