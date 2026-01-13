@@ -3,8 +3,8 @@
   @if(isContextMenuActive() && isAdmin()){
   <div class="context-overlay" (click)="closeContextMenu( )"></div>
   <div class="context-menu" [style.left.px]="contextInfo().xPos" [style.top.px]="contextInfo().yPos">
-    <button class="context-menu-button" (click)="contextMenuUpdate()"><img src="/assets/icons/pencil.svg"/>Update</button>
-    <button class="context-menu-button" (click)="contextMenuDelete()"><img src="/assets/icons/trash.svg"/>Delete</button>
+    <button class="context-menu-button" id="update_button_clickHere" (click)="contextMenuUpdate()"><img src="/assets/icons/pencil.svg"/>Update</button>
+    <button class="context-menu-button" id="delete_button_clickHere" (click)="contextMenuDelete()"><img src="/assets/icons/trash.svg"/>Delete</button>
   </div>
   }
 
