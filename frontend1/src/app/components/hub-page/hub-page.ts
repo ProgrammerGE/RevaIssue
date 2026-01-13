@@ -1,4 +1,4 @@
-import { Component, computed, effect, model, OnInit, Signal, signal, WritableSignal } from '@angular/core';
+import { Component, computed, effect, model, ModelSignal, OnInit, Signal, signal, WritableSignal } from '@angular/core';
 import { ListContainer } from '../list-container/list-container';
 import { hubListItem } from '../../interfaces/hubpage-list-item';
 import { ProjectService } from '../../services/project-service';
@@ -14,11 +14,14 @@ import { ProjectData } from '../../interfaces/project-data';
 import { IssueData } from '../../interfaces/issue-data';
 import { NavBar } from '../nav-bar/nav-bar';
 import { CapitalizeFirst } from '../../pipes/capitalize-first.pipe';
-import { PopUpService } from '../../services/pop-up-service';
 import { Router, RouterLink } from '@angular/router';
 import { PopupWrapper } from '../popup-wrapper/popup-wrapper';
 import { SearchBar } from '../search-bar/search-bar';
 import { SearchPopup } from '../search-popup/search-popup';
+import { DeleteProject } from '../delete-project/delete-project';
+import { UpdateProject } from '../update-project/update-project';
+import { ProjectUpdate } from '../../interfaces/project-update';
+import { HubMenuContext } from '../../interfaces/hub-menu-context';
 
 @Component({
   selector: 'app-hub-page',
@@ -32,6 +35,8 @@ import { SearchPopup } from '../search-popup/search-popup';
     SearchBar,
     RouterLink,
     SearchPopup,
+    DeleteProject,
+    UpdateProject,
   ],
   templateUrl: './hub-page.html',
   styleUrl: './hub-page.css',
@@ -39,8 +44,8 @@ import { SearchPopup } from '../search-popup/search-popup';
 export class HubPage extends RevaIssueSubscriber {
   username: WritableSignal<string> = signal('');
   userRole: WritableSignal<string> = signal('');
+  userLoggedIn: WritableSignal<boolean> = signal(false);
   auditLogs: WritableSignal<Array<AuditLogData>> = signal([]);
-  // made isAdmin a computed signal instead of WritableSignal
   isAdmin: Signal<boolean> = computed(() => this.userRole().toLowerCase() === 'admin');
   searchFilter = '';
   searchPopupValue = model('');
@@ -54,6 +59,10 @@ export class HubPage extends RevaIssueSubscriber {
   projectsList: Signal<hubListItem[]> = computed(() => {
     return this.mapProject(this.projects());
   });
+  isContextMenuActive = model(false);
+  contextInfo: WritableSignal<HubMenuContext> = signal<HubMenuContext>({xPos: 0, yPos: 0, item: null});
+  isDeleteProjectPopupActive = model(false);
+  isUpdatePopupActive = model(false);
 
   constructor(
     private router: Router,
@@ -61,7 +70,6 @@ export class HubPage extends RevaIssueSubscriber {
     private auditLogService: AuditLogService,
     private issueService: IssueService,
     private projectService: ProjectService,
-    private popUpService: PopUpService
   ) {
     super();
     this.subscription = this.userService.getUserSubject().subscribe((userData) => {
@@ -122,5 +130,44 @@ export class HubPage extends RevaIssueSubscriber {
     }));
   }
 
-  userLoggedIn: WritableSignal<boolean> = signal(false);
+  contextMenuDelete() {
+    this.isContextMenuActive.set(false);
+    this.isDeleteProjectPopupActive.set(true);
+  }
+
+  contextMenuUpdate() {
+    this.isContextMenuActive.set(false);
+    this.isUpdatePopupActive.set(true);
+  }
+
+  contextEvent(context: HubMenuContext) {
+    this.isContextMenuActive.set(true);
+    this.contextInfo.set(context);
+  }
+
+  closeContextMenu() {
+    this.isContextMenuActive.set(false);
+  }
+
+  confirmDeletion() {
+    const item = this.contextInfo()?.item;
+    if (item) {
+      this.projectService.deleteProjectByID(item?.id);
+    }
+    this.isDeleteProjectPopupActive.set(false);
+  }
+
+  updateProject(info: ProjectUpdate) {
+    const item = this.contextInfo()?.item;
+    if (info.title != '' && info.description != '' && item?.id) {
+      const newTitle = info.title;
+      const newDescription = info.description;
+
+      this.projectService.updateProject(item?.id, {
+        projectName: newTitle,
+        projectDescription: newDescription,
+      });
+      window.location.reload();
+    }
+  }
 }
