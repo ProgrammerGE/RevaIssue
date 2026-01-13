@@ -1,37 +1,30 @@
-import { Component, Input, signal, WritableSignal } from '@angular/core';
-import { PopUpService } from '../../services/pop-up-service';
-import { ProjectService } from '../../services/project-service';
+import { Component, Input, model, output } from '@angular/core';
+import { PopupWrapper } from '../popup-wrapper/popup-wrapper';
 
 @Component({
   selector: 'app-delete-project',
-  imports: [],
+  imports: [PopupWrapper],
   templateUrl: './delete-project.html',
   styleUrl: './delete-project.css',
 })
-export class DeleteProject {  
+export class DeleteProject { 
   @Input()
   projectID: number = 0;
   @Input() projectName: string = '';
-  buttonText = 'Delete Project';
-  buttonCancel = 'Cancel';
   @Input() isPoppedUp: boolean = false;
+  isPopupActive = model(false);
+  deleteEvent = output();
 
-  constructor(private popUpService: PopUpService, private projectService: ProjectService){
-  }
-  
-  addDeletePopup() {
-    this.isPoppedUp = true;
+  constructor(){
   }
 
-  deleteProject(){
-    this.projectService.deleteProjectByID(this.projectID);
-    this.isPoppedUp = false;
-    window.location.reload();
-  }  
-
-  cancelCreation() {
-    this.isPoppedUp = false;
+  clickConfirm(){
+    this.isPopupActive.set(false);
+    this.deleteEvent.emit();
     window.location.reload();
   }
 
+  clickCancel() {
+    this.isPopupActive.set(false);
+  }
 }
