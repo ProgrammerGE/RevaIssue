@@ -1,4 +1,4 @@
-package com.example.RevaIssue.E2E.steps;
+package com.example.RevaIssue.E2E.steps.popups;
 
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
