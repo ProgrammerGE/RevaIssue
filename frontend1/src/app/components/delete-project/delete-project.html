@@ -1,17 +1,11 @@
-<div class="delete_button">
-        <button (click)="addDeletePopup()" id="delete_button_clickHere">
-          <img src="assets/icons/trash.svg" />
-        </button>
-</div>
-@if (isPoppedUp){
-<div class="parent">
-  <div class="proj_warning">
-    <h4 style="color: red">Are you sure you want to delete project: {{projectName}}</h4>
+<app-popup-wrapper>
+  <div class="parent">
+    <div class="proj_warning">
+      <h4 style="color: red">Are you sure you want to delete: {{projectName}}</h4>
+    </div>
+    <div class="deletion_buttons">
+      <button (click)="clickConfirm()">Delete</button>
+      <button (click)="clickCancel()">Cancel</button>
+    </div>
   </div>
-  <div class="deletion_buttons">    
-    <button (click)="deleteProject()">{{ buttonText }}</button>
-    <button (click)="cancelCreation()">{{ buttonCancel }}</button>
-  </div>
-</div>
-
-}
+</app-popup-wrapper>
