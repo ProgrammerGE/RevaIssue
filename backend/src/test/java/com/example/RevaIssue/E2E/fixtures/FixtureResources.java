@@ -22,6 +22,7 @@ public class FixtureResources {
         driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         hubpage = new HubPage(driver);
+        registerPage = new RegisterPage(driver);
     }
 
     @After

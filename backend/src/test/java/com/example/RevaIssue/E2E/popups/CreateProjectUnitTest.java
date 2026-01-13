@@ -1,4 +1,4 @@
-package com.example.RevaIssue.service;
+package com.example.RevaIssue.E2E.popups;
 
 import com.example.RevaIssue.entity.Project;
 import io.restassured.RestAssured;

@@ -13,6 +13,8 @@ public class HubPage {
 
     private final String URL = "http://localhost:8080/hubpage";
 
+    private final String URLLogin = "http://localhost:8080/login";
+
     private WebDriver driver;
 
     @FindBy(id = "delete_button_clickHere")
@@ -29,7 +31,13 @@ public class HubPage {
         PageFactory.initElements(driver, this);
     }
 
+    public void login(){
+        driver.get(URLLogin);
+        //Need to log in and create a web token
+    }
+
     public void openHubPage(){
+        login();
         driver.get(URL);
     }
 

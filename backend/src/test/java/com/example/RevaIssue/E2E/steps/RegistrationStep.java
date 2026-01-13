@@ -15,7 +15,7 @@ public class RegistrationStep {
     }
     @When("The user enters their information")
     public void the_user_enters_their_information() {
-        registerPage.registerUserInfo("admin", "admin");
+        registerPage.registerUserInfo("admin", "password");
     }
     @When("Selects the {string} role")
     public void selects_the_role(String role) {
