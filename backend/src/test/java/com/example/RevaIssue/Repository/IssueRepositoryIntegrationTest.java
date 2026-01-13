@@ -141,4 +141,43 @@ public class IssueRepositoryIntegrationTest {
         assertNotNull(results);
         assertTrue(results.isEmpty());
     }
+
+    @Test
+    void findByFilterPositiveTest() {
+        // Create an issue that matches all 3 criteria
+        Issue issue = new Issue();
+        issue.setName("Match");
+        issue.setStatus("closed");
+        issue.setSeverity(2);
+        issue.setPriority(1);
+        issue.setProject(project);
+
+        issueRepository.save(issue);
+
+        // Search with the exact matching values
+        List<Issue> results = issueRepository.findByFilter("closed", 2, 1);
+
+        // Check that we found exactly 1 result and it's the right one
+        assertEquals(1, results.size(), "Should have found exactly 1 matching issue");
+        assertEquals("Match", results.getFirst().getName());
+    }
+
+    @Test
+    void findByFilterNegativeTest() {
+        // Create an issue that is ALMOST a match (Priority is wrong)
+        Issue issue = new Issue();
+        issue.setName("Non-Match");
+        issue.setStatus("open");
+        issue.setSeverity(2);
+        issue.setPriority(3); // This is the difference
+        issue.setProject(project);
+
+        issueRepository.save(issue);
+
+        // Search with values that don't match the issue
+        List<Issue> results = issueRepository.findByFilter("open", 2, 1);
+
+        // The list should be empty because priority 3 != 1
+        assertTrue(results.isEmpty(), "Result list should be empty for partial matches");
+    }
 }
