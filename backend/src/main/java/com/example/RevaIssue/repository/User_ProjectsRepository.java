@@ -15,13 +15,12 @@ import java.util.List;
 @Repository
 public interface User_ProjectsRepository extends JpaRepository<User_Projects, Integer> {
     List<User_Projects> findByUser(User user);
-    List<User_Projects> findByProject(Project project);
 
     @Query("SELECT up.user FROM User_Projects up WHERE up.project.projectID = :pId")
     List<User> findUsersByProjectId(@Param("pId") int pId);
-    
+
     @Modifying
     @Transactional
     @Query("DELETE FROM User_Projects up WHERE up.user.username = :uName AND up.project.ID = :pId")
-    void deleteByUsernameAndProjectId(@Param("uName") String uName, @Param("pId") int pId);
+    int deleteByUsernameAndProjectId(@Param("uName") String uName, @Param("pId") int pId);
 }
