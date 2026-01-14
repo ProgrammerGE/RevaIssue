@@ -9,7 +9,7 @@ import org.openqa.selenium.support.PageFactory;
 /**
  * This POM file represents the Hubpage
  */
-public class HubPage {
+public class HubPage extends ParentPOM {
 
     private final String URL = "http://localhost:8080/hubpage";
 
@@ -45,7 +45,7 @@ public class HubPage {
     private WebElement submitBtn;
 
     public HubPage(WebDriver driver){
-        this.driver = driver;
+        super(driver);
         PageFactory.initElements(driver, this);
     }
     //Need to log in and create a web token
