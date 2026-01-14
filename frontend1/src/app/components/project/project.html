@@ -139,11 +139,11 @@
       <div class="comments-section">
         <div>
           @if (userRole() === 'tester') {
-          <button (click)="reopenIssue()">Re-open issue</button>
-          <button (click)="closeIssue()">Close issue</button>
+          <button id="reopen_isu_btn" (click)="reopenIssue()">Re-open issue</button>
+          <button id="close_isu_btn" (click)="closeIssue()">Close issue</button>
           } @else if (userRole() === 'developer') {
-          <button (click)="startProgress()">Move to in progress</button>
-          <button (click)="resolveIssue()">Resolve Issue</button>
+          <button id="in_progress_isu_btn" (click)="startProgress()">Move to in progress</button>
+          <button id="resolv_isu_btn" (click)="resolveIssue()">Resolve Issue</button>
           }
         </div>
         <h4>Comments</h4>
