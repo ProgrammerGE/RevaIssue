@@ -1,11 +1,27 @@
 <app-nav-bar></app-nav-bar>
 <div class="hub-page">
+  @if(isContextMenuActive() && isAdmin()){
+  <div class="context-overlay" (click)="closeContextMenu( )"></div>
+  <div class="context-menu" [style.left.px]="contextInfo().xPos" [style.top.px]="contextInfo().yPos">
+    <button class="context-menu-button" id="update_button_clickHere" (click)="contextMenuUpdate()"><img src="/assets/icons/pencil.svg"/>Update</button>
+    <button class="context-menu-button" id="delete_button_clickHere" (click)="contextMenuDelete()"><img src="/assets/icons/trash.svg"/>Delete</button>
+  </div>
+  }
+
+  @if(isDeleteProjectPopupActive()) {
+  @if (contextInfo()?.item?.id) {
+  <app-delete-project [projectID]="contextInfo()!.item!.id" (deleteEvent)="confirmDeletion()"
+    [(isPopupActive)]="isDeleteProjectPopupActive">
+  </app-delete-project>
+  }
+  }
+
+  @if(isUpdatePopupActive()) {
+    <app-update-project [(isPopupActive)]="isUpdatePopupActive" (updateEvent)="updateProject($event)"></app-update-project>
+  }
+  
   @if(isSearchPopupActive()){
-  <app-search-popup
-    [(isPopupActive)]="isSearchPopupActive"
-    [(inputValue)]="searchPopupValue"
-    placeholder="Search Issues"
-  >
+  <app-search-popup [(isPopupActive)]="isSearchPopupActive" [(inputValue)]="searchPopupValue" placeholder="Search Issues">
     @for(issue of searchResults(); track $index){
     <a class="search-result-item" [routerLink]="['/projects', issue.project?.projectID]">
       {{ issue.name | capitalizeFirst }}
@@ -13,6 +29,7 @@
     }
   </app-search-popup>
   }
+
   <header class="hub-header">
     <div>
       <h2 class="welcome-message">Welcome, {{ username() | capitalizeFirst }}</h2>
@@ -27,6 +44,7 @@
       [hasButton]="true"
       [itemClicked]="goToProject"
       [userRole]="userRole()"
+      (contextMenuRequested)="contextEvent($event)"
     >
     </app-list-container>
     <app-list-container
@@ -34,6 +52,7 @@
       [items]="issuesList()"
       [hasButton]="false"
       [itemClicked]="goToProject"
+      (contextMenuRequested)="contextEvent($event)"
     ></app-list-container>
   </section>
   @if(isAdmin()){
