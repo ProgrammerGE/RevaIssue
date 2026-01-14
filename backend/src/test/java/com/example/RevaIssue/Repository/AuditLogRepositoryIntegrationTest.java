@@ -9,6 +9,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,5 +41,14 @@ public class AuditLogRepositoryIntegrationTest {
         // assertions
         assertNotNull(result);
         assertEquals(result, log);
+    }
+
+    void findByIdNegative() {
+
+        // find by id
+        AuditLog result = auditLogRepository.findById(UUID.randomUUID()).orElse(null);
+
+        // assertions
+        assertNull(result);
     }
 }
