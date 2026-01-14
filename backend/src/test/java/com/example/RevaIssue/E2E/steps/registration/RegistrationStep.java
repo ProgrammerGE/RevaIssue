@@ -1,4 +1,4 @@
-package com.example.RevaIssue.E2E.steps;
+package com.example.RevaIssue.E2E.steps.registration;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -9,10 +9,6 @@ import static com.example.RevaIssue.E2E.fixtures.FixtureResources.driver;
 import static com.example.RevaIssue.E2E.fixtures.FixtureResources.registerPage;
 
 public class RegistrationStep {
-    @Given("The user is on the registration page")
-    public void the_user_is_on_the_registration_page() {
-        registerPage.openRegistrationPage();
-    }
     @When("The user enters their information")
     public void the_user_enters_their_information() {
         registerPage.registerUserInfo("admin", "password");

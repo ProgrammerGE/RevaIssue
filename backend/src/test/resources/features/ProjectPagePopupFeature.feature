@@ -3,10 +3,14 @@ Feature: Popup Functionality on the Project page for Users
   Background: shared starting condition
     Given The user is on the project page
 
-  Scenario: Testers can click on the create issue botton for a popup
+  Scenario: Testers can create issue botton for a project
     When The tester clicks on the create issue button
-    Then A popup will appear for creating an issue for the project
+    And  inputs the issue details
+    And  clicks the submit new issue button
+    Then A issue will be created
 
-    Scenario: Users can click on the update issue button for a popup
+    Scenario: Users can update issue details
       When Users click the update issue button
-      Then A popup will appear for updating the issue details
+      And  inputs the updated issue details
+      And  clicks the submit update issue button
+      Then the issue details will be updated
