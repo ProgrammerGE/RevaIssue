@@ -1,10 +1,9 @@
 package com.example.RevaIssue.E2E.steps.issue;
 
-import com.example.RevaIssue.E2E.poms.ProjectPage;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import static com.example.RevaIssue.E2E.fixtures.TestFixtures.projectPage;
+import static com.example.RevaIssue.E2E.fixtures.FixtureResources.projectPage;
 
 public class IssueSteps {
 

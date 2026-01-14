@@ -58,7 +58,7 @@ public class ProjectPage extends ParentPOM {
     }
 
     public void goToProject(int projectId) {
-        driver.get(URL + projectId);
+        driver.get(URL +"/"+ projectId);
     }
 
     // =========================
