@@ -45,6 +45,18 @@ public class IssueSteps {
         projectPage.selectFirstIssue();
     }
 
-
+    // Scenario Outline: Change Issue Status
+    @When("a user selects an issue")
+    public void a_selects_an_issue(){
+        projectPage.selectFirstIssue();
+    }
+    @When("{string} sets status to {string}")
+    public void sets_status_to(String role, String status){
+        projectPage.updateStatusIssue(role, status);
+    }
+    @When("the issue status is now {string}")
+    public void the_issue_status_is_now(String status){
+        projectPage.selectFirstIssue();
+    }
 
 }
