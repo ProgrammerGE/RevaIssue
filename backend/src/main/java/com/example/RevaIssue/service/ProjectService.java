@@ -63,11 +63,6 @@ public class ProjectService {
     }
 
     public List<User> getAllUsersByProject(Project project){
-        List<User_Projects> userProjectList = user_projectsRepo.findByProject(project);
-        List<User> users = new ArrayList<>();
-        for(User_Projects userProj : userProjectList){
-            users.add(userProj.getUser());
-        }
-        return users;
+        return user_projectsRepo.findUsersByProjectId(project.getProjectID());
     }
 }
