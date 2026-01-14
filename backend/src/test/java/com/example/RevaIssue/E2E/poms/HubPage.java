@@ -26,6 +26,15 @@ public class HubPage {
     @FindBy(id = "update_button_clickHere")
     private WebElement updateButton;
 
+    @FindBy(id = "proj_title")
+    private WebElement projectTitleInput;
+
+    @FindBy(id = "descriptionBox")
+    private WebElement projectDescInput;
+
+    @FindBy(partialLinkText = "Create Project")
+    private WebElement submitBtn;
+
     public HubPage(WebDriver driver){
         this.driver = driver;
         PageFactory.initElements(driver, this);
@@ -55,6 +64,15 @@ public class HubPage {
 
     public boolean isCreatePopupOpen(){
         return this.createButton.isDisplayed();
+    }
+
+    public void enterInfo(String title, String description){
+        projectTitleInput.sendKeys(title);
+        projectDescInput.sendKeys(description);
+    }
+
+    public void submitNewProject(){
+        this.submitBtn.click();
     }
 
     public void clickUpdateProject(){

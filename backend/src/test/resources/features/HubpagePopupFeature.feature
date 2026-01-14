@@ -1,6 +1,6 @@
 Feature: Popup Functionality on the Hubpage for Admins
 
-  Background: shared stating condition
+  Background: shared starting condition
     Given The admin is on the hub page
 
   Scenario: Admin can click the delete project button for a popup
@@ -23,3 +23,9 @@ Feature: Popup Functionality on the Hubpage for Admins
       |Delete Project|
       |Create Project|
       |Update Project|
+
+    Scenario: Admin can create projects
+      When The admin clicks on the create project button
+      And  inputs the project details
+      And  clicks the submit button
+      Then A project will be created
