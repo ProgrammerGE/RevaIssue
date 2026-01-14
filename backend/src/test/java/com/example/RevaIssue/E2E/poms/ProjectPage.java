@@ -64,12 +64,6 @@ public class ProjectPage extends ParentPOM {
     @FindBy(id = "update_prior")
     private WebElement updatePriorDropdown;
 
-    public ProjectPage(WebDriver driver){
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
-    }
-    //Need to log in and create a web token
-    public void login(){
     @FindBy(css = ".issue-card")
     private List<WebElement> issueList;
 
