@@ -12,7 +12,7 @@
     }
     <p>Issue Title</p>
 
-    <input type="text" placeholder="Issue Title" [(ngModel)]="issueTitle" />
+    <input id="issue_title_inpt" type="text" placeholder="Issue Title" [(ngModel)]="issueTitle" />
   </div>
   <div class="issue_desc" id="descriptionBox">
     <!-- Holds the description of the issue -->
@@ -22,6 +22,7 @@
     <p>Issue Description</p>
     <textarea
       type="text"
+      id="descript_issue_inpt"
       placeholder="Issue Description"
       class="description"
       [(ngModel)]="issueDesc"
@@ -56,7 +57,7 @@
   </div>
   <div class="issue_buttons">
     <!-- This will hold (2) buttons, Confirm and Cancel -->
-    <button (click)="createIssue()">{{ buttonText }}</button>
+    <button id="issue_create_confirm" (click)="createIssue()">{{ buttonText }}</button>
     <button (click)="cancelCreation()">{{ buttonCancel }}</button>
   </div>
 </div>

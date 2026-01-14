@@ -14,7 +14,7 @@
     }
     <p>Issue Title</p>
 
-    <input type="text" placeholder="Issue Title" [(ngModel)]="issueTitle" />
+    <input id="update_title_iss" type="text" placeholder="Issue Title" [(ngModel)]="issueTitle" />
   </div>
   <div class="issue_desc" id="descriptionBox">
     <!-- Holds the description of the issue -->
@@ -24,6 +24,7 @@
     <p>Issue Description</p>
     <textarea
       type="text"
+      id="update_desc_iss"
       placeholder="Issue Description"
       class="description"
       [(ngModel)]="issueDesc"
@@ -37,7 +38,7 @@
     <h4 style="color: red">You must select the severity of the issue</h4>
     }
     <p>Severity</p>
-    <select name="severity" [(ngModel)]="severityInput">
+    <select id="update_sev" name="severity" [(ngModel)]="severityInput">
       <option value="1">Low</option>
       <option value="2">Medium</option>
       <option value="3">High</option>
@@ -50,7 +51,7 @@
     }
     <p>Priority</p>
 
-    <select name="priority" [(ngModel)]="priorityInput">
+    <select id="update_prior" name="priority" [(ngModel)]="priorityInput">
       <option value="1">Low</option>
       <option value="2">Medium</option>
       <option value="3">High</option>
@@ -58,7 +59,7 @@
   </div>
   <div class="issue_buttons">
     <!-- This will hold (2) buttons, Confirm and Cancel -->
-    <button (click)="updateIssue()">{{ buttonText }}</button>
+    <button id="update_issue_confirm" (click)="updateIssue()">{{ buttonText }}</button>
     <button (click)="cancelUpdate()">{{ buttonCancel }}</button>
   </div>
 </div>

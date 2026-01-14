@@ -20,11 +20,20 @@ public class HubPage {
     @FindBy(id = "delete_button_clickHere")
     private WebElement deleteButton;
 
+    @FindBy(id = "delete_confirm")
+    private WebElement deleteConfirm;
+
     @FindBy(className = "add-button")
     private WebElement createButton;
 
+    @FindBy(id = "create_confirm")
+    private WebElement confirmCreate;
+
     @FindBy(id = "update_button_clickHere")
     private WebElement updateButton;
+
+    @FindBy(id = "update_confirm")
+    private WebElement confirmUpdate;
 
     @FindBy(id = "proj_title")
     private WebElement projectTitleInput;
@@ -39,10 +48,12 @@ public class HubPage {
         this.driver = driver;
         PageFactory.initElements(driver, this);
     }
-
+    //Need to log in and create a web token
     public void login(){
         driver.get(URLLogin);
-        //Need to log in and create a web token
+        driver.findElement(By.id("username")).sendKeys("admin@email.com");
+        driver.findElement(By.id("password")).sendKeys("password");
+        driver.findElement(By.id("login-submit-btn")).click();
     }
 
     public void openHubPage(){
@@ -52,6 +63,14 @@ public class HubPage {
 
     public void clickDeleteProject(){
         this.deleteButton.click();
+    }
+
+    public void clickDeleteConfirm(){
+        this.deleteConfirm.click();
+    }
+
+    public void submitUpdatedProject(){
+        this.confirmUpdate.click();
     }
 
     public boolean isDeletePopupOpen(){
