@@ -15,7 +15,5 @@ import static io.cucumber.junit.platform.engine.Constants.PLUGIN_PROPERTY_NAME;
 @SelectPackages({"com.example.RevaIssue.E2E", "features"})
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.example.RevaIssue.E2E")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty, html:target/cucumber-report.html")
-@CucumberContextConfiguration
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class CucumberRunner {
 }
