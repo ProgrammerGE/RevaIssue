@@ -19,9 +19,7 @@ public interface User_ProjectsRepository extends JpaRepository<User_Projects, In
 
     @Query("SELECT up.user FROM User_Projects up WHERE up.project.projectID = :pId")
     List<User> findUsersByProjectId(@Param("pId") int pId);
-
-    void deleteByUserAndProject(User user, Project project);
-
+    
     @Modifying
     @Transactional
     @Query("DELETE FROM User_Projects up WHERE up.user.username = :uName AND up.project.ID = :pId")
