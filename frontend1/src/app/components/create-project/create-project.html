@@ -8,7 +8,7 @@
     <h4 style="color: red">Enter a title name for the project</h4>
     }
     <p>Project Name</p>
-    <input type="text" placeholder="Project Title" [(ngModel)]="projectTitle" />
+    <input id="proj_title" type="text" placeholder="Project Title" [(ngModel)]="projectTitle" />
   </div>
   <div class="proj_description">
     @if (descriptionMissing) {
@@ -22,7 +22,7 @@
       [(ngModel)]="projectDesc"
       rows="10"
     ></textarea>
-    <button (click)="createProject()">{{ buttonText }}</button>
+    <button id="create_confirm" (click)="createProject()">{{ buttonText }}</button>
     <button (click)="cancelCreation()">{{ buttonCancel }}</button>
   </div>
 </div>
