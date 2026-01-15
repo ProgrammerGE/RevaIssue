@@ -15,7 +15,7 @@ public class SubmitUpdateIssue {
     }
     @When("inputs the updated issue details")
     public void inputs_the_updated_issue_details(){
-        projectPage.filloutUpdatedIssueInformation("Updated Title", "Updated description", "2", "3");
+        projectPage.filloutUpdatedIssueInformation("Updated Title", "Updated description", 2, 3);
     }
     @When("clicks the submit update issue button")
     public void clicks_the_submit_update_issue_button(){

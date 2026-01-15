@@ -25,7 +25,16 @@ public class CommentService {
     }
 
     public Comment addComment(Long issueId, String text){
-        Issue issue = issueRepository.getReferenceById(issueId);
+        // validation for non-nullable and length constraints
+        if (text == null || text.trim().isEmpty() || text.length() > 2000) {
+            return null;
+        }
+
+        Issue issue = issueRepository.findById(issueId).orElse(null);
+
+        if (issue == null) {
+            return null;
+        }
 
         Comment comment = new Comment();
         comment.setText(text);

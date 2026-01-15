@@ -25,7 +25,7 @@ public class IssueService {
     }
 
     public Issue getIssue(Long issueId){
-        return issueRepo.getReferenceById(issueId);
+        return issueRepo.findById(issueId).orElse(null);
     }
 
     public List<Issue> getMostRecentIssues(){
@@ -33,29 +33,11 @@ public class IssueService {
     }
 
     public List<Issue> getIssuesByKeyword(String keyword){
-        List<Issue> issueList = issueRepo.findByKeyword(keyword);
-        return issueList;
+        return issueRepo.findByKeyword(keyword);
     }
 
     public List<Issue> getIssuesByFilter(String status, int severity, int priority){
-        List<Issue> issueList = issueRepo.findByFilter(status, severity, priority);
-        return issueList;
-    }
-
-    public int getSeverityById(Long issueId) {
-        Issue targetIssue = issueRepo.getReferenceById(issueId);
-        return targetIssue.getSeverity();
-    }
-
-    public int getPriorityById(Long issueId) {
-        Issue targetIssue = issueRepo.getReferenceById(issueId);
-        return targetIssue.getPriority();
-    }
-
-    // issue status as per Epic 3, bullet 1 in the User storeis MVP
-    public String getProgressById(Long issueId) {
-        Issue targetIssue = issueRepo.getReferenceById(issueId);
-        return targetIssue.getStatus();
+        return issueRepo.findByFilter(status, severity, priority);
     }
 
     public List<Issue> getIssuesByProject(Long projectId) {
@@ -66,65 +48,33 @@ public class IssueService {
     }
 
     public Issue updateIssue(Long issueId, Issue updatedIssue){
-        Optional<Issue> issueOptional = Optional.of(issueRepo.getReferenceById(issueId));
-        if(issueOptional.isPresent()){
-            Issue issueUpdate = issueOptional.get();
+        return issueRepo.findById(issueId).map(issueUpdate -> {
             issueUpdate.setName(updatedIssue.getName());
             issueUpdate.setDescription(updatedIssue.getDescription());
             issueUpdate.setSeverity(updatedIssue.getSeverity());
             issueUpdate.setPriority(updatedIssue.getPriority());
-            this.issueRepo.save(issueUpdate);
-        }
-        return this.issueRepo.getReferenceById(issueId);
-    }
-
-    // TODO: updating the issue's description, comment, severity, and priority, status
-    public Issue updateIssueDescription(Long issueId, String desc){
-        Issue targetIssue = issueRepo.getReferenceById(issueId);
-        if(desc.isEmpty()){
-            return null;
-        }
-        targetIssue.setDescription(desc);
-        issueRepo.save(targetIssue);
-        return issueRepo.getReferenceById(issueId);
-    }
-
-    public Issue updateIssueSeverity(Long issueId, Integer severity){
-        Issue targetIssue = issueRepo.getReferenceById(issueId);
-        targetIssue.setSeverity(severity);
-        issueRepo.save(targetIssue);
-        return issueRepo.getReferenceById(issueId);
-    }
-
-    public Issue updateIssuePriority(Long issueId, Integer priority){
-        Issue targetIssue = issueRepo.getReferenceById(issueId);
-        targetIssue.setPriority(priority);
-        issueRepo.save(targetIssue);
-        return issueRepo.getReferenceById(issueId);
+            return issueRepo.save(issueUpdate);
+        }).orElse(null);
     }
 
     public Issue updateIssueStatus(Long issueId, String status, String role){
+        String upperRole = role.toUpperCase();
+        String upperStatus = status.toUpperCase();
 
-        role = role.toUpperCase();
         // Developer only status updates
-        if (status.equals("IN_PROGRESS") && !role.equals("DEVELOPER")) {
-            throw new RuntimeException("Only developers can move issues to In Progress");
-        }
-        if (status.equals("RESOLVED") && !role.equals("DEVELOPER")) {
-            throw new RuntimeException("Only developers can resolve issues");
+        if ((upperStatus.equals("IN_PROGRESS") || upperStatus.equals("RESOLVED")) && !upperRole.equals("DEVELOPER")) {
+            throw new RuntimeException("Unauthorized: Role " + upperRole + " cannot set status to " + upperStatus);
         }
 
         // Tester only status updates
-        if (status.equals("CLOSED") && !role.equals("TESTER")) {
-            throw new RuntimeException("Only testers can close issues");
+        if ((upperStatus.equals("CLOSED") || upperStatus.equals("OPEN")) && !upperRole.equals("TESTER")) {
+            throw new RuntimeException("Unauthorized: Role " + upperRole + " cannot set status to " + upperStatus);
         }
-        if (status.equals("OPEN") && !role.equals("TESTER")) {
-            throw new RuntimeException("Only testers can reopen issues");
-        }
-        Issue targetIssue = issueRepo.getReferenceById(issueId);
-        targetIssue.setStatus(status);
-        issueRepo.save(targetIssue);
-        return issueRepo.getReferenceById(issueId);
+
+        return issueRepo.findById(issueId).map(targetIssue -> {
+            targetIssue.setStatus(upperStatus);
+            return issueRepo.save(targetIssue);
+        }).orElse(null);
     }
 
 
