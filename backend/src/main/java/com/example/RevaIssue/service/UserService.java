@@ -1,6 +1,5 @@
 package com.example.RevaIssue.service;
 
-import com.example.RevaIssue.entity.AuditLog;
 import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.entity.User;
 import com.example.RevaIssue.entity.User_Projects;
@@ -30,8 +29,8 @@ User_Projects SQL table.
 public class UserService {
     private final UserRepository userRepository;
     private final User_ProjectsRepository userProjectsRepository;
-    @Autowired
-    private AuditLogService auditLogService;
+//    @Autowired
+//    private AuditLogService auditLogService;
     private final ProjectRepository projectRepository;
     private final UserMapper userMapper;
 
