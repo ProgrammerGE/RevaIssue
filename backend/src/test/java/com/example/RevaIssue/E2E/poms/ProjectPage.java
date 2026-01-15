@@ -189,4 +189,20 @@ public class ProjectPage extends ParentPOM {
                 By.cssSelector(".parent .issue_buttons button")).click();
     }
 
+    //Changing the status of the issue based on the role
+    public void updateStatusIssue(String role, String status){
+        if (role.equals("tester")){
+            if (status.equalsIgnoreCase("Open")){
+                driver.findElement(By.id("reopen_isu_btn")).click();
+            } else if (status.equalsIgnoreCase("Close")) {
+                driver.findElement(By.id("close_isu_btn")).click();
+            }
+        } else if (role.equalsIgnoreCase("developer")) {
+            if (status.equalsIgnoreCase("In Progress")){
+                driver.findElement(By.id("in_progress_isu_btn")).click();
+            } else if (status.equalsIgnoreCase("Resolved")) {
+                driver.findElement(By.id("resolv_isu_btn")).click();
+            }
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package com.example.RevaIssue.E2E.steps.popups.submitting;
+package com.example.RevaIssue.E2E.steps.popups;
 
 import io.cucumber.java.en.Given;
 
