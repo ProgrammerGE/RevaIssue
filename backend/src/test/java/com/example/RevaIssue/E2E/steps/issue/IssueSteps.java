@@ -1,6 +1,8 @@
 package com.example.RevaIssue.E2E.steps.issue;
 
+import com.example.RevaIssue.E2E.fixtures.FixtureResources;
 import com.example.RevaIssue.E2E.poms.ProjectPage;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
@@ -46,6 +48,10 @@ public class IssueSteps {
     }
 
     // Scenario Outline: Change Issue Status
+    @Given("a {string} selects a project with issues")
+    public void a_selects_a_project_with_issues(String role) {
+        projectPage.openProjectPageAsRole(role);
+    }
     @When("a user selects an issue")
     public void a_selects_an_issue(){
         projectPage.selectFirstIssue();
