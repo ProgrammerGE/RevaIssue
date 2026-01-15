@@ -82,8 +82,8 @@ public class ProjectPage extends ParentPOM {
 
     public void login() {
         driver.get(URLLogin);
-        driver.findElement(By.id("username")).sendKeys("tester@email.com");
-        driver.findElement(By.id("password")).sendKeys("password");
+        driver.findElement(By.id("login-username-input")).sendKeys("tester@email.com");
+        driver.findElement(By.id("login-password-input")).sendKeys("password");
         driver.findElement(By.id("login-submit-btn")).click();
     }
 
@@ -99,13 +99,13 @@ public class ProjectPage extends ParentPOM {
     public void openProjectPageAsRole(String role){
         if (role.equalsIgnoreCase("tester")){
             driver.get(URLLogin);
-            driver.findElement(By.id("username")).sendKeys("tester@email.com");
-            driver.findElement(By.id("password")).sendKeys("password");
+            driver.findElement(By.id("login-username-input")).sendKeys("tester@email.com");
+            driver.findElement(By.id("login-password-input")).sendKeys("password");
             driver.findElement(By.id("login-submit-btn")).click();
         } else if (role.equalsIgnoreCase("developer")) {
             driver.get(URLLogin);
-            driver.findElement(By.id("username")).sendKeys("developer@email.com");
-            driver.findElement(By.id("password")).sendKeys("password");
+            driver.findElement(By.id("login-username-input")).sendKeys("developer@email.com");
+            driver.findElement(By.id("login-password-input")).sendKeys("password");
             driver.findElement(By.id("login-submit-btn")).click();
         }
         goToProject(1);
