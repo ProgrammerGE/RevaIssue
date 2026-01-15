@@ -139,7 +139,7 @@ public class IssueServiceUnitTest {
 
     @Test
     void updateIssueStatus_UnauthorizedRole_NegativeTest() {
-        // Tester trying to do Developer work
+        // tester trying to do Developer work
         assertThrows(RuntimeException.class, () -> {
             issueService.updateIssueStatus(1L, "IN_PROGRESS", "TESTER");
         });
