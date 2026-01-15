@@ -4,15 +4,15 @@ Feature: Users can register to the app
     Given The user is on the registration page
 
     Scenario Outline: Users can register as a select role
-      When The user enters their information
+      When The "<user>" enters their information
       And  Selects the "<role>" role
       And  Clicks on the submit button
       Then The user should be registered and sent to login
       Examples:
-        |role|
-        |admin|
-        |tester|
-        |developer|
+        |user|role|
+        |admin|ADMIN|
+        |tester|TESTER|
+        |tester|DEVELOPER|
 
       Scenario: Users can cancel registration
         When The user clicks on the cancel button

@@ -17,7 +17,7 @@
         @if (passwordMismatch) {            
             <h4 style="color: red;">Password must match</h4>
         }
-        <input type="password" placeholder="password" [(ngModel)]="confirmPasswordInput">
+        <input id="confirm_password" type="password" placeholder="password" [(ngModel)]="confirmPasswordInput">
         <br>
         <h3>Choose your role</h3>
         @if (roleMissing) {            
@@ -29,8 +29,8 @@
             <option value="DEVELOPER">developer</option>
         </select>
         <br>
-        <button (click)="registerUser()">{{ buttonRegistration}}</button>
-        <button (click)="cancelRegister()">{{ buttonCancel}}</button>
+        <button id="register_accnt_button" (click)="registerUser()">{{ buttonRegistration}}</button>
+        <button id="cancel_register_btn" (click)="cancelRegister()">{{ buttonCancel}}</button>
     </div>
 </div>
     
