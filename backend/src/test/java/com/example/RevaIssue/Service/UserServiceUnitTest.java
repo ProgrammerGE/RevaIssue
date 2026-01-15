@@ -7,7 +7,6 @@ import com.example.RevaIssue.enums.UserRole;
 import com.example.RevaIssue.repository.ProjectRepository;
 import com.example.RevaIssue.repository.UserRepository;
 import com.example.RevaIssue.repository.User_ProjectsRepository;
-import com.example.RevaIssue.service.ProjectService;
 import com.example.RevaIssue.service.UserService;
 import com.example.RevaIssue.util.UserDTO;
 import com.example.RevaIssue.util.UserMapper;
@@ -17,14 +16,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceUnitTest {
@@ -33,8 +31,6 @@ public class UserServiceUnitTest {
     @InjectMocks
     private UserService userService;
     // mock dependencies
-    @Mock
-    private ProjectService projectService; // todo: delete if not needed (we may need this).
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -133,69 +129,70 @@ public class UserServiceUnitTest {
 
     @Test
     void assignProjectPositiveTest(){
+        // create the data
         User mockUser = new User();
-        mockUser.setUser_ID(UUID.randomUUID());
         mockUser.setUsername("tester");
-        mockUser.setPassword("password");
-        mockUser.setUserRole(UserRole.TESTER);
 
         Project mockProject = new Project();
         mockProject.setProjectID(1);
-        mockProject.setProjectName("Mock Project");
-        mockProject.setProjectDescription("Mock Description");
 
-        User_Projects mockUser_project = new User_Projects();
-        mockUser_project.setUser(mockUser);
-        mockUser_project.setProject(mockProject);
-        mockUser_project.setID(1);
+        User_Projects mockUserProject = new User_Projects();
+        mockUserProject.setUser(mockUser);
+        mockUserProject.setProject(mockProject);
 
-        when(userService.createUser(mockUser)).thenReturn(mockUser);
-        when(projectService.createProject(mockProject)).thenReturn(mockProject);
+        // mock the repository behavior
+        when(userRepository.findByUsername("tester")).thenReturn(Optional.of(mockUser));
+        when(projectRepository.findById(1)).thenReturn(Optional.of(mockProject));
+        when(userProjectsRepository.save(any(User_Projects.class))).thenReturn(mockUserProject);
 
-        User_Projects targetUserProj = userService.assignProject(1, "tester");
-        assertNotNull(targetUserProj);
-        assertEquals(targetUserProj.getUser(), mockUser);
-        assertEquals(targetUserProj.getProject(), mockProject);
+        // call the logic in the service
+        User_Projects result = userService.assignProject(1, "tester");
+
+        // assertions
+        assertNotNull(result);
+        assertEquals("tester", result.getUser().getUsername());
+        assertEquals(1, result.getProject().getProjectID());
     }
 
     @Test
     void assignProjectNegativeTest(){
+        // mock the repository behavior
+        // simulate user not found to trigger a RuntimeException in the service
+        when(userRepository.findByUsername("failure")).thenReturn(Optional.empty());
 
-        when(userService.getProjectsById(UUID.randomUUID())).thenReturn(null);
-
+        // assertions
         assertThrows(RuntimeException.class, () -> userService.assignProject(1, "failure"));
     }
 
     @Test
     void revokeProjectPositiveTest(){
-        User mockUser = new User();
-        mockUser.setUser_ID(UUID.randomUUID());
-        mockUser.setUsername("tester");
-        mockUser.setPassword("password");
-        mockUser.setUserRole(UserRole.TESTER);
+        // mock the repository behavior
+        // simulate that 1 row was successfully deleted
+        when(userProjectsRepository.deleteByUsernameAndProjectId("tester", 1)).thenReturn(1);
 
-        Project mockProject = new Project();
-        mockProject.setProjectID(1);
-        mockProject.setProjectName("Mock Project");
-        mockProject.setProjectDescription("Mock Description");
-
-        User_Projects user_project = new User_Projects();
-        user_project.setUser(mockUser);
-        user_project.setProject(mockProject);
-        user_project.setID(1);
-
-        when(userService.createUser(mockUser)).thenReturn(mockUser);
-        when(projectService.createProject(mockProject)).thenReturn(mockProject);
-
+        // call the logic in the service
         boolean userRevoked = userService.revokeProject(1, "tester");
+
+        // assertions
         assertTrue(userRevoked);
+
+        // verify the repository was actually called with these exact parameters
+        verify(userProjectsRepository).deleteByUsernameAndProjectId("tester", 1);
     }
 
     @Test
     void revokeProjectNegativeTest(){
-        when(userService.revokeProject(1, "tester")).thenReturn(false);
+        // mock the repository behavior
+        // simulate an exception being thrown
+        // this triggers the catch block in the service
+        when(userProjectsRepository.deleteByUsernameAndProjectId("tester", 1))
+                .thenThrow(new RuntimeException("Database error"));
 
+        // call the logic in the service
         boolean userRevoked = userService.revokeProject(1, "tester");
-        assertTrue(userRevoked);
+
+        // assertions
+        // the catch block prints the error and returns false
+        assertFalse(userRevoked);
     }
 }
