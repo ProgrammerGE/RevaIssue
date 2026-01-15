@@ -1,96 +1,193 @@
 package com.example.RevaIssue.Service;
 
 import com.example.RevaIssue.entity.Project;
+import com.example.RevaIssue.entity.User;
+import com.example.RevaIssue.repository.ProjectRepository;
+import com.example.RevaIssue.repository.User_ProjectsRepository;
 import com.example.RevaIssue.service.ProjectService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class ProjectServiceUnitTest {
 
-    @Mock
+    @Mock private ProjectRepository projectRepository;
+    @Mock private User_ProjectsRepository userProjectsRepository;
+
+    @InjectMocks
     private ProjectService projectService;
 
     @Test
     void createProjectTest(){
+        // create the data
         Project mockProject = new Project();
         mockProject.setProjectName("Mock Project");
         mockProject.setProjectDescription("Mock Description");
-        mockProject.setProjectID(1);
 
-        when(projectService.getProjectById(1)).thenReturn(mockProject);
+        when(projectRepository.save(any(Project.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        Project targetProject = projectService.createProject(mockProject);
+        // call logic
+        Project result = projectService.createProject(mockProject);
 
-        assertNotNull(targetProject);
-        assertEquals(mockProject, targetProject);
+        // assertions
+        assertNotNull(result);
+        assertEquals("Mock Project", result.getProjectName());
+        verify(projectRepository, times(1)).save(mockProject);
     }
 
     @Test
     void getProjectByIdTest(){
+        // create the data
         Project mockProject = new Project();
-        mockProject.setProjectName("Mock Project");
-        mockProject.setProjectDescription("Mock Description");
         mockProject.setProjectID(1);
+        mockProject.setProjectName("Searchable Project");
 
-        when(projectService.createProject(mockProject)).thenReturn(mockProject);
+        // mock behavior
+        when(projectRepository.findById(1)).thenReturn(Optional.of(mockProject));
 
-        Project project = projectService.getProjectById(1);
-        assertNotNull(project);
-        assertEquals(mockProject, project);
+        // call logic
+        Project result = projectService.getProjectById(1);
+
+        // assertions
+        assertNotNull(result);
+        assertEquals(1, result.getProjectID());
+        assertEquals("Searchable Project", result.getProjectName());
     }
 
     @Test
-    void deleteProjectTest(){
+    void deleteProject_PositiveTest() {
+        // create the data
         Project mockProject = new Project();
-        mockProject.setProjectName("Mock Project");
-        mockProject.setProjectDescription("Mock Description");
         mockProject.setProjectID(1);
 
-        when(projectService.createProject(mockProject)).thenReturn(mockProject);
+        // mock behavior - findById must return something for the 'if' check
+        when(projectRepository.findById(1)).thenReturn(Optional.of(mockProject));
 
-        boolean projectDelete = projectService.deleteProject(1);
-        assertTrue(projectDelete);
+        // call logic
+        boolean result = projectService.deleteProject(1);
+
+        // assertions
+        assertTrue(result);
+        verify(projectRepository, times(1)).deleteById(1);
     }
 
     @Test
-    void updateProjectTest(){
-        Project mockProject = new Project();
-        mockProject.setProjectName("New Name");
-        mockProject.setProjectDescription("New Description");
-        mockProject.setProjectID(1);
+    void deleteProject_NegativeTest() {
+        // mock behavior - return empty to trigger the false branch
+        when(projectRepository.findById(1)).thenReturn(Optional.empty());
 
-        Project mockUpdatedProject = new Project();
-        mockUpdatedProject.setProjectName("Updated Name");
-        mockUpdatedProject.setProjectDescription("Updated Description");
-        mockUpdatedProject.setProjectID(1);
+        // call logic
+        boolean result = projectService.deleteProject(1);
 
-        when(projectService.createProject(mockProject)).thenReturn(mockProject);
+        // assertions
+        assertFalse(result);
+        verify(projectRepository, never()).deleteById(anyInt());
+    }
 
+    @Test
+    void updateProjectTest() {
+        // create the data
+        Project existingProject = new Project();
+        existingProject.setProjectID(1);
+        existingProject.setProjectName("Old Name");
+        existingProject.setProjectDescription("Old Description");
+
+        // mock behavior
+        // 1. Return existing project for the initial check
+        when(projectRepository.findById(1)).thenReturn(Optional.of(existingProject));
+        // 2. Return the same project for the final return statement
+        when(projectRepository.save(any(Project.class))).thenReturn(existingProject);
+
+        // call logic
         Project updatedProject = projectService.updateProject(1, "Updated Name", "Updated Description");
+
+        // assertions
         assertNotNull(updatedProject);
-        assertEquals(mockUpdatedProject, updatedProject);
+        assertEquals("Updated Name", updatedProject.getProjectName());
+        assertEquals("Updated Description", updatedProject.getProjectDescription());
+        verify(projectRepository).save(existingProject);
     }
 
     @Test
-    void getProjectByKeywordTest(){
+    void getProjectsByKeywordTest() {
+        // create the data
         Project mockProject = new Project();
-        mockProject.setProjectName("New Name");
-        mockProject.setProjectDescription("New Description");
-        mockProject.setProjectID(1);
+        mockProject.setProjectName("New Project");
+        List<Project> mockList = List.of(mockProject);
 
-        List<Project> mockProjectList = new ArrayList<>();
-        mockProjectList.add(mockProject);
+        // mock behavior
+        when(projectRepository.findByKeyword("New")).thenReturn(mockList);
 
-        when(projectService.createProject(mockProject)).thenReturn(mockProject);
+        // call logic
+        List<Project> result = projectService.getProjectsByKeyword("New");
 
-        List<Project> projectList = projectService.getProjectsByKeyword("New");
-        assertNotNull(projectList);
-        assertEquals(projectList.getFirst(), mockProjectList.getFirst());
+        // assertions
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("New Project", result.get(0).getProjectName());
+    }
+
+    @Test
+    void getAllUsersByProjectTest() {
+        // create the data
+        Project mockProject = new Project();
+        mockProject.setProjectID(10);
+
+        User mockUser = new User();
+        mockUser.setUsername("developer");
+
+        List<User> mockUsers = List.of(mockUser);
+
+        // mock behavior
+        when(userProjectsRepository.findUsersByProjectId(10)).thenReturn(mockUsers);
+
+        // call logic
+        List<User> result = projectService.getAllUsersByProject(mockProject);
+
+        // assertions
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("developer", result.getFirst().getUsername());
+    }
+
+    @Test
+    void getAllProjectsTest() {
+        // create data
+        List<Project> mockProjects = List.of(new Project(), new Project());
+
+        // mock behavior
+        when(projectRepository.findAll()).thenReturn(mockProjects);
+
+        // call logic
+        List<Project> result = projectService.getAllProjects();
+
+        // assertions
+        assertEquals(2, result.size());
+        verify(projectRepository, times(1)).findAll();
+    }
+
+    @Test
+    void updateProject_NotFoundTest() {
+        // mock behavior - project does not exist
+        when(projectRepository.findById(99)).thenReturn(Optional.empty());
+
+        // call logic
+        Project result = projectService.updateProject(99, "Name", "Desc");
+
+        // assertions
+        assertNull(result);
+        // CRITICAL: verify that save was never called because the project wasn't found
+        verify(projectRepository, never()).save(any(Project.class));
     }
 }

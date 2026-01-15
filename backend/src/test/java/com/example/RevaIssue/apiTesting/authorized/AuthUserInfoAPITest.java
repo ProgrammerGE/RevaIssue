@@ -1,7 +1,5 @@
-package com.example.RevaIssue.E2E.register;
+package com.example.RevaIssue.apiTesting.authorized;
 
-import com.example.RevaIssue.entity.User;
-import com.example.RevaIssue.enums.UserRole;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,8 +11,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.notNullValue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class RegisterAPITest {
-
+public class AuthUserInfoAPITest {
     @BeforeAll
     public static void setup(){
         RestAssured.baseURI = "http://localhost";
@@ -22,23 +19,18 @@ public class RegisterAPITest {
     }
 
     @BeforeEach
-    public void registerSetup(){
-        RestAssured.basePath = "/register";
+    public void auditLogSetup(){
+        RestAssured.basePath = "/auth";
     }
 
     @Test
-    public void userRegisterSuccessful(){
-        User user = new User();
-        user.setUsername("user");
-        user.setPassword("password");
-        user.setUserRole(UserRole.ADMIN);
-        given().contentType(ContentType.JSON)
-                .body(user)
-                .header("Authorization", "token")
-                .when()
-                .post("/auth/register")
+    public void getUserInfoPositiveTest(){
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "token goes here")
+                .get("/userInfo")
                 .then()
                 .statusCode(200)
-                .body("token", notNullValue());
+                .body("userInfo", notNullValue());
     }
 }
