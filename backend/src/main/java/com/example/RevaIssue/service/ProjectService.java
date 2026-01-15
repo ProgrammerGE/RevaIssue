@@ -53,15 +53,15 @@ public class ProjectService {
 //    }
 
     // The Admin can update the project's name and description
-    public Project updateProject(int projectId, String name, String description){
-        Optional<Project> projectOptional = Optional.of(projectRepo.getReferenceById(projectId));
-        if(projectOptional.isPresent()){
+    public Project updateProject(int projectId, String name, String description) {
+        Optional<Project> projectOptional = projectRepo.findById(projectId);
+        if (projectOptional.isPresent()) {
             Project projectUpdate = projectOptional.get();
             projectUpdate.setProjectName(name);
             projectUpdate.setProjectDescription(description);
-            this.projectRepo.save(projectUpdate);
+            return projectRepo.save(projectUpdate);
         }
-        return this.projectRepo.getReferenceById(projectId);
+        return null;
     }
 
     public List<User> getAllUsersByProject(Project project){
