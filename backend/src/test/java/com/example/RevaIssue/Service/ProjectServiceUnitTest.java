@@ -160,4 +160,34 @@ public class ProjectServiceUnitTest {
         assertEquals(1, result.size());
         assertEquals("developer", result.getFirst().getUsername());
     }
+
+    @Test
+    void getAllProjectsTest() {
+        // create data
+        List<Project> mockProjects = List.of(new Project(), new Project());
+
+        // mock behavior
+        when(projectRepository.findAll()).thenReturn(mockProjects);
+
+        // call logic
+        List<Project> result = projectService.getAllProjects();
+
+        // assertions
+        assertEquals(2, result.size());
+        verify(projectRepository, times(1)).findAll();
+    }
+    
+    @Test
+    void updateProject_NotFoundTest() {
+        // mock behavior - project does not exist
+        when(projectRepository.findById(99)).thenReturn(Optional.empty());
+
+        // call logic
+        Project result = projectService.updateProject(99, "Name", "Desc");
+
+        // assertions
+        assertNull(result);
+        // CRITICAL: verify that save was never called because the project wasn't found
+        verify(projectRepository, never()).save(any(Project.class));
+    }
 }
