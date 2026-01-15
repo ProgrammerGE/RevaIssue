@@ -27,7 +27,9 @@ public class ProjectService {
 
     public List<Project> getAllProjects(){ return projectRepo.findAll(); }
 
-    public Project getProjectById(int id){ return projectRepo.getReferenceById(id); }
+    public Project getProjectById(int id) {
+        return projectRepo.findById(id).orElse(null);
+    }
 
     public List<Project> getProjectsByKeyword(String keyword){
         return projectRepo.findByKeyword(keyword);
@@ -42,13 +44,13 @@ public class ProjectService {
         return true;
     }
 
-    public Project getProjectById(Integer projectId){
-        Optional<Project> projectOptional = Optional.of(projectRepo.getReferenceById(projectId));
-        if(projectOptional.isPresent()){
-            return projectOptional.get();
-        }
-        return null; // TODO: Throw error here
-    }
+//    public Project getProjectById(Integer projectId){
+//        Optional<Project> projectOptional = Optional.of(projectRepo.getReferenceById(projectId));
+//        if(projectOptional.isPresent()){
+//            return projectOptional.get();
+//        }
+//        return null; // TODO: Throw error here
+//    }
 
     // The Admin can update the project's name and description
     public Project updateProject(int projectId, String name, String description){
