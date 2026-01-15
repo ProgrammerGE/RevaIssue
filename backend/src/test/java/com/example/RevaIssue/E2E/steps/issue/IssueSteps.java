@@ -1,5 +1,6 @@
 package com.example.RevaIssue.E2E.steps.issue;
 
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
@@ -9,9 +10,10 @@ public class IssueSteps {
 
     // Background
 
-    @When("I open a project with issues")
+
+    @Given("I open a project with issues")
     public void i_open_a_project_with_issues() {
-        projectPage.goToProject(1);
+        projectPage.openProjectPage();
     }
 
     // Scenario: View list of issues

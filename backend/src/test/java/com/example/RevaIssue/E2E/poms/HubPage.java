@@ -11,9 +11,9 @@ import org.openqa.selenium.support.PageFactory;
  */
 public class HubPage {
 
-    private final String URL = "http://localhost:8080/hubpage";
+    private final String URL = "http://localhost:4200/hubpage";
 
-    private final String URLLogin = "http://localhost:8080/login";
+    private final String URLLogin = "http://localhost:4200/login";
 
     private WebDriver driver;
 

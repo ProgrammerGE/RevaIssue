@@ -1,7 +1,7 @@
 package com.example.RevaIssue.E2E.poms;
 
-import com.example.RevaIssue.entity.Project;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ProjectPage extends ParentPOM {
 
-    private final String URL = "http://localhost:4200/project";
+    private final String URL = "http://localhost:4200/projects";
     private final String URLLogin = "http://localhost:4200/login";
 
     // =========================
@@ -40,7 +40,7 @@ public class ProjectPage extends ParentPOM {
     @FindBy(name = "priority")
     private WebElement priorityDropdown;
 
-    private Select severitynput;
+    private Select severityInput;
     private Select priorityInput;
 
     @FindBy(id = "update_issue_btn")
@@ -64,12 +64,7 @@ public class ProjectPage extends ParentPOM {
     @FindBy(id = "update_prior")
     private WebElement updatePriorDropdown;
 
-    public ProjectPage(WebDriver driver){
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
-    }
-    //Need to log in and create a web token
-    public void login(){
+
     @FindBy(css = ".issue-card")
     private List<WebElement> issueList;
 
@@ -88,13 +83,15 @@ public class ProjectPage extends ParentPOM {
 
     public void login() {
         driver.get(URLLogin);
-        driver.findElement(By.id("username")).sendKeys("tester@email.com");
-        driver.findElement(By.id("password")).sendKeys("password");
+        driver.findElement(By.id("username")).sendKeys("admin");
+        driver.findElement(By.id("password")).sendKeys("admin");
         driver.findElement(By.id("login-submit-btn")).click();
     }
 
     public void openProjectPage() {
         login();
+
+        // Wait until the 'firstProject' element is actually visible and clickable
         this.firstProject.click();
     }
 
@@ -108,10 +105,21 @@ public class ProjectPage extends ParentPOM {
 
     // just get the first issue on the page to avoid having to search through the issueList
     public void selectFirstIssue() {
-        issueList.getFirst().click();
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.presenceOfElementLocated(
-                        By.cssSelector(".issue-card.active")));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
+
+        try {
+            // Try to find the issue first
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".issue-card")));
+        } catch (TimeoutException e) {
+            // If it's not there, the app likely needs a reload to fetch new data
+            System.out.println("Issues not found, refreshing page...");
+            driver.navigate().refresh();
+
+            // Wait again after refresh
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".issue-card")));
+        }
+
+        issueList.get(0).click();
     }
 
     // click the update button on the issue you want to update
@@ -128,22 +136,22 @@ public class ProjectPage extends ParentPOM {
         this.createIssueBtn.click();
     }
 
-    public void filloutIssueInformation(String title, String desc, String severity, String priority){
+    public void filloutIssueInformation(String title, String desc, int severity, int priority){
         this.issueTitleInput.sendKeys(title);
         this.issueDescInput.sendKeys(desc);
-        this.severitynput = new Select(severityDropdown);
-        this.severitynput.selectByValue(severity);
+        this.severityInput = new Select(severityDropdown);
+        this.severityInput.selectByValue(String.valueOf(severity));
         this.priorityInput = new Select(priorityDropdown);
-        this.priorityInput.selectByValue(priority);
+        this.priorityInput.selectByValue(String.valueOf(priority));
     }
 
-    public void filloutUpdatedIssueInformation(String title, String desc, String severity, String priority){
+    public void filloutUpdatedIssueInformation(String title, String desc, int severity, int priority){
         this.updateTitleInput.sendKeys(title);
         this.updateDescInput.sendKeys(desc);
-        this.severitynput = new Select(updateSevDropdown);
-        this.severitynput.selectByValue(severity);
+        this.severityInput = new Select(updateSevDropdown);
+        this.severityInput.selectByValue(String.valueOf(severity));
         this.priorityInput = new Select(updatePriorDropdown);
-        this.priorityInput.selectByValue(priority);
+        this.priorityInput.selectByValue(String.valueOf(priority));
     }
 
     public void submitNewIssue(){
@@ -170,29 +178,11 @@ public class ProjectPage extends ParentPOM {
         // just get the first issue on the page to avoid having to search through the issueList
         selectFirstIssue();
 
-        // click on the update button for the selected (first) issue
-        clickUpdate();
+        clickUpdateIssue();
 
-        // update the fields of the Issue
-        WebElement inputTitle = driver.findElement(By.cssSelector(".parent > input[type='text']"));
-        inputTitle.sendKeys(title);
+        filloutUpdatedIssueInformation(title,description,severity,priority);
 
-        WebElement inputDescription = driver.findElement(
-                By.cssSelector(".parent textarea.description"));
-        inputDescription.sendKeys(description);
-
-        WebElement selectSeverity = driver.findElement(
-                By.cssSelector(".parent select[name='severity']"));
-        Select updatedSeverity = new Select(selectSeverity);
-        updatedSeverity.selectByIndex(severity);
-
-        WebElement selectPriority = driver.findElement(
-                By.cssSelector(".parent select[name='priority']"));
-        Select updatedPriority = new Select(selectPriority);
-        updatedPriority.selectByIndex(priority);
-
-        driver.findElement(
-                By.cssSelector(".parent .issue_buttons button")).click();
+        submitUpdatedIssue();
     }
 
 }
