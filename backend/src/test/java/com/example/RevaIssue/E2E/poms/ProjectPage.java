@@ -1,7 +1,6 @@
 package com.example.RevaIssue.E2E.poms;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -64,9 +63,11 @@ public class ProjectPage extends ParentPOM {
     @FindBy(id = "update_prior")
     private WebElement updatePriorDropdown;
 
-
     @FindBy(css = ".issue-card")
     private List<WebElement> issueList;
+
+    private final By usernameInput = By.id("login-username-input");
+    private final By passwordInput = By.id("login-password-input");
 
     // =========================
     // Constructor
@@ -81,18 +82,25 @@ public class ProjectPage extends ParentPOM {
     // Navigation / Setup
     // =========================
 
-    public void login() {
+    public void login(String role) {
         driver.get(URLLogin);
-        driver.findElement(By.id("username")).sendKeys("admin");
-        driver.findElement(By.id("password")).sendKeys("admin");
+        if(role.equalsIgnoreCase("admin")) {
+            driver.findElement(usernameInput).sendKeys("admin");
+            driver.findElement(passwordInput).sendKeys("admin");
+        } else if (role.equalsIgnoreCase("tester")) {
+            driver.findElement(usernameInput).sendKeys("tester");
+            driver.findElement(passwordInput).sendKeys("tester");
+        } else if (role.equalsIgnoreCase("developer")) {
+            driver.findElement(usernameInput).sendKeys("dev");
+            driver.findElement(passwordInput).sendKeys("dev");
+        }
         driver.findElement(By.id("login-submit-btn")).click();
     }
 
-    public void openProjectPage() {
-        login();
-
-        // Wait until the 'firstProject' element is actually visible and clickable
-        this.firstProject.click();
+    public void openProjectPage(String role) {
+        login(role);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.elementToBeClickable(firstProject)).click();
     }
 
     public void goToProject(int projectId) {
@@ -105,27 +113,11 @@ public class ProjectPage extends ParentPOM {
 
     // just get the first issue on the page to avoid having to search through the issueList
     public void selectFirstIssue() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
 
-        try {
-            // Try to find the issue first
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".issue-card")));
-        } catch (TimeoutException e) {
-            // If it's not there, the app likely needs a reload to fetch new data
-            System.out.println("Issues not found, refreshing page...");
-            driver.navigate().refresh();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".issue-card")));
 
-            // Wait again after refresh
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".issue-card")));
-        }
-
-        issueList.get(0).click();
-    }
-
-    // click the update button on the issue you want to update
-    public void clickUpdate() {
-        WebElement firstIssue = driver.findElement(By.cssSelector(".issue-card.active"));
-        firstIssue.findElement(By.cssSelector(".button_update button")).click();
+        issueList.getFirst().click();
     }
 
     // =========================
@@ -185,4 +177,28 @@ public class ProjectPage extends ParentPOM {
         submitUpdatedIssue();
     }
 
+    public void updateStatusIssueAsTester(String status) {
+        openProjectPage("tester");
+        selectFirstIssue();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".comments-section")));
+
+        if (status.equalsIgnoreCase("Open")){
+                driver.findElement(By.id("reopen_isu_btn")).click();
+            } else if (status.equalsIgnoreCase("Close")) {
+                driver.findElement(By.id("close_isu_btn")).click();
+            }
+    }
+
+    public void updateStatusIssueAsDeveloper(String status) {
+        openProjectPage("developer");
+        selectFirstIssue();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".comments-section")));
+            if (status.equalsIgnoreCase("In Progress")){
+                driver.findElement(By.id("in_progress_isu_btn")).click();
+            } else if (status.equalsIgnoreCase("Resolved")) {
+                driver.findElement(By.id("resolv_isu_btn")).click();
+            }
+    }
 }

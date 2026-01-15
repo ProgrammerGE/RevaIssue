@@ -64,7 +64,7 @@ public class IssueRepositoryIntegrationTest {
     void findByProjectIdNegativeTest() {
         List<Issue> issues;
         // Step 1: look for issues in non-existent project:
-        issues = issueRepository.findByProjectProjectID((long)project.getProjectID() + 9999);
+        issues = issueRepository.findByProjectProjectID(9999L);
         assertNotNull(issues);
         assertTrue(issues.isEmpty());
         // Step 2: look for issues in existing project without them

@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 @TestPropertySource(locations = "classpath:test.properties")
 public class UserRepositoryIntegrationTest {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public UserRepositoryIntegrationTest(UserRepository userRepository){

@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
-public class RegisterPage {
+public class RegisterPage extends ParentPOM {
 
     private final String URL = "http://localhost:4200/register";
 
@@ -30,7 +30,7 @@ public class RegisterPage {
     private WebElement cancelButton;
 
     public RegisterPage(WebDriver driver){
-        this.driver = driver;
+        super(driver);
         PageFactory.initElements(driver, this);
     }
 

@@ -101,7 +101,7 @@ public class UserProjectsRepositoryIntegrationTest {
     @Test
     void findUsersByProjectIdNegative() {
         // Should return empty list if pId does not exist or has no users
-        List<User> result = upRepository.findUsersByProjectId(project.getProjectID()+9999);
+        List<User> result = upRepository.findUsersByProjectId(9999);
         // assertions
         assertTrue(result.isEmpty());
     }
@@ -122,10 +122,10 @@ public class UserProjectsRepositoryIntegrationTest {
         assertFalse(upRepository.findAll().isEmpty());
 
         // try to delete up where user & project both don't exist
-        int r1 = upRepository.deleteByUsernameAndProjectId("Eric_Suminski", project.getProjectID() + 9999);
+        int r1 = upRepository.deleteByUsernameAndProjectId("Eric_Suminski", 9999);
 
         // try to delete up where user exists but project doesn't
-        int r2 = upRepository.deleteByUsernameAndProjectId("john_doe", project.getProjectID() + 9999);
+        int r2 = upRepository.deleteByUsernameAndProjectId("john_doe", 9999);
         // try to delete up where project exists but user doesn't
         int r3 = upRepository.deleteByUsernameAndProjectId("Eric_Suminski", project.getProjectID());
         // try to delete up where user and project exist but aren't associated
