@@ -27,39 +27,41 @@ public class ProjectService {
 
     public List<Project> getAllProjects(){ return projectRepo.findAll(); }
 
-    public Project getProjectById(int id){ return projectRepo.getReferenceById(id); }
+    public Project getProjectById(int id) {
+        return projectRepo.findById(id).orElse(null);
+    }
 
     public List<Project> getProjectsByKeyword(String keyword){
         return projectRepo.findByKeyword(keyword);
     }
 
-    public boolean deleteProject(int projId){
-        Optional<Project> projectOptional = Optional.of(projectRepo.getReferenceById(projId));
-        if(!projectOptional.isPresent()){
+    public boolean deleteProject(int projId) {
+        Optional<Project> projectOptional = projectRepo.findById(projId); // No Optional.of() needed
+        if (!projectOptional.isPresent()) {
             return false;
         }
         projectRepo.deleteById(projId);
         return true;
     }
 
-    public Project getProjectById(Integer projectId){
-        Optional<Project> projectOptional = Optional.of(projectRepo.getReferenceById(projectId));
-        if(projectOptional.isPresent()){
-            return projectOptional.get();
-        }
-        return null; // TODO: Throw error here
-    }
+//    public Project getProjectById(Integer projectId){
+//        Optional<Project> projectOptional = Optional.of(projectRepo.getReferenceById(projectId));
+//        if(projectOptional.isPresent()){
+//            return projectOptional.get();
+//        }
+//        return null; // TODO: Throw error here
+//    }
 
     // The Admin can update the project's name and description
-    public Project updateProject(int projectId, String name, String description){
-        Optional<Project> projectOptional = Optional.of(projectRepo.getReferenceById(projectId));
-        if(projectOptional.isPresent()){
+    public Project updateProject(int projectId, String name, String description) {
+        Optional<Project> projectOptional = projectRepo.findById(projectId);
+        if (projectOptional.isPresent()) {
             Project projectUpdate = projectOptional.get();
             projectUpdate.setProjectName(name);
             projectUpdate.setProjectDescription(description);
-            this.projectRepo.save(projectUpdate);
+            return projectRepo.save(projectUpdate);
         }
-        return this.projectRepo.getReferenceById(projectId);
+        return null;
     }
 
     public List<User> getAllUsersByProject(Project project){

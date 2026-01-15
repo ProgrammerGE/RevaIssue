@@ -4,169 +4,195 @@ import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.entity.User;
 import com.example.RevaIssue.entity.User_Projects;
 import com.example.RevaIssue.enums.UserRole;
-import com.example.RevaIssue.service.AuditLogService;
-import com.example.RevaIssue.service.ProjectService;
+import com.example.RevaIssue.repository.ProjectRepository;
+import com.example.RevaIssue.repository.UserRepository;
+import com.example.RevaIssue.repository.User_ProjectsRepository;
 import com.example.RevaIssue.service.UserService;
 import com.example.RevaIssue.util.UserDTO;
+import com.example.RevaIssue.util.UserMapper;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class UserServiceUnitTest {
 
-    @Mock
-    private UserService userService;
-    @Mock
-    private ProjectService projectService;
+    @Mock private UserRepository userRepository;
+    @Mock private User_ProjectsRepository userProjectsRepository;
+    @Mock private ProjectRepository projectRepository;
+    @Mock private UserMapper userMapper;
+
+    @InjectMocks private UserService userService;
 
     @Test
     void createUserTest(){
-        User mockUser = new User();
-        mockUser.setUser_ID(UUID.randomUUID());
-        mockUser.setUsername("admin");
-        mockUser.setPassword("password");
-        mockUser.setUserRole(UserRole.ADMIN);
+        // create the data - testing toLowerCase logic
+        User inputUser = new User();
+        inputUser.setUsername("Admin");
 
-        when(userService.getUserById(mockUser.getUser_ID())).thenReturn(mockUser);
+        when(userRepository.save(any(User.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        User targetUser = userService.createUser(mockUser);
+        // call the logic
+        User result = userService.createUser(inputUser);
 
-        assertNotNull(targetUser);
-        assertEquals(mockUser, targetUser);
+        // assertions
+        assertEquals("admin", result.getUsername()); // Verifies the .toLowerCase() logic
     }
 
     @Test
-    void getUserByIdTest(){
-        User mockUser = new User();
-        UUID id = UUID.randomUUID();
-        mockUser.setUser_ID(id);
-        mockUser.setUsername("admin");
-        mockUser.setPassword("password");
-        mockUser.setUserRole(UserRole.ADMIN);
+    void getUserByUsername_NotFoundTest() {
+        // mock the repository to return empty
+        when(userRepository.findByUsername("missing")).thenReturn(Optional.empty());
 
-        when(userService.createUser(mockUser)).thenReturn(mockUser);
-
-        User targetUser = userService.getUserById(id);
-        assertNotNull(targetUser);
-        assertEquals(mockUser, targetUser);
+        // assertions
+        assertThrows(ResponseStatusException.class, () -> userService.getUserByUsername("missing"));
     }
 
     @Test
-    void getUserByUsernameTest(){
+    void getProjectsByIdTest() {
+        // create the data
+        UUID userId = UUID.randomUUID();
         User mockUser = new User();
-        UUID id = UUID.randomUUID();
-        mockUser.setUser_ID(id);
-        mockUser.setUsername("admin");
-        mockUser.setPassword("password");
-        mockUser.setUserRole(UserRole.ADMIN);
+        mockUser.setUser_ID(userId);
 
-        when(userService.createUser(mockUser)).thenReturn(mockUser);
+        Project proj1 = new Project();
+        proj1.setProjectID(101);
+        Project proj2 = new Project();
+        proj2.setProjectID(102);
 
-        User targetUser = userService.getUserByUsername(mockUser.getUsername());
-        assertNotNull(targetUser);
-        assertEquals(mockUser, targetUser);
+        User_Projects up1 = new User_Projects();
+        up1.setProject(proj1);
+        User_Projects up2 = new User_Projects();
+        up2.setProject(proj2);
+
+        List<User_Projects> mockJoinTableRecords = List.of(up1, up2);
+
+        // mock the repository behavior
+        // 1. Mock the user lookup
+        when(userRepository.findById(userId)).thenReturn(Optional.of(mockUser));
+        // 2. Mock the join table lookup
+        when(userProjectsRepository.findByUser(mockUser)).thenReturn(mockJoinTableRecords);
+
+        // call the logic in the service
+        List<Project> result = userService.getProjectsById(userId);
+
+        // assertions
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals(101, result.get(0).getProjectID());
+        assertEquals(102, result.get(1).getProjectID());
+    }
+
+    @Test
+    void deleteUser_NonAdminTest() {    // because admins can't be deleted using the service, as a safety guard
+        // create the data
+        User user = new User();
+        user.setUserRole(UserRole.TESTER);
+
+        // call the logic
+        userService.deleteUser(user);
+
+        // assertions
+        // verify that delete was actually called once
+        verify(userRepository, times(1)).delete(user);
+    }
+
+    @Test
+    void deleteUser_AdminNegativeTest() {
+        // create the data
+        User adminUser = new User();
+        adminUser.setUsername("boss");
+        adminUser.setUserRole(UserRole.ADMIN);
+
+        // call logic and assert exception
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            userService.deleteUser(adminUser);
+        });
+
+        // assertions
+        assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());
+        assertTrue(exception.getReason().contains("Cannot delete"));
+
+        // verify the repository delete was NEVER called
+        verify(userRepository, never()).delete(any(User.class));
     }
 
     @Test
     void getAllUsersByProjectIdTest(){
+        // create the data
         User mockUser = new User();
-        mockUser.setUser_ID(UUID.randomUUID());
-        mockUser.setUsername("tester");
-        mockUser.setPassword("password");
-        mockUser.setUserRole(UserRole.TESTER);
+        List<User> mockList = List.of(mockUser);
+        UserDTO mockDto = new UserDTO("admin", UserRole.ADMIN);
 
-        Project mockProject = new Project();
-        mockProject.setProjectID(1);
-        mockProject.setProjectName("Mock Project");
-        mockProject.setProjectDescription("Mock Description");
+        // mock behavior
+        when(userProjectsRepository.findUsersByProjectId(1)).thenReturn(mockList);
+        when(userMapper.toDTO(mockUser)).thenReturn(mockDto);
 
-        User_Projects user_project = new User_Projects();
-        user_project.setUser(mockUser);
-        user_project.setProject(mockProject);
-        user_project.setID(1);
+        // call logic
+        List<UserDTO> result = userService.getAllUsersByProjectId(1);
 
-        List<UserDTO> mockUserDTOList = new ArrayList<>();
-        mockUserDTOList.add(new UserDTO("tester", UserRole.TESTER));
-
-        when(userService.getAllUsersByProjectId(1)).thenReturn(mockUserDTOList);
-
-        List<UserDTO> userDTOList = userService.getAllUsersByProjectId(1);
-        assertNotNull(userDTOList);
-        assertEquals(userDTOList.getFirst().username(), mockUserDTOList.getFirst().username());
-        assertEquals(userDTOList.getFirst().role(), mockUserDTOList.getFirst().role());
+        // assertions
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("admin", result.get(0).username());
     }
 
     @Test
     void assignProjectPositiveTest(){
+        // create the data
         User mockUser = new User();
-        mockUser.setUser_ID(UUID.randomUUID());
-        mockUser.setUsername("tester");
-        mockUser.setPassword("password");
-        mockUser.setUserRole(UserRole.TESTER);
-
         Project mockProject = new Project();
-        mockProject.setProjectID(1);
-        mockProject.setProjectName("Mock Project");
-        mockProject.setProjectDescription("Mock Description");
+        User_Projects savedLink = new User_Projects();
+        savedLink.setUser(mockUser);
+        savedLink.setProject(mockProject);
 
-        User_Projects mockUser_project = new User_Projects();
-        mockUser_project.setUser(mockUser);
-        mockUser_project.setProject(mockProject);
-        mockUser_project.setID(1);
+        // mock behavior
+        when(userRepository.findByUsername("tester")).thenReturn(Optional.of(mockUser));
+        when(projectRepository.findById(1)).thenReturn(Optional.of(mockProject));
+        when(userProjectsRepository.save(any(User_Projects.class))).thenReturn(savedLink);
 
-        when(userService.createUser(mockUser)).thenReturn(mockUser);
-        when(projectService.createProject(mockProject)).thenReturn(mockProject);
+        // call logic
+        User_Projects result = userService.assignProject(1, "tester");
 
-        User_Projects targetUserProj = userService.assignProject(1, "tester");
-        assertNotNull(targetUserProj);
-        assertEquals(targetUserProj.getUser(), mockUser);
-        assertEquals(targetUserProj.getProject(), mockProject);
-    }
-
-    @Test
-    void assignProjectNegativeTest(){
-
-        when(userService.getProjectsById(UUID.randomUUID())).thenReturn(null);
-
-        assertThrows(RuntimeException.class, () -> userService.assignProject(1, "failure"));
+        // assertions
+        assertNotNull(result);
+        verify(userProjectsRepository).save(any(User_Projects.class));
     }
 
     @Test
     void revokeProjectPositiveTest(){
-        User mockUser = new User();
-        mockUser.setUser_ID(UUID.randomUUID());
-        mockUser.setUsername("tester");
-        mockUser.setPassword("password");
-        mockUser.setUserRole(UserRole.TESTER);
+        // mock behavior - repo returns 1 for one row deleted
+        when(userProjectsRepository.deleteByUsernameAndProjectId("tester", 1)).thenReturn(1);
 
-        Project mockProject = new Project();
-        mockProject.setProjectID(1);
-        mockProject.setProjectName("Mock Project");
-        mockProject.setProjectDescription("Mock Description");
+        // call logic
+        boolean result = userService.revokeProject(1, "tester");
 
-        User_Projects user_project = new User_Projects();
-        user_project.setUser(mockUser);
-        user_project.setProject(mockProject);
-        user_project.setID(1);
-
-        when(userService.createUser(mockUser)).thenReturn(mockUser);
-        when(projectService.createProject(mockProject)).thenReturn(mockProject);
-
-        boolean userRevoked = userService.revokeProject(1, "tester");
-        assertTrue(userRevoked);
+        // assertions
+        assertTrue(result);
     }
 
     @Test
     void revokeProjectNegativeTest(){
-        when(userService.revokeProject(1, "tester")).thenReturn(false);
+        // mock a database crash
+        when(userProjectsRepository.deleteByUsernameAndProjectId(anyString(), anyInt()))
+                .thenThrow(new RuntimeException("DB Error"));
 
-        boolean userRevoked = userService.revokeProject(1, "tester");
-        assertTrue(userRevoked);
+        // call logic
+        boolean result = userService.revokeProject(1, "tester");
+
+        // assertions
+        assertFalse(result);
     }
 }
