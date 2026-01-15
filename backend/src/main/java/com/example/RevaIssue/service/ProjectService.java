@@ -35,9 +35,9 @@ public class ProjectService {
         return projectRepo.findByKeyword(keyword);
     }
 
-    public boolean deleteProject(int projId){
-        Optional<Project> projectOptional = Optional.of(projectRepo.getReferenceById(projId));
-        if(!projectOptional.isPresent()){
+    public boolean deleteProject(int projId) {
+        Optional<Project> projectOptional = projectRepo.findById(projId); // No Optional.of() needed
+        if (!projectOptional.isPresent()) {
             return false;
         }
         projectRepo.deleteById(projId);
