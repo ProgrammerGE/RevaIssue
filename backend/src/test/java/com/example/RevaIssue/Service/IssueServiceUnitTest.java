@@ -1,246 +1,164 @@
 package com.example.RevaIssue.Service;
 
 import com.example.RevaIssue.entity.Issue;
-import com.example.RevaIssue.entity.Project;
+import com.example.RevaIssue.repository.IssueRepository;
 import com.example.RevaIssue.service.IssueService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class IssueServiceUnitTest {
 
     @Mock
+    private IssueRepository issueRepo;
+
+    @InjectMocks
     private IssueService issueService;
 
-    @Test
-    void createIssueTest(){
-        Issue mockIssue = new Issue();
+    private Issue mockIssue;
+
+    @BeforeEach
+    void setUp() {
+        mockIssue = new Issue();
         mockIssue.setIssueID(1);
-        mockIssue.setName("Mock Issue");
-        mockIssue.setDescription("Mock Description");
-        mockIssue.setStatus("Open");
+        mockIssue.setName("Test Issue");
+        mockIssue.setStatus("OPEN");
         mockIssue.setSeverity(1);
         mockIssue.setPriority(1);
-        mockIssue.setDateCreated(LocalDateTime.now());
-
-
-        Project mockProject = new Project();
-        mockProject.setProjectName("Mock Project");
-        mockProject.setProjectDescription("Mock Description");
-        mockProject.setProjectID(1);
-
-        mockIssue.setProject(mockProject);
-
-        when(issueService.getIssue((long)1)).thenReturn(mockIssue);
-
-        Issue issue = issueService.createIssue(mockIssue);
-
-        assertNotNull(issue);
-        assertEquals(mockIssue, issue);
     }
 
     @Test
-    void getIssueTest(){
-        Issue mockIssue = new Issue();
-        mockIssue.setIssueID(1);
-        mockIssue.setName("Mock Issue");
-        mockIssue.setDescription("Mock Description");
-        mockIssue.setStatus("Open");
-        mockIssue.setSeverity(1);
-        mockIssue.setPriority(1);
-        mockIssue.setDateCreated(LocalDateTime.now());
+    void createIssue_PositiveTest() {
+        when(issueRepo.save(any(Issue.class))).thenAnswer(i -> i.getArguments()[0]);
 
+        Issue result = issueService.createIssue(mockIssue);
 
-        Project mockProject = new Project();
-        mockProject.setProjectName("Mock Project");
-        mockProject.setProjectDescription("Mock Description");
-        mockProject.setProjectID(1);
-
-        mockIssue.setProject(mockProject);
-
-        when(issueService.createIssue(mockIssue)).thenReturn(mockIssue);
-
-        Issue issue = issueService.getIssue((long)1);
-
-        assertNotNull(issue);
-        assertEquals(mockIssue, issue);
+        assertNotNull(result);
+        assertEquals("Test Issue", result.getName());
+        verify(issueRepo, times(1)).save(any(Issue.class));
     }
 
     @Test
-    void getRecentIssuesTest(){
-        Issue mockIssue = new Issue();
-        mockIssue.setIssueID(1);
-        mockIssue.setName("Mock Issue");
-        mockIssue.setDescription("Mock Description");
-        mockIssue.setStatus("Open");
-        mockIssue.setSeverity(1);
-        mockIssue.setPriority(1);
-        mockIssue.setDateCreated(LocalDateTime.now());
+    void getIssue_PositiveTest() {
+        when(issueRepo.findById(1L)).thenReturn(Optional.of(mockIssue));
 
+        Issue result = issueService.getIssue(1L);
 
-        Project mockProject = new Project();
-        mockProject.setProjectName("Mock Project");
-        mockProject.setProjectDescription("Mock Description");
-        mockProject.setProjectID(1);
-
-        mockIssue.setProject(mockProject);
-
-        List<Issue> mockIssueList = new ArrayList<>();
-        mockIssueList.add(mockIssue);
-
-        when(issueService.createIssue(mockIssue)).thenReturn(mockIssue);
-
-        List<Issue> issueList = issueService.getMostRecentIssues();
-        assertNotNull(issueList);
-        assertEquals(mockIssueList.getFirst(), issueList.getFirst());
-
-    }
-    @Test
-    void getIssuesByKeywordTest(){
-        Issue mockIssue = new Issue();
-        mockIssue.setIssueID(1);
-        mockIssue.setName("Mock Issue");
-        mockIssue.setDescription("Mock Description");
-        mockIssue.setStatus("Open");
-        mockIssue.setSeverity(1);
-        mockIssue.setPriority(1);
-        mockIssue.setDateCreated(LocalDateTime.now());
-
-
-        Project mockProject = new Project();
-        mockProject.setProjectName("Mock Project");
-        mockProject.setProjectDescription("Mock Description");
-        mockProject.setProjectID(1);
-
-        mockIssue.setProject(mockProject);
-
-        List<Issue> mockIssueList = new ArrayList<>();
-        mockIssueList.add(mockIssue);
-
-        when(issueService.createIssue(mockIssue)).thenReturn(mockIssue);
-
-        List<Issue> issueList = issueService.getIssuesByKeyword("Mock");
-        assertNotNull(issueList);
-        assertEquals(mockIssueList.getFirst(), issueList.getFirst());
+        assertNotNull(result);
+        assertEquals(1, result.getIssueID());
     }
 
     @Test
-    void updateIssueTest(){
-        Issue mockIssue = new Issue();
-        mockIssue.setIssueID(1);
-        mockIssue.setName("Mock Issue");
-        mockIssue.setDescription("Mock Description");
-        mockIssue.setStatus("Open");
-        mockIssue.setSeverity(1);
-        mockIssue.setPriority(1);
-        mockIssue.setDateCreated(LocalDateTime.now());
+    void getIssue_NotFoundTest() {
+        when(issueRepo.findById(1L)).thenReturn(Optional.empty());
 
+        Issue result = issueService.getIssue(1L);
 
-        Project mockProject = new Project();
-        mockProject.setProjectName("Mock Project");
-        mockProject.setProjectDescription("Mock Description");
-        mockProject.setProjectID(1);
-
-        mockIssue.setProject(mockProject);
-
-        Issue mockUpdatedIssue = new Issue();
-        mockUpdatedIssue.setIssueID(1);
-        mockUpdatedIssue.setName("Updated Issue");
-        mockUpdatedIssue.setDescription("Updated Description");
-        mockUpdatedIssue.setStatus("Closed");
-        mockUpdatedIssue.setSeverity(2);
-        mockUpdatedIssue.setPriority(3);
-        mockUpdatedIssue.setDateCreated(LocalDateTime.now());
-        mockUpdatedIssue.setProject(mockProject);
-
-        when(issueService.createIssue(mockIssue)).thenReturn(mockIssue);
-
-        Issue updatedIssue = issueService.updateIssue((long)1, mockUpdatedIssue);
-
-        assertNotNull(updatedIssue);
-        assertEquals(mockUpdatedIssue, updatedIssue);
+        assertNull(result);
     }
 
-    /**
-     * This unit test will check for the tester's role privilege to change the
-     * issue's status from Open to Closed
-     */
     @Test
-    void updateIssueClosedTesterStatusTest(){
-        Project mockProject = new Project();
-        mockProject.setProjectName("Mock Project");
-        mockProject.setProjectDescription("Mock Description");
-        mockProject.setProjectID(1);
+    void getMostRecentIssues_PositiveTest() {
+        List<Issue> issues = Arrays.asList(mockIssue, new Issue(), new Issue());
+        when(issueRepo.findTop5ByOrderByDateCreatedDesc()).thenReturn(issues);
 
-        Issue mockIssue = new Issue();
-        mockIssue.setIssueID(1);
-        mockIssue.setName("Mock Issue");
-        mockIssue.setDescription("Mock Description");
-        mockIssue.setStatus("Open");
-        mockIssue.setSeverity(1);
-        mockIssue.setPriority(1);
-        mockIssue.setDateCreated(LocalDateTime.now());
-        mockIssue.setProject(mockProject);
+        List<Issue> result = issueService.getMostRecentIssues();
 
-        Issue mockUpdatedIssue = new Issue();
-        mockUpdatedIssue.setIssueID(1);
-        mockUpdatedIssue.setName("Mock Issue");
-        mockUpdatedIssue.setDescription("Mock Description");
-        mockUpdatedIssue.setStatus("Closed");
-        mockUpdatedIssue.setSeverity(1);
-        mockUpdatedIssue.setPriority(1);
-        mockUpdatedIssue.setDateCreated(LocalDateTime.now());
-        mockUpdatedIssue.setProject(mockProject);
-
-        when(issueService.createIssue(mockIssue)).thenReturn(mockIssue);
-
-        Issue updatedIssue = issueService.updateIssueStatus((long)1, "CLOSED", "TESTER");
-        assertNotNull(updatedIssue);
-        assertEquals(mockUpdatedIssue, updatedIssue);
+        assertEquals(3, result.size());
+        verify(issueRepo, times(1)).findTop5ByOrderByDateCreatedDesc();
     }
 
-    /**
-     * This unit test will check for the developer's role privilege to change the
-     * issue's status from In_Progress to Resolved
-     */
     @Test
-    void updateIssueResolvedDeveloperStatusTest(){
-        Project mockProject = new Project();
-        mockProject.setProjectName("Mock Project");
-        mockProject.setProjectDescription("Mock Description");
-        mockProject.setProjectID(1);
+    void getIssuesByProject_PositiveTest() {
+        List<Issue> projectIssues = Collections.singletonList(mockIssue);
+        when(issueRepo.findByProjectProjectID(10L)).thenReturn(projectIssues);
 
-        Issue mockIssue = new Issue();
-        mockIssue.setIssueID(1);
-        mockIssue.setName("Mock Issue");
-        mockIssue.setDescription("Mock Description");
-        mockIssue.setStatus("Open");
-        mockIssue.setSeverity(1);
-        mockIssue.setPriority(1);
-        mockIssue.setDateCreated(LocalDateTime.now());
-        mockIssue.setProject(mockProject);
+        List<Issue> result = issueService.getIssuesByProject(10L);
 
-        Issue mockUpdatedIssue = new Issue();
-        mockUpdatedIssue.setIssueID(1);
-        mockUpdatedIssue.setName("Mock Issue");
-        mockUpdatedIssue.setDescription("Mock Description");
-        mockUpdatedIssue.setStatus("Closed");
-        mockUpdatedIssue.setSeverity(1);
-        mockUpdatedIssue.setPriority(1);
-        mockUpdatedIssue.setDateCreated(LocalDateTime.now());
-        mockUpdatedIssue.setProject(mockProject);
+        assertEquals(1, result.size());
+        verify(issueRepo, times(1)).findByProjectProjectID(10L);
+    }
 
-        when(issueService.createIssue(mockIssue)).thenReturn(mockIssue);
+    @Test
+    void getIssuesByFilter_PositiveTest() {
+        List<Issue> filteredIssues = Collections.singletonList(mockIssue);
+        when(issueRepo.findByFilter("OPEN", 1, 1)).thenReturn(filteredIssues);
 
-        Issue updatedIssue = issueService.updateIssueStatus((long)1, "RESOLVED", "DEVELOPER");
-        assertNotNull(updatedIssue);
-        assertEquals(mockUpdatedIssue, updatedIssue);
+        List<Issue> result = issueService.getIssuesByFilter("OPEN", 1, 1);
+
+        assertFalse(result.isEmpty());
+        verify(issueRepo, times(1)).findByFilter("OPEN", 1, 1);
+    }
+
+    @Test
+    void updateIssue_PositiveTest() {
+        Issue updates = new Issue();
+        updates.setName("Updated Name");
+        updates.setDescription("Updated Desc");
+
+        when(issueRepo.findById(1L)).thenReturn(Optional.of(mockIssue));
+        when(issueRepo.save(any(Issue.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        Issue result = issueService.updateIssue(1L, updates);
+
+        assertNotNull(result);
+        assertEquals("Updated Name", result.getName());
+        verify(issueRepo, times(1)).save(any(Issue.class));
+    }
+
+    @Test
+    void updateIssue_NotFoundTest() {
+        when(issueRepo.findById(1L)).thenReturn(Optional.empty());
+
+        Issue result = issueService.updateIssue(1L, new Issue());
+
+        assertNull(result);
+        verify(issueRepo, never()).save(any(Issue.class));
+    }
+
+    @Test
+    void updateIssueStatus_AuthorizedRole_PositiveTest() {
+        when(issueRepo.findById(1L)).thenReturn(Optional.of(mockIssue));
+        when(issueRepo.save(any(Issue.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        Issue result = issueService.updateIssueStatus(1L, "RESOLVED", "DEVELOPER");
+
+        assertEquals("RESOLVED", result.getStatus());
+        verify(issueRepo, times(1)).save(any(Issue.class));
+    }
+
+    @Test
+    void updateIssueStatus_UnauthorizedRole_NegativeTest() {
+        // tester trying to do Developer work
+        assertThrows(RuntimeException.class, () -> {
+            issueService.updateIssueStatus(1L, "IN_PROGRESS", "TESTER");
+        });
+
+        // Developer trying to do Tester work
+        assertThrows(RuntimeException.class, () -> {
+            issueService.updateIssueStatus(1L, "CLOSED", "DEVELOPER");
+        });
+
+        verify(issueRepo, never()).save(any(Issue.class));
+    }
+
+    @Test
+    void getIssuesByKeyword_PositiveTest() {
+        when(issueRepo.findByKeyword("Bug")).thenReturn(Collections.singletonList(mockIssue));
+
+        List<Issue> result = issueService.getIssuesByKeyword("Bug");
+
+        assertFalse(result.isEmpty());
+        verify(issueRepo, times(1)).findByKeyword("Bug");
     }
 }
