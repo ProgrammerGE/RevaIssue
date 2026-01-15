@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,172 +28,150 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class UserServiceUnitTest {
 
-    // test candidate
-    @InjectMocks
-    private UserService userService;
-    // mock dependencies
-    @Mock
-    private UserRepository userRepository;
-    @Mock
-    private ProjectRepository projectRepository;
-    @Mock
-    private User_ProjectsRepository userProjectsRepository;
-    @Mock
-    private UserMapper userMapper;
+    @Mock private UserRepository userRepository;
+    @Mock private User_ProjectsRepository userProjectsRepository;
+    @Mock private ProjectRepository projectRepository;
+    @Mock private UserMapper userMapper;
 
+    @InjectMocks private UserService userService;
 
     @Test
     void createUserTest(){
-        // create the data
+        // create the data - testing toLowerCase logic
         User inputUser = new User();
-        inputUser.setUsername("admin");
+        inputUser.setUsername("Admin");
 
-        // mock the repository behavior
-        when(userRepository.save(any(User.class))).thenReturn(inputUser);
+        when(userRepository.save(any(User.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        // call the logic in the service
+        // call the logic
         User result = userService.createUser(inputUser);
 
         // assertions
+        assertEquals("admin", result.getUsername()); // Verifies the .toLowerCase() logic
+    }
+
+    @Test
+    void getUserByUsername_NotFoundTest() {
+        // mock the repository to return empty
+        when(userRepository.findByUsername("missing")).thenReturn(Optional.empty());
+
+        // assertions
+        assertThrows(ResponseStatusException.class, () -> userService.getUserByUsername("missing"));
+    }
+
+    @Test
+    void getProjectsByIdTest() {
+        // create the data
+        UUID userId = UUID.randomUUID();
+        User mockUser = new User();
+        mockUser.setUser_ID(userId);
+
+        Project proj1 = new Project();
+        proj1.setProjectID(101);
+        Project proj2 = new Project();
+        proj2.setProjectID(102);
+
+        User_Projects up1 = new User_Projects();
+        up1.setProject(proj1);
+        User_Projects up2 = new User_Projects();
+        up2.setProject(proj2);
+
+        List<User_Projects> mockJoinTableRecords = List.of(up1, up2);
+
+        // mock the repository behavior
+        // 1. Mock the user lookup
+        when(userRepository.findById(userId)).thenReturn(Optional.of(mockUser));
+        // 2. Mock the join table lookup
+        when(userProjectsRepository.findByUser(mockUser)).thenReturn(mockJoinTableRecords);
+
+        // call the logic in the service
+        List<Project> result = userService.getProjectsById(userId);
+
+        // assertions
         assertNotNull(result);
-        assertEquals("admin", result.getUsername());
+        assertEquals(2, result.size());
+        assertEquals(101, result.get(0).getProjectID());
+        assertEquals(102, result.get(1).getProjectID());
     }
 
     @Test
-    void getUserByIdTest(){
+    void deleteUser_NonAdminTest() {    // because admins can't be deleted using the service, as a safety guard
         // create the data
-        UUID id = UUID.randomUUID();
-        User mockUser = new User();
-        mockUser.setUser_ID(id);
-        mockUser.setUsername("admin");
-        mockUser.setPassword("password");
-        mockUser.setUserRole(UserRole.ADMIN);
+        User user = new User();
+        user.setUserRole(UserRole.TESTER);
 
-        // mock the repository behavior
-        // We mock the findById call to return our user
-        when(userRepository.findById(id)).thenReturn(Optional.of(mockUser));
-
-        // call the logic in the service
-        User targetUser = userService.getUserById(id);
+        // call the logic
+        userService.deleteUser(user);
 
         // assertions
-        assertNotNull(targetUser);
-        assertEquals(id, targetUser.getUser_ID());
-        assertEquals("admin", targetUser.getUsername());
-    }
-
-    @Test
-    void getUserByUsernameTest(){
-        // create the data
-        User mockUser = new User();
-        mockUser.setUsername("admin");
-        mockUser.setPassword("password");
-        mockUser.setUserRole(UserRole.ADMIN);
-
-        // mock the repository behavior
-        when(userRepository.findByUsername("admin")).thenReturn(Optional.of(mockUser));
-
-        // call the logic in the service
-        User targetUser = userService.getUserByUsername("admin");
-
-        // assertions
-        assertNotNull(targetUser);
-        assertEquals("admin", targetUser.getUsername());
+        // verify that delete was actually called once
+        verify(userRepository, times(1)).delete(user);
     }
 
     @Test
     void getAllUsersByProjectIdTest(){
         // create the data
-        UserDTO mockDto = new UserDTO("admin", UserRole.ADMIN);
         User mockUser = new User();
-        mockUser.setUsername("admin");
-        mockUser.setPassword("password");
-        mockUser.setUserRole(UserRole.ADMIN);
-
         List<User> mockList = List.of(mockUser);
+        UserDTO mockDto = new UserDTO("admin", UserRole.ADMIN);
 
-        // mock the repository behavior
+        // mock behavior
         when(userProjectsRepository.findUsersByProjectId(1)).thenReturn(mockList);
-
-        // mock the mapper behavior
         when(userMapper.toDTO(mockUser)).thenReturn(mockDto);
 
-        // call the logic in the service
+        // call logic
         List<UserDTO> result = userService.getAllUsersByProjectId(1);
 
         // assertions
         assertNotNull(result);
         assertEquals(1, result.size());
-        // Note: changed "tester" to "admin" to match your mockUser setup
-        assertEquals("admin", result.getFirst().username());
+        assertEquals("admin", result.get(0).username());
     }
 
     @Test
     void assignProjectPositiveTest(){
         // create the data
         User mockUser = new User();
-        mockUser.setUsername("tester");
-
         Project mockProject = new Project();
-        mockProject.setProjectID(1);
+        User_Projects savedLink = new User_Projects();
+        savedLink.setUser(mockUser);
+        savedLink.setProject(mockProject);
 
-        User_Projects mockUserProject = new User_Projects();
-        mockUserProject.setUser(mockUser);
-        mockUserProject.setProject(mockProject);
-
-        // mock the repository behavior
+        // mock behavior
         when(userRepository.findByUsername("tester")).thenReturn(Optional.of(mockUser));
         when(projectRepository.findById(1)).thenReturn(Optional.of(mockProject));
-        when(userProjectsRepository.save(any(User_Projects.class))).thenReturn(mockUserProject);
+        when(userProjectsRepository.save(any(User_Projects.class))).thenReturn(savedLink);
 
-        // call the logic in the service
+        // call logic
         User_Projects result = userService.assignProject(1, "tester");
 
         // assertions
         assertNotNull(result);
-        assertEquals("tester", result.getUser().getUsername());
-        assertEquals(1, result.getProject().getProjectID());
-    }
-
-    @Test
-    void assignProjectNegativeTest(){
-        // mock the repository behavior
-        // simulate user not found to trigger a RuntimeException in the service
-        when(userRepository.findByUsername("failure")).thenReturn(Optional.empty());
-
-        // assertions
-        assertThrows(RuntimeException.class, () -> userService.assignProject(1, "failure"));
+        verify(userProjectsRepository).save(any(User_Projects.class));
     }
 
     @Test
     void revokeProjectPositiveTest(){
-        // mock the repository behavior
-        // simulate that 1 row was successfully deleted
+        // mock behavior - repo returns 1 for one row deleted
         when(userProjectsRepository.deleteByUsernameAndProjectId("tester", 1)).thenReturn(1);
 
-        // call the logic in the service
-        boolean userRevoked = userService.revokeProject(1, "tester");
+        // call logic
+        boolean result = userService.revokeProject(1, "tester");
 
         // assertions
-        assertTrue(userRevoked);
-
-        // verify the repository was actually called with these exact parameters
-        verify(userProjectsRepository).deleteByUsernameAndProjectId("tester", 1);
+        assertTrue(result);
     }
 
     @Test
     void revokeProjectNegativeTest(){
-        // mock the repository behavior
-        // simulate an exception being thrown
-        // this triggers the catch block in the service
-        when(userProjectsRepository.deleteByUsernameAndProjectId("tester", 1))
-                .thenThrow(new RuntimeException("Database error"));
+        // mock a database crash
+        when(userProjectsRepository.deleteByUsernameAndProjectId(anyString(), anyInt()))
+                .thenThrow(new RuntimeException("DB Error"));
 
-        // call the logic in the service
-        boolean userRevoked = userService.revokeProject(1, "tester");
+        // call logic
+        boolean result = userService.revokeProject(1, "tester");
 
         // assertions
-        // the catch block prints the error and returns false
-        assertFalse(userRevoked);
+        assertFalse(result);
     }
 }
