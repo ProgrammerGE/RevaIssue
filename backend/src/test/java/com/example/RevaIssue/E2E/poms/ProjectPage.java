@@ -1,6 +1,5 @@
 package com.example.RevaIssue.E2E.poms;
 
-import com.example.RevaIssue.entity.Project;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -15,7 +14,7 @@ import java.util.List;
 
 public class ProjectPage extends ParentPOM {
 
-    private final String URL = "http://localhost:4200/project";
+    private final String URL = "http://localhost:4200/projects";
     private final String URLLogin = "http://localhost:4200/login";
 
     // =========================
@@ -40,7 +39,7 @@ public class ProjectPage extends ParentPOM {
     @FindBy(name = "priority")
     private WebElement priorityDropdown;
 
-    private Select severitynput;
+    private Select severityInput;
     private Select priorityInput;
 
     @FindBy(id = "update_issue_btn")
@@ -67,6 +66,9 @@ public class ProjectPage extends ParentPOM {
     @FindBy(css = ".issue-card")
     private List<WebElement> issueList;
 
+    private final By usernameInput = By.id("login-username-input");
+    private final By passwordInput = By.id("login-password-input");
+
     // =========================
     // Constructor
     // =========================
@@ -80,20 +82,29 @@ public class ProjectPage extends ParentPOM {
     // Navigation / Setup
     // =========================
 
-    public void login() {
+    public void login(String role) {
         driver.get(URLLogin);
-        driver.findElement(By.id("username")).sendKeys("tester@email.com");
-        driver.findElement(By.id("password")).sendKeys("password");
+        if(role.equalsIgnoreCase("admin")) {
+            driver.findElement(usernameInput).sendKeys("admin");
+            driver.findElement(passwordInput).sendKeys("admin");
+        } else if (role.equalsIgnoreCase("tester")) {
+            driver.findElement(usernameInput).sendKeys("tester");
+            driver.findElement(passwordInput).sendKeys("tester");
+        } else if (role.equalsIgnoreCase("developer")) {
+            driver.findElement(usernameInput).sendKeys("dev");
+            driver.findElement(passwordInput).sendKeys("dev");
+        }
         driver.findElement(By.id("login-submit-btn")).click();
     }
 
-    public void openProjectPage() {
-        login();
-        this.firstProject.click();
+    public void openProjectPage(String role) {
+        login(role);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.elementToBeClickable(firstProject)).click();
     }
 
     public void goToProject(int projectId) {
-        driver.get(URL + projectId);
+        driver.get(URL +"/"+ projectId);
     }
 
     public void openProjectPageAsRole(String role){
@@ -117,16 +128,11 @@ public class ProjectPage extends ParentPOM {
 
     // just get the first issue on the page to avoid having to search through the issueList
     public void selectFirstIssue() {
-        issueList.getFirst().click();
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.presenceOfElementLocated(
-                        By.cssSelector(".issue-card.active")));
-    }
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
 
-    // click the update button on the issue you want to update
-    public void clickUpdate() {
-        WebElement firstIssue = driver.findElement(By.cssSelector(".issue-card.active"));
-        firstIssue.findElement(By.cssSelector(".button_update button")).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".issue-card")));
+
+        issueList.getFirst().click();
     }
 
     // =========================
@@ -137,22 +143,22 @@ public class ProjectPage extends ParentPOM {
         this.createIssueBtn.click();
     }
 
-    public void filloutIssueInformation(String title, String desc, String severity, String priority){
+    public void filloutIssueInformation(String title, String desc, int severity, int priority){
         this.issueTitleInput.sendKeys(title);
         this.issueDescInput.sendKeys(desc);
-        this.severitynput = new Select(severityDropdown);
-        this.severitynput.selectByValue(severity);
+        this.severityInput = new Select(severityDropdown);
+        this.severityInput.selectByValue(String.valueOf(severity));
         this.priorityInput = new Select(priorityDropdown);
-        this.priorityInput.selectByValue(priority);
+        this.priorityInput.selectByValue(String.valueOf(priority));
     }
 
-    public void filloutUpdatedIssueInformation(String title, String desc, String severity, String priority){
+    public void filloutUpdatedIssueInformation(String title, String desc, int severity, int priority){
         this.updateTitleInput.sendKeys(title);
         this.updateDescInput.sendKeys(desc);
-        this.severitynput = new Select(updateSevDropdown);
-        this.severitynput.selectByValue(severity);
+        this.severityInput = new Select(updateSevDropdown);
+        this.severityInput.selectByValue(String.valueOf(severity));
         this.priorityInput = new Select(updatePriorDropdown);
-        this.priorityInput.selectByValue(priority);
+        this.priorityInput.selectByValue(String.valueOf(priority));
     }
 
     public void submitNewIssue(){
@@ -179,45 +185,35 @@ public class ProjectPage extends ParentPOM {
         // just get the first issue on the page to avoid having to search through the issueList
         selectFirstIssue();
 
-        // click on the update button for the selected (first) issue
-        clickUpdate();
+        clickUpdateIssue();
 
-        // update the fields of the Issue
-        WebElement inputTitle = driver.findElement(By.cssSelector(".parent > input[type='text']"));
-        inputTitle.sendKeys(title);
+        filloutUpdatedIssueInformation(title,description,severity,priority);
 
-        WebElement inputDescription = driver.findElement(
-                By.cssSelector(".parent textarea.description"));
-        inputDescription.sendKeys(description);
-
-        WebElement selectSeverity = driver.findElement(
-                By.cssSelector(".parent select[name='severity']"));
-        Select updatedSeverity = new Select(selectSeverity);
-        updatedSeverity.selectByIndex(severity);
-
-        WebElement selectPriority = driver.findElement(
-                By.cssSelector(".parent select[name='priority']"));
-        Select updatedPriority = new Select(selectPriority);
-        updatedPriority.selectByIndex(priority);
-
-        driver.findElement(
-                By.cssSelector(".parent .issue_buttons button")).click();
+        submitUpdatedIssue();
     }
 
-    //Changing the status of the issue based on the role
-    public void updateStatusIssue(String role, String status){
-        if (role.equals("tester")){
-            if (status.equalsIgnoreCase("Open")){
+    public void updateStatusIssueAsTester(String status) {
+        openProjectPage("tester");
+        selectFirstIssue();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".comments-section")));
+
+        if (status.equalsIgnoreCase("Open")){
                 driver.findElement(By.id("reopen_isu_btn")).click();
             } else if (status.equalsIgnoreCase("Close")) {
                 driver.findElement(By.id("close_isu_btn")).click();
             }
-        } else if (role.equalsIgnoreCase("developer")) {
+    }
+
+    public void updateStatusIssueAsDeveloper(String status) {
+        openProjectPage("developer");
+        selectFirstIssue();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".comments-section")));
             if (status.equalsIgnoreCase("In Progress")){
                 driver.findElement(By.id("in_progress_isu_btn")).click();
             } else if (status.equalsIgnoreCase("Resolved")) {
                 driver.findElement(By.id("resolv_isu_btn")).click();
             }
-        }
     }
 }

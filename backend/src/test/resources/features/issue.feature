@@ -14,3 +14,13 @@ Feature: Issue Management
   Scenario: View history of an issue
     When    I select an issue
     Then    I can see the comments describing the history
+
+  Scenario Outline: Change Issue Status
+    When  "<user>" sets status to "<status>"
+    Then the issue status is now "<status>"
+    Examples:
+      |user|status|
+      |Developer|In Progress|
+      |Developer|Resolved|
+      |Tester|Close|
+      |Tester|Open|

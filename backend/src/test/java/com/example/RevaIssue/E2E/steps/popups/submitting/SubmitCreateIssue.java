@@ -15,7 +15,7 @@ public class SubmitCreateIssue {
     }
     @When("inputs the issue details")
     public void inputs_the_issue_details(){
-        projectPage.filloutIssueInformation("Issue Title", "A description", "1", "1");
+        projectPage.filloutIssueInformation("Issue Title", "A description", 1, 1);
     }
     @When("clicks the submit new issue button")
     public void clicks_the_submit_new_issue_button(){
