@@ -176,7 +176,7 @@ public class ProjectServiceUnitTest {
         assertEquals(2, result.size());
         verify(projectRepository, times(1)).findAll();
     }
-    
+
     @Test
     void updateProject_NotFoundTest() {
         // mock behavior - project does not exist
