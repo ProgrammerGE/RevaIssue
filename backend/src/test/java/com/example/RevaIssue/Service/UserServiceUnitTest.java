@@ -4,12 +4,18 @@ import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.entity.User;
 import com.example.RevaIssue.entity.User_Projects;
 import com.example.RevaIssue.enums.UserRole;
+import com.example.RevaIssue.repository.ProjectRepository;
+import com.example.RevaIssue.repository.UserRepository;
+import com.example.RevaIssue.repository.User_ProjectsRepository;
 import com.example.RevaIssue.service.AuditLogService;
 import com.example.RevaIssue.service.ProjectService;
 import com.example.RevaIssue.service.UserService;
 import com.example.RevaIssue.util.UserDTO;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +24,22 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 public class UserServiceUnitTest {
 
-    @Mock
+    // test candidate
+    @InjectMocks
     private UserService userService;
+    // mock dependencies
     @Mock
-    private ProjectService projectService;
+    private ProjectService projectService; // todo: delete if not needed (we may need this).
+    @Mock
+    private UserRepository userRepository;
+    @Mock
+    private ProjectRepository projectRepository;
+    @Mock
+    private User_ProjectsRepository userProjectsRepository;
+
 
     @Test
     void createUserTest(){
