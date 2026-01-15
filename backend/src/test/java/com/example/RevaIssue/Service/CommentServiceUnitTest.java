@@ -3,83 +3,97 @@ package com.example.RevaIssue.Service;
 import com.example.RevaIssue.entity.Issue;
 import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.helper.Comment;
+import com.example.RevaIssue.repository.CommentRepository;
+import com.example.RevaIssue.repository.IssueRepository;
 import com.example.RevaIssue.service.CommentService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class CommentServiceUnitTest {
 
     @Mock
+    private CommentRepository commentRepository;
+
+    @Mock
+    private IssueRepository issueRepository;
+
+    @InjectMocks
     private CommentService commentService;
 
     @Test
-    void addCommentTest(){
-        Project mockProject = new Project();
-        mockProject.setProjectName("Mock Project");
-        mockProject.setProjectDescription("Mock Description");
-        mockProject.setProjectID(1);
+    void addComment_PositiveTest() {
+        // mock data
+        Long issueId = 1L;
+        String commentText = "New Comment";
 
         Issue mockIssue = new Issue();
         mockIssue.setIssueID(1);
         mockIssue.setName("Mock Issue");
-        mockIssue.setDescription("Mock Description");
-        mockIssue.setStatus("Open");
-        mockIssue.setSeverity(1);
-        mockIssue.setPriority(1);
-        mockIssue.setDateCreated(LocalDateTime.now());
-        mockIssue.setProject(mockProject);
 
-        Comment mockComment = new Comment();
-        mockComment.setComment_id((long)1);
-        mockComment.setText("New Comment");
-        mockComment.setIssue(mockIssue);
-        mockComment.setTimeLogged(LocalDateTime.now());
 
-        Comment newComment = commentService.addComment((long)1, "New Comment");
-        assertNotNull(newComment);
-        assertEquals(mockComment, newComment);
+        when(issueRepository.findById(issueId)).thenReturn(Optional.of(mockIssue));
+        // save methods return input object
+        when(commentRepository.save(any(Comment.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        // try to add a comment
+        Comment result = commentService.addComment(issueId, commentText);
+
+        // assertions
+        assertNotNull(result);
+        // verifying specific fields because timestamps generated inside the service
+        // will not match mock object's timestamp.
+        assertEquals(commentText, result.getText());
+        assertEquals(issueId, result.getIssue().getIssueID());
+        verify(issueRepository, times(1)).findById(issueId);
+        verify(commentRepository, times(1)).save(any(Comment.class));
     }
 
     @Test
-    void getCommentsByIssueTest(){
+    void addComment_IssueNotFoundTest() {
+        // mock data
+        Long issueId = 1L;
+        when(issueRepository.findById(issueId)).thenReturn(Optional.empty());
 
-        Project mockProject = new Project();
-        mockProject.setProjectName("Mock Project");
-        mockProject.setProjectDescription("Mock Description");
-        mockProject.setProjectID(1);
+        // try to add a comment to an issue that doesn't exist
+        Comment result = commentService.addComment(issueId, "Text");
 
-        Issue mockIssue = new Issue();
-        mockIssue.setIssueID(1);
-        mockIssue.setName("Mock Issue");
-        mockIssue.setDescription("Mock Description");
-        mockIssue.setStatus("Open");
-        mockIssue.setSeverity(1);
-        mockIssue.setPriority(1);
-        mockIssue.setDateCreated(LocalDateTime.now());
-        mockIssue.setProject(mockProject);
+        // assertions
+        assertNull(result);
+        verify(commentRepository, never()).save(any(Comment.class));
+    }
 
-        Comment mockComment = new Comment();
-        mockComment.setComment_id((long)1);
-        mockComment.setText("New Comment");
-        mockComment.setIssue(mockIssue);
-        mockComment.setTimeLogged(LocalDateTime.now());
+    @Test
+    void getCommentsByIssue_PositiveTest() {
+        // mock data
+        Long issueId = 1L;
+        Comment comment1 = new Comment();
+        comment1.setText("Comment 1");
 
-        List<Comment> mockCommentList = new ArrayList<>();
-        mockCommentList.add(mockComment);
+        List<Comment> mockList = new ArrayList<>();
+        mockList.add(comment1);
 
-        when(commentService.addComment((long)1, "New Comment")).thenReturn(mockComment);
+        when(commentRepository.findByIssue_IssueIDOrderByTimeLoggedAsc(issueId)).thenReturn(mockList);
 
-        List<Comment> commentList = commentService.getCommentsByIssue((long)1);
-        assertNotNull(commentList);
-        assertEquals(mockCommentList.getFirst(), commentList.getFirst());
+        // try to get comments by issue id
+        List<Comment> result = commentService.getCommentsByIssue(issueId);
 
+        // assertions
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("Comment 1", result.getFirst().getText());
+        verify(commentRepository, times(1)).findByIssue_IssueIDOrderByTimeLoggedAsc(issueId);
     }
 }
