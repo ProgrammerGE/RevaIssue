@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -106,6 +107,26 @@ public class UserServiceUnitTest {
         // assertions
         // verify that delete was actually called once
         verify(userRepository, times(1)).delete(user);
+    }
+
+    @Test
+    void deleteUser_AdminNegativeTest() {
+        // create the data
+        User adminUser = new User();
+        adminUser.setUsername("boss");
+        adminUser.setUserRole(UserRole.ADMIN);
+
+        // call logic and assert exception
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            userService.deleteUser(adminUser);
+        });
+
+        // assertions
+        assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());
+        assertTrue(exception.getReason().contains("Cannot delete"));
+
+        // verify the repository delete was NEVER called
+        verify(userRepository, never()).delete(any(User.class));
     }
 
     @Test
