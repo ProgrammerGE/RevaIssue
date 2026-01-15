@@ -49,7 +49,7 @@ public class UserService {
     public void deleteUser(User user) {
         // protection for admins
         if (user.getUserRole() == UserRole.ADMIN) {
-            // TODO: throw an error
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Cannot delete a user with ADMIN role.");
         } else {
             // delete the user
             userRepository.delete(user);
