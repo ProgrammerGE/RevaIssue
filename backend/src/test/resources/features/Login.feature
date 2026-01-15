@@ -1,9 +1,10 @@
-Feature: Login
+Feature: Login to the application
+  A user will need to login with valid credentials
+  before they could access the application.
 
-  Background:
-    Given   The user is on the login page
-
-  Scenario: Admin can log in to the Admin portal
-    When    The Admin ents valid credentials
-    And     clicks the login button
-    Then    The Admin should be sent to the Admin portal
+  Scenario: Admin with a registered account successfully logs in to the Admin portal
+    Given   The admin is on the login page
+    When    They enter a valid username
+    And     They enter a valid password
+    And     They click the login button
+    Then    They are directed to the hubpage
