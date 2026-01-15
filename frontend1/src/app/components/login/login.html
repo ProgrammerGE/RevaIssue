@@ -3,11 +3,11 @@
 <form (ngSubmit)="onSubmit()" class="login-form" method="post">
     <div class="input-container">
         <input id="login-username-input" placeholder=" " type="text" [field]="loginForm.username" />
-        <label for="username">Username</label>
+        <label for="login-username-input">Username</label>
     </div>
     <div class="input-container">
         <input type="password" placeholder=" " [field]="loginForm.password" id="login-password-input" />
-        <label for="password">Password</label>
+        <label for="login-password-input">Password</label>
     </div>
     <button id="login-submit-btn" type="submit">Login</button>
 </form>
