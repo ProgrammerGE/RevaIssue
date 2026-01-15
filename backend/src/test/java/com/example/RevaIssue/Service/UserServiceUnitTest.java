@@ -7,10 +7,10 @@ import com.example.RevaIssue.enums.UserRole;
 import com.example.RevaIssue.repository.ProjectRepository;
 import com.example.RevaIssue.repository.UserRepository;
 import com.example.RevaIssue.repository.User_ProjectsRepository;
-import com.example.RevaIssue.service.AuditLogService;
 import com.example.RevaIssue.service.ProjectService;
 import com.example.RevaIssue.service.UserService;
 import com.example.RevaIssue.util.UserDTO;
+import com.example.RevaIssue.util.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,9 +19,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,83 +41,94 @@ public class UserServiceUnitTest {
     private ProjectRepository projectRepository;
     @Mock
     private User_ProjectsRepository userProjectsRepository;
+    @Mock
+    private UserMapper userMapper;
 
 
     @Test
     void createUserTest(){
-        User mockUser = new User();
-        mockUser.setUser_ID(UUID.randomUUID());
-        mockUser.setUsername("admin");
-        mockUser.setPassword("password");
-        mockUser.setUserRole(UserRole.ADMIN);
+        // create the data
+        User inputUser = new User();
+        inputUser.setUsername("admin");
 
-        when(userService.getUserById(mockUser.getUser_ID())).thenReturn(mockUser);
+        // mock the repository behavior
+        when(userRepository.save(any(User.class))).thenReturn(inputUser);
 
-        User targetUser = userService.createUser(mockUser);
+        // call the logic in the service
+        User result = userService.createUser(inputUser);
 
-        assertNotNull(targetUser);
-        assertEquals(mockUser, targetUser);
+        // assertions
+        assertNotNull(result);
+        assertEquals("admin", result.getUsername());
     }
 
     @Test
     void getUserByIdTest(){
-        User mockUser = new User();
+        // create the data
         UUID id = UUID.randomUUID();
+        User mockUser = new User();
         mockUser.setUser_ID(id);
         mockUser.setUsername("admin");
         mockUser.setPassword("password");
         mockUser.setUserRole(UserRole.ADMIN);
 
-        when(userService.createUser(mockUser)).thenReturn(mockUser);
+        // mock the repository behavior
+        // We mock the findById call to return our user
+        when(userRepository.findById(id)).thenReturn(Optional.of(mockUser));
 
+        // call the logic in the service
         User targetUser = userService.getUserById(id);
+
+        // assertions
         assertNotNull(targetUser);
-        assertEquals(mockUser, targetUser);
+        assertEquals(id, targetUser.getUser_ID());
+        assertEquals("admin", targetUser.getUsername());
     }
 
     @Test
     void getUserByUsernameTest(){
+        // create the data
         User mockUser = new User();
-        UUID id = UUID.randomUUID();
-        mockUser.setUser_ID(id);
         mockUser.setUsername("admin");
         mockUser.setPassword("password");
         mockUser.setUserRole(UserRole.ADMIN);
 
-        when(userService.createUser(mockUser)).thenReturn(mockUser);
+        // mock the repository behavior
+        when(userRepository.findByUsername("admin")).thenReturn(Optional.of(mockUser));
 
-        User targetUser = userService.getUserByUsername(mockUser.getUsername());
+        // call the logic in the service
+        User targetUser = userService.getUserByUsername("admin");
+
+        // assertions
         assertNotNull(targetUser);
-        assertEquals(mockUser, targetUser);
+        assertEquals("admin", targetUser.getUsername());
     }
 
     @Test
     void getAllUsersByProjectIdTest(){
+        // create the data
+        UserDTO mockDto = new UserDTO("admin", UserRole.ADMIN);
         User mockUser = new User();
-        mockUser.setUser_ID(UUID.randomUUID());
-        mockUser.setUsername("tester");
+        mockUser.setUsername("admin");
         mockUser.setPassword("password");
-        mockUser.setUserRole(UserRole.TESTER);
+        mockUser.setUserRole(UserRole.ADMIN);
 
-        Project mockProject = new Project();
-        mockProject.setProjectID(1);
-        mockProject.setProjectName("Mock Project");
-        mockProject.setProjectDescription("Mock Description");
+        List<User> mockList = List.of(mockUser);
 
-        User_Projects user_project = new User_Projects();
-        user_project.setUser(mockUser);
-        user_project.setProject(mockProject);
-        user_project.setID(1);
+        // mock the repository behavior
+        when(userProjectsRepository.findUsersByProjectId(1)).thenReturn(mockList);
 
-        List<UserDTO> mockUserDTOList = new ArrayList<>();
-        mockUserDTOList.add(new UserDTO("tester", UserRole.TESTER));
+        // mock the mapper behavior
+        when(userMapper.toDTO(mockUser)).thenReturn(mockDto);
 
-        when(userService.getAllUsersByProjectId(1)).thenReturn(mockUserDTOList);
+        // call the logic in the service
+        List<UserDTO> result = userService.getAllUsersByProjectId(1);
 
-        List<UserDTO> userDTOList = userService.getAllUsersByProjectId(1);
-        assertNotNull(userDTOList);
-        assertEquals(userDTOList.getFirst().username(), mockUserDTOList.getFirst().username());
-        assertEquals(userDTOList.getFirst().role(), mockUserDTOList.getFirst().role());
+        // assertions
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        // Note: changed "tester" to "admin" to match your mockUser setup
+        assertEquals("admin", result.getFirst().username());
     }
 
     @Test
