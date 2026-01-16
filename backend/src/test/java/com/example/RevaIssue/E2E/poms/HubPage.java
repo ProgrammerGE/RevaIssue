@@ -1,5 +1,6 @@
 package com.example.RevaIssue.E2E.poms;
 
+import com.example.RevaIssue.E2E.driver.ChromeDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -9,24 +10,29 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Duration;
 
 /**
  * This POM file represents the Hubpage
  */
-public class HubPage extends ParentPOM {
+public class HubPage {
 
     private final String URL = "http://localhost:4200/hubpage";
 
     private final String URLLogin = "http://localhost:4200/login";
 
-    WebElement deletedProject;
+    private final WebDriver driver;
+  
+    private WebElement deletedProject;
 
-    public HubPage(WebDriver driver){
-        super(driver);
+    @Autowired
+    public HubPage(ChromeDriverManager chromeDriverManager){
+        this.driver = chromeDriverManager.getDriver();
         PageFactory.initElements(driver, this);
     }
+
     //Need to log in and create a web token
     public void login(){
         driver.get(URLLogin);
@@ -37,7 +43,6 @@ public class HubPage extends ParentPOM {
 
     public void openHubPage(){
         login();
-        //driver.get(URL);
     }
 
     public void clickDeleteProject(){

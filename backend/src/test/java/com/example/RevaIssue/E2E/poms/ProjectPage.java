@@ -1,5 +1,6 @@
 package com.example.RevaIssue.E2E.poms;
 
+import com.example.RevaIssue.E2E.driver.ChromeDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -9,14 +10,16 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Duration;
 import java.util.List;
 
-public class ProjectPage extends ParentPOM {
+public class ProjectPage {
 
     private final String URL = "http://localhost:4200/projects";
     private final String URLLogin = "http://localhost:4200/login";
+    private final WebDriver driver;
 
     // =========================
     // Page Elements
@@ -74,8 +77,9 @@ public class ProjectPage extends ParentPOM {
     // Constructor
     // =========================
 
-    public ProjectPage(WebDriver driver) {
-        super(driver);
+    @Autowired
+    public ProjectPage(ChromeDriverManager chromeDriverManager){
+        this.driver = chromeDriverManager.getDriver();
         PageFactory.initElements(driver, this);
     }
 

@@ -12,8 +12,6 @@ import com.example.RevaIssue.repository.UserRepository;
 import com.example.RevaIssue.service.UserService;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,7 +20,6 @@ import java.time.LocalDateTime;
 import static com.example.RevaIssue.enums.UserRole.*;
 
 public class FixtureResources {
-    public static WebDriver driver;
     public static HubPage hubpage;
     public static RegisterPage registerPage;
     public static ProjectPage projectPage;
@@ -44,25 +41,6 @@ public class FixtureResources {
     public void setup(){
         cleanDatabase();
         createProjectWithIssue();
-
-        if (driver == null) {
-            ChromeOptions options = new ChromeOptions();
-            options.addArguments("--start-maximized");
-
-            // Disable the "Data Breach" and "Save Password" popups
-            java.util.Map<String, Object> prefs = new java.util.HashMap<>();
-            prefs.put("credentials_enable_service", false);
-            prefs.put("profile.password_manager_enabled", false);
-            prefs.put("profile.password_manager_leak_detection", false);
-
-            options.setExperimentalOption("prefs", prefs);
-
-            driver = new ChromeDriver(options);
-        }
-         hubpage = new HubPage(driver);
-        registerPage = new RegisterPage(driver);
-        projectPage = new ProjectPage(driver);
-
     }
 
     public void createProjectWithIssue() {
@@ -71,7 +49,6 @@ public class FixtureResources {
         project.setProjectName("Test Project");
         project.setProjectDescription("Test Project Description");
         Project savedProject = projectRepository.saveAndFlush(project);
-
         Issue issue = new Issue();
         issue.setProject(savedProject);
         issue.setDateCreated(LocalDateTime.now());
@@ -116,12 +93,5 @@ public class FixtureResources {
         dev.setPassword("dev");
         userService.createUser(dev);
 
-    }
-
-    @After
-    public static void tearDown(){
-        if(driver != null)
-            driver.quit();
-        driver = null;
     }
 }
