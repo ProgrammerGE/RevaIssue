@@ -9,8 +9,10 @@ import com.example.RevaIssue.service.UserService;
 import io.cucumber.spring.ScenarioScope;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 
 @Component
 @ScenarioScope
