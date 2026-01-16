@@ -1,14 +1,17 @@
 package com.example.RevaIssue.E2E.poms;
 
+import com.example.RevaIssue.E2E.driver.ChromeDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public class RegisterPage extends ParentPOM {
+public class RegisterPage {
 
     private final String URL = "http://localhost:4200/register";
+    private final WebDriver driver;
 
     @FindBy(id = "user_input")
     private WebElement userNameInput;
@@ -30,8 +33,9 @@ public class RegisterPage extends ParentPOM {
     @FindBy(id = "cancel_register_btn")
     private WebElement cancelButton;
 
-    public RegisterPage(WebDriver driver){
-        super(driver);
+    @Autowired
+    public RegisterPage(ChromeDriverManager chromeDriverManager){
+        this.driver = chromeDriverManager.getDriver();
         PageFactory.initElements(driver, this);
     }
 
