@@ -34,7 +34,7 @@ public class HubPage extends ParentPOM {
 
     public void openHubPage(){
         login();
-        driver.get(URL);
+        //driver.get(URL);
     }
 
     public void clickDeleteProject(){
@@ -54,11 +54,11 @@ public class HubPage extends ParentPOM {
     }
 
     public void clickCreateProject(){
-        driver.findElement(By.id("login-submit-btn")).click();
+        driver.findElement(By.className("add-button")).click();
     }
 
     public boolean isCreatePopupOpen(){
-        return driver.findElement(By.id("login-submit-btn")).isDisplayed();
+        return driver.findElement(By.id("create_projec_btn")).isDisplayed();
     }
 
     public void enterInfo(String title, String description){
@@ -75,7 +75,7 @@ public class HubPage extends ParentPOM {
                 .sendKeys(description)
                 .perform();*/
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(
-                ExpectedConditions.visibilityOfElementLocated(By.className("proj_name")));;
+                ExpectedConditions.visibilityOfElementLocated(By.className("proj_name")));
         driver.findElement(By.id("proj_title")).sendKeys(title);
         driver.findElement(By.id("descriptionBox")).sendKeys(description);
     }
