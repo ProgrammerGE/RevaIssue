@@ -1,6 +1,7 @@
 package com.example.RevaIssue.E2E.poms;
 
 import com.example.RevaIssue.E2E.driver.ChromeDriverManager;
+import io.cucumber.spring.ScenarioScope;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -13,10 +14,14 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Duration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * This POM file represents the Hubpage
  */
+@Component
+@ScenarioScope
 public class HubPage {
 
     private final String URL = "http://localhost:4200/hubpage";
@@ -26,6 +31,36 @@ public class HubPage {
     private final WebDriver driver;
   
     private WebElement deletedProject;
+
+    @FindBy(id = "delete_button_clickHere")
+    private WebElement deleteButton;
+
+    @FindBy(id = "delete_confirm")
+    private WebElement deleteConfirm;
+
+    @FindBy(className = "add-button")
+    private WebElement createButton;
+
+    @FindBy(id = "create_confirm")
+    private WebElement confirmCreate;
+
+    @FindBy(id = "update_button_clickHere")
+    private WebElement updateButton;
+
+    @FindBy(id = "update_confirm")
+    private WebElement confirmUpdate;
+
+    @FindBy(id = "proj_title")
+    private WebElement projectTitleInput;
+
+    @FindBy(id = "descriptionBox")
+    private WebElement projectDescInput;
+
+    @FindBy(partialLinkText = "Create Project")
+    private WebElement submitBtn;
+
+    @FindBy(id = "searchbar")
+    private WebElement searchbar;
 
     @Autowired
     public HubPage(ChromeDriverManager chromeDriverManager){
@@ -138,4 +173,12 @@ public class HubPage {
     public void cancelPopup(String popupTitle){
         driver.findElement(By.id("cancel_btn")).click();
     }
+
+    public void enableSearchPopup() {
+        System.out.println(this.searchbar.isDisplayed());
+        this.searchbar.click();
+        System.out.println("CLICKED");
+    }
 }
+
+
