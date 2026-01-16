@@ -27,8 +27,8 @@ public class HubPage extends ParentPOM {
     //Need to log in and create a web token
     public void login(){
         driver.get(URLLogin);
-        driver.findElement(By.id("login-username-input")).sendKeys("admin@email.com");
-        driver.findElement(By.id("login-password-input")).sendKeys("password");
+        driver.findElement(By.id("login-username-input")).sendKeys("admin");
+        driver.findElement(By.id("login-password-input")).sendKeys("admin");
         driver.findElement(By.id("login-submit-btn")).click();
     }
 
@@ -62,7 +62,7 @@ public class HubPage extends ParentPOM {
     }
 
     public void enterInfo(String title, String description){
-        WebElement firstProject = driver.findElement(By.className("proj_name"));
+        /*WebElement firstProject = driver.findElement(By.className("proj_name"));
         new Actions(driver)
                 .moveToElement(firstProject)
                 .pause(Duration.ofSeconds(1))
@@ -73,10 +73,11 @@ public class HubPage extends ParentPOM {
                 .moveToElement(driver.findElement(By.id("descriptionBox")))
                 .pause(Duration.ofSeconds(1))
                 .sendKeys(description)
-                .perform();
-        //new WebDriverWait(driver, Duration.ofSeconds(5));
-        //driver.findElement(By.id("proj_title")).sendKeys(title);
-        //driver.findElement(By.id("descriptionBox")).sendKeys(description);
+                .perform();*/
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(
+                ExpectedConditions.visibilityOfElementLocated(By.className("proj_name")));;
+        driver.findElement(By.id("proj_title")).sendKeys(title);
+        driver.findElement(By.id("descriptionBox")).sendKeys(description);
     }
 
     public void submitNewProject(){

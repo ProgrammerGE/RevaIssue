@@ -10,9 +10,9 @@ Feature: Users can register to the app
       Then The user should be registered and sent to login
       Examples:
         |user|role|
-        |admin|ADMIN|
-        |tester|TESTER|
-        |tester|DEVELOPER|
+        |admin109|ADMIN|
+        |tester101|TESTER|
+        |developer102|DEVELOPER|
 
       Scenario: Users can cancel registration
         When The user clicks on the cancel button
