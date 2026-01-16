@@ -37,17 +37,18 @@ public class AuthService {
         return jwtUtility.generateAccessToken(savedUser.getUsername(), savedUser.getUserRole());
     }
 
-    public boolean checkUserToken(String headerData){
-        if (headerData == null){
+    public boolean checkUserToken(String headerData) {
+        // check header data to ensure the format of "Prefix Token". Apparently it can potentially cause a 500 error.
+        if (headerData == null || !headerData.contains(" ")) {
             return false;
         }
-        try{
-            String token = headerData.split(" ") [1];
+        try {
+            String token = headerData.split(" ")[1];
             String role = this.jwtUtility.extractRole(token);
-            return  role.equalsIgnoreCase("admin")
+            return role.equalsIgnoreCase("admin")
                     || role.equalsIgnoreCase("tester")
-                    || role.equalsIgnoreCase("developer") ;
-        }catch (JwtException e){
+                    || role.equalsIgnoreCase("developer");
+        } catch (Exception e) { // catching Exception instead of JwtException to also handle potential String.split errors
             return false;
         }
     }

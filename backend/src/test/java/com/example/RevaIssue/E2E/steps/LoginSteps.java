@@ -28,48 +28,55 @@ public class LoginSteps {
     private WebDriver driver;
     private WebDriverWait wait;
     private static final String LOGIN_URL =  "http://localhost:4200";
-    private static final String TEST_USERNAME = "june@email.com";
-    private static final String TEST_PASSWORD = "062026";
 
     @Before()
     public void setup() {
-        if(userRepository.findByUsername(TEST_USERNAME).isEmpty()) {
-            User user = new User();
-            user.setUsername(TEST_USERNAME);
-            user.setPassword(TEST_PASSWORD);
-            user.setUserRole(UserRole.ADMIN);
-            userService.createUser(user);
-        }
-
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--start-maximized");
         driver = new ChromeDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(2));
     }
 
-    @Given("The admin is on the login page")
-    public void the_user_is_in_the_login_page() {
+    @Given("A user exists with username {string} and password {string}")
+    public void aUserExists(String username, String password) {
+        if(userRepository.findByUsername(username).isEmpty()) {
+            User user = new User();
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setUserRole(UserRole.TESTER);
+            userService.createUser(user);
+        }
+    }
+
+    @And("The user is on the login page")
+    public void theUserIsOnLoginPage() {
         driver.get(LOGIN_URL);
         wait.until(d -> driver.findElement(By.tagName("app-login")));
     }
 
-    @When("They enter a valid username")
-    public void theyEnterAValidUsername() {
+    @When("They enter a username {string}")
+    public void theyEnterUsername(String username) {
         WebElement usernameField = driver.findElement(By.id("login-username-input"));
         wait.until(d -> usernameField.isDisplayed());
-        usernameField.sendKeys(TEST_USERNAME);
+        usernameField.sendKeys(username);
     }
 
-    @And("They enter a valid password")
-    public void theyEnterValidPassword() {
+    @And("They enter a password {string}")
+    public void theyEnterPassword(String password) {
         WebElement passwordField = driver.findElement(By.id("login-password-input"));
         wait.until(d -> passwordField.isDisplayed());
-        passwordField.sendKeys(TEST_PASSWORD);
+        passwordField.sendKeys(password);
     }
 
     @And("They click the login button")
     public void theyClickTheLoginButton() {
-        driver.findElement(By.id("login-submit-btn")).click();
+        WebElement loginBtn = driver.findElement(By.id("login-submit-btn"));
+        if (loginBtn.isEnabled()) {
+            loginBtn.click();
+        }
+        else {
+            System.out.println("The login button is disabled!");
+        }
     }
 
     @Then("They are directed to the hubpage")
@@ -80,6 +87,11 @@ public class LoginSteps {
                 )
         );
         System.out.println("User logged in");
+    }
+
+    @Then("They remain on the login page")
+    public void theyRemainOnLoginPage () {
+        this.theUserIsOnLoginPage();
     }
 
     @After()

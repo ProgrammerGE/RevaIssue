@@ -10,23 +10,24 @@ public class RegisterPage extends ParentPOM {
 
     private final String URL = "http://localhost:4200/register";
 
-    private WebDriver driver;
-
     @FindBy(id = "user_input")
     private WebElement userNameInput;
 
     @FindBy(id = "password_input")
     private WebElement passwordInput;
 
+    @FindBy(id = "confirm_password")
+    private WebElement confirmPassword;
+
     @FindBy(tagName = "select")
     private WebElement roleDropdown;
 
     private Select roleInput;
 
-    @FindBy(partialLinkText = "Register")
+    @FindBy(id = "register_accnt_button")
     private WebElement submitButton;
 
-    @FindBy(partialLinkText = "Cancel")
+    @FindBy(id = "cancel_register_btn")
     private WebElement cancelButton;
 
     public RegisterPage(WebDriver driver){
@@ -41,6 +42,7 @@ public class RegisterPage extends ParentPOM {
     public void registerUserInfo(String username, String password){
         this.userNameInput.sendKeys(username);
         this.passwordInput.sendKeys(password);
+        this.confirmPassword.sendKeys(password);
     }
 
     public void registerRoleInfo(String role){
