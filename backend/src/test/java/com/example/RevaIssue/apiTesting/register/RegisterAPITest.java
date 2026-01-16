@@ -9,6 +9,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.notNullValue;
 
@@ -19,24 +22,22 @@ public class RegisterAPITest {
     public static void setup(){
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = 8080;
+        RestAssured.basePath = "/auth";
     }
-
-    @BeforeEach
-    public void registerSetup(){
-        RestAssured.basePath = "/register";
-    }
-
+    
     @Test
-    public void userRegisterSuccessful(){
-        User user = new User();
-        user.setUsername("user");
-        user.setPassword("password");
-        user.setUserRole(UserRole.ADMIN);
-        given().contentType(ContentType.JSON)
-                .body(user)
-                .header("Authorization", "token")
+    public void userRegisterSuccessful() {
+        // Use a Map or a dedicated RegisterRequest object to match the Controller
+        Map<String, String> request = new HashMap<>();
+        request.put("username", "new_dev_user");
+        request.put("password", "SecurePass123");
+        request.put("role", "DEVELOPER");
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(request)
                 .when()
-                .post("/auth/register")
+                .post("/register") // This maps to /auth/register
                 .then()
                 .statusCode(200)
                 .body("token", notNullValue());
