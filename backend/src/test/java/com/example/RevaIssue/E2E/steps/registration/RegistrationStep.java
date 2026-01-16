@@ -4,6 +4,8 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -26,7 +28,8 @@ public class RegistrationStep {
     }
     @Then("The user should be registered and sent to login")
     public void the_user_should_be_registered_and_sent_to_login() {
-        new WebDriverWait(driver, Duration.ofSeconds(5));
+        new WebDriverWait(driver, Duration.ofSeconds(60)).until(
+                ExpectedConditions.visibilityOfElementLocated(By.className("login-form")));
         Assertions.assertEquals("http://localhost:4200/login", driver.getCurrentUrl());
     }
 }
