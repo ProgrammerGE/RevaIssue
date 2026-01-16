@@ -221,4 +221,21 @@ public class ProjectPage extends ParentPOM {
                 driver.findElement(By.id("resolv_isu_btn")).click();
             }
     }
+
+    // =========================
+    // Project Actions
+    // =========================
+
+    public void addUserToProject() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".div3")));
+        driver.findElement(By.id("add_user_to_project_input")).sendKeys("tester");
+        driver.findElement(By.id("add_usr_btn")).click();
+    }
+
+    public void viewUsersOnProject() {
+        goToProject(1);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".user-item")));
+    }
 }
