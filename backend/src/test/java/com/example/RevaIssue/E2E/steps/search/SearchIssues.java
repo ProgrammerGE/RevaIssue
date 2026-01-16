@@ -16,22 +16,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @ScenarioScope
 public class SearchIssues {
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    UserService userService;
-    @Autowired
-    JwtUtility jwt;
-    @Autowired
-    AuthService authService;
-    @Autowired
-    ProjectService projectService;
-    @Autowired
-    LoginPage loginPage;
-    @Autowired
-    HubPage hubPage;
-    @Autowired
-    AuthHelper authHelper;
+    private final LoginPage loginPage;
+    private final HubPage hubPage;
+    private final AuthHelper authHelper;
+
+    public SearchIssues (LoginPage loginPage, HubPage hubPage, AuthHelper authHelper) {
+        this.loginPage = loginPage;
+        this.hubPage = hubPage;
+        this.authHelper = authHelper;
+    }
 
     @Given("The user is logged in")
     public void theUserIsLoggedIn() throws InterruptedException {
