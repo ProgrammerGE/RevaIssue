@@ -17,8 +17,9 @@
     <h2>Users List</h2>
     <!-- Show button/form for adding and removing users -->
     @if (userRole() === 'admin') {
-    <button (click)="addUserToProject()">Add User</button>
+    <button id="add_usr_btn" (click)="addUserToProject()">Add User</button>
     <input
+      id="add_user_to_project_input"
       type="text"
       [ngModel]="newUser()"
       (ngModelChange)="newUser.set($event)"
@@ -26,7 +27,7 @@
     />
     }
     <!-- Show the user list -->
-    <div id="project-user-list">
+    <div class="project-user-list">
       @for (user of users(); track user.username; let i = $index) {
       <div
         class="user-item"
