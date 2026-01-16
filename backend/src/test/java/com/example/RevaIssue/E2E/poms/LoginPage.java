@@ -31,7 +31,6 @@ public class LoginPage {
     @Autowired
     public LoginPage(ChromeDriverManager driverManager) {
         this.driver = driverManager.getDriver();
-        System.out.println(driver);
         this.wait = driverManager.getWait();
         PageFactory.initElements(driver, this);
     }
