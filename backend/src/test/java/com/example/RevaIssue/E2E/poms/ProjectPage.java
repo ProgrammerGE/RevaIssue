@@ -144,6 +144,8 @@ public class ProjectPage extends ParentPOM {
     }
 
     public void filloutIssueInformation(String title, String desc, int severity, int priority){
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".issue_title")));
         this.issueTitleInput.sendKeys(title);
         this.issueDescInput.sendKeys(desc);
         this.severityInput = new Select(severityDropdown);
@@ -153,6 +155,9 @@ public class ProjectPage extends ParentPOM {
     }
 
     public void filloutUpdatedIssueInformation(String title, String desc, int severity, int priority){
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".issue_title")));
         this.updateTitleInput.sendKeys(title);
         this.updateDescInput.sendKeys(desc);
         this.severityInput = new Select(updateSevDropdown);
