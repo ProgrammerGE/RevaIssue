@@ -14,7 +14,7 @@ public class SubmitUpdateProject {
     }
     @When("inputs the updated project details")
     public void inputs_the_updated_project_details(){
-        hubpage.enterInfo("New Project", "New Description");
+        hubpage.enterInfo("Updated Project", "Updated Description");
     }
     @When("clicks the submit update project button")
     public void clicks_the_submit_update_project_button(){

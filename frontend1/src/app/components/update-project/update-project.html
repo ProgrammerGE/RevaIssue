@@ -5,7 +5,7 @@
       <h4 style="color: red">Enter a title name for the project</h4>
       }
       <p>Project Name</p>
-      <input type="text" placeholder="Project Title" [(ngModel)]="projectTitle" />
+      <input id="proj_title" type="text" placeholder="Project Title" [(ngModel)]="projectTitle" />
     </div>
     <div class="proj_description">
       @if (descriptionMissing) {
@@ -15,7 +15,7 @@
       <textarea type="text" placeholder="Project Description" id="descriptionBox" [(ngModel)]="projectDesc"
         rows="10"></textarea>
       <button id="update_confirm" (click)="clickUpdate()">Update</button>
-      <button (click)="clickCancel()">Cancel</button>
+      <button id="cancel_btn" (click)="clickCancel()">Cancel</button>
     </div>
   </div>
     <p>Project Description</p>

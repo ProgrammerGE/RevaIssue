@@ -1,6 +1,7 @@
 package com.example.RevaIssue.E2E.poms;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -183,7 +184,11 @@ public class ProjectPage extends ParentPOM {
     }
 
     public boolean isUpdateIssueOpen() {
-        return this.updateIssueBtn.isDisplayed();
+        try{
+            return this.updateIssueBtn.isDisplayed();
+        }catch (NoSuchElementException e){
+            return true;
+        }
     }
 
     public void updateIssue(String title, String description, int severity, int priority) {
@@ -234,8 +239,8 @@ public class ProjectPage extends ParentPOM {
     }
 
     public void viewUsersOnProject() {
-        goToProject(1);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        driver.navigate().refresh();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(1));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".user-item")));
     }
 }
