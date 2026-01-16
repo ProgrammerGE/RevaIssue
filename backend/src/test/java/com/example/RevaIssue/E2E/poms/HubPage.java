@@ -3,6 +3,7 @@ package com.example.RevaIssue.E2E.poms;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -26,8 +27,8 @@ public class HubPage extends ParentPOM {
     //Need to log in and create a web token
     public void login(){
         driver.get(URLLogin);
-        driver.findElement(By.id("login-username-input")).sendKeys("admin@email.com");
-        driver.findElement(By.id("login-password-input")).sendKeys("password");
+        driver.findElement(By.id("login-username-input")).sendKeys("admin");
+        driver.findElement(By.id("login-password-input")).sendKeys("admin");
         driver.findElement(By.id("login-submit-btn")).click();
     }
 
@@ -61,7 +62,20 @@ public class HubPage extends ParentPOM {
     }
 
     public void enterInfo(String title, String description){
-        new WebDriverWait(driver, Duration.ofSeconds(5));
+        /*WebElement firstProject = driver.findElement(By.className("proj_name"));
+        new Actions(driver)
+                .moveToElement(firstProject)
+                .pause(Duration.ofSeconds(1))
+                .moveToElement(driver.findElement(By.id("proj_title")))
+                .pause(Duration.ofSeconds(1))
+                .sendKeys(title)
+                .pause(Duration.ofSeconds(1))
+                .moveToElement(driver.findElement(By.id("descriptionBox")))
+                .pause(Duration.ofSeconds(1))
+                .sendKeys(description)
+                .perform();*/
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(
+                ExpectedConditions.visibilityOfElementLocated(By.className("proj_name")));;
         driver.findElement(By.id("proj_title")).sendKeys(title);
         driver.findElement(By.id("descriptionBox")).sendKeys(description);
     }
