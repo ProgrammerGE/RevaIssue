@@ -11,6 +11,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 
 @Component
@@ -29,11 +30,17 @@ public class AuthHelper {
     }
 
     public void authenticateUser(UserRole role) {
-        User user = new User();
-        user.setUsername("user@mail.com");
-        user.setPassword("#@!user-strong-password!@#");
-        user.setUserRole(role);
-        userService.createUser(user);
+        String username = "user@mail.com";
+        User user;
+        try {
+            user = userService.getUserByUsername(username);
+        } catch (ResponseStatusException e) {
+            user = new User();
+            user.setUsername(username);
+            user.setPassword("#@!user-strong-password!@#");
+            user.setUserRole(role);
+            userService.createUser(user);
+        }
         LoginRequest request = new LoginRequest(user.getUsername(), user.getPassword());
         String token = authService.login(request);
         ((JavascriptExecutor) driver).executeScript(
