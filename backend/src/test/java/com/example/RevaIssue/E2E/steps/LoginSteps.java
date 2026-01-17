@@ -1,5 +1,6 @@
 package com.example.RevaIssue.E2E.steps;
 
+import com.example.RevaIssue.E2E.poms.HubPage;
 import com.example.RevaIssue.E2E.poms.LoginPage;
 import com.example.RevaIssue.entity.User;
 import com.example.RevaIssue.enums.UserRole;
@@ -10,16 +11,20 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.spring.ScenarioScope;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @ScenarioScope
 public class LoginSteps {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private LoginPage loginPage;
+    private final UserRepository userRepository;
+    private final UserService userService;
+    private final LoginPage loginPage;
+    private final HubPage hubPage;
+
+    public LoginSteps(UserRepository userRepository, UserService userService, LoginPage loginPage, HubPage hubPage) {
+        this.userRepository = userRepository;
+        this.userService = userService;
+        this.loginPage = loginPage;
+        this.hubPage = hubPage;
+    }
 
     @Given("A user exists with username {string} and password {string}")
     public void aUserExists(String username, String password) {
@@ -54,15 +59,19 @@ public class LoginSteps {
 
     @Then("They are directed to the hubpage")
     public void theyAreDirectedToTheHubpage () {
-        if(this.loginPage.isAtDashboard()) {
-            System.out.println("User Logged In");
+        if(this.hubPage.isOnHubpage()) {
+            System.out.println("user logged in");
+        } else {
+            throw new AssertionError("login failed");
         }
     }
 
     @Then("They remain on the login page")
     public void theyRemainOnLoginPage () {
-        if(!this.loginPage.isAtDashboard()) {
-            System.out.println("User Login Failed");
+        if(!this.hubPage.isOnHubpage()) {
+            System.out.println("login failed as expected");
+        } else {
+            throw new AssertionError("AUTHENTICATION PASSED WITH INVALID CREDENTIALS");
         }
     }
 }
