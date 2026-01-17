@@ -21,6 +21,7 @@ Feature: Popup Functionality on the Hubpage for Admins
       Then A project will be updated
 
   Scenario Outline: Admin can cancel the popups
+    When  The admin clicks on the "<title>" project button
     When  The admin clicks on the cancel button on the "<title>" popup
     Then  The "<title>" popup will disappear
     Examples:

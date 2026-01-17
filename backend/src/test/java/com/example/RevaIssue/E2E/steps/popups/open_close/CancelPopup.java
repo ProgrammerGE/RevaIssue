@@ -7,6 +7,10 @@ import org.junit.jupiter.api.Assertions;
 import static com.example.RevaIssue.E2E.fixtures.FixtureResources.hubpage;
 
 public class CancelPopup {
+    @When("The admin clicks on the {string} project button")
+    public void the_admin_clicks_on_the_project_button(String title) {
+        hubpage.openPopup(title);
+    }
     @When("The admin clicks on the cancel button on the {string} popup")
     public void the_admin_clicks_on_the_cancel_button_on_the_popup(String title) {
         hubpage.cancelPopup(title);

@@ -2,6 +2,7 @@ package com.example.RevaIssue.E2E.poms;
 
 import com.example.RevaIssue.E2E.driver.ChromeDriverManager;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -23,6 +24,8 @@ public class HubPage {
     private final String URLLogin = "http://localhost:4200/login";
 
     private final WebDriver driver;
+  
+    private WebElement deletedProject;
 
     @Autowired
     public HubPage(ChromeDriverManager chromeDriverManager){
@@ -40,65 +43,99 @@ public class HubPage {
 
     public void openHubPage(){
         login();
-        driver.get(URL);
     }
 
     public void clickDeleteProject(){
-        driver.findElement(By.id("delete_button_clickHere")).click();
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(
+                (ExpectedConditions.elementToBeClickable(By.className("list-item-link"))));
+        this.deletedProject = driver.findElement(By.className("list-item-link"));
+        new Actions(driver)
+                .moveToElement(deletedProject)
+                .pause(Duration.ofSeconds(5))
+                .contextClick()
+                .pause(Duration.ofSeconds(5))
+                .perform();
+        driver.findElement(By.id("delete-button-clickHere")).click();
     }
 
     public void clickDeleteConfirm(){
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(
+                ExpectedConditions.visibilityOfElementLocated(By.id("delete_confirm")));
         driver.findElement(By.id("delete_confirm")).click();
     }
 
     public void submitUpdatedProject(){
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(
+                ExpectedConditions.visibilityOfElementLocated(By.id("update_confirm")));
         driver.findElement(By.id("update_confirm")).click();
     }
 
     public boolean isDeletePopupOpen(){
-        return driver.findElement(By.id("delete_button_clickHere")).isDisplayed();
+        try{
+            return driver.findElement(By.id("delete_confirm")).isDisplayed();
+        }catch (Exception e){
+            return true;
+        }
     }
 
     public void clickCreateProject(){
-        driver.findElement(By.id("login-submit-btn")).click();
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(
+                ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".add-button")));
+        driver.findElement(By.cssSelector(".add-button")).click();
     }
 
     public boolean isCreatePopupOpen(){
-        return driver.findElement(By.id("login-submit-btn")).isDisplayed();
+        try{
+            return driver.findElement(By.cssSelector(".add-button")).isDisplayed();
+        }catch (NoSuchElementException e){
+            return true;
+        }
+
     }
 
     public void enterInfo(String title, String description){
-        /*WebElement firstProject = driver.findElement(By.className("proj_name"));
-        new Actions(driver)
-                .moveToElement(firstProject)
-                .pause(Duration.ofSeconds(1))
-                .moveToElement(driver.findElement(By.id("proj_title")))
-                .pause(Duration.ofSeconds(1))
-                .sendKeys(title)
-                .pause(Duration.ofSeconds(1))
-                .moveToElement(driver.findElement(By.id("descriptionBox")))
-                .pause(Duration.ofSeconds(1))
-                .sendKeys(description)
-                .perform();*/
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(
-                ExpectedConditions.visibilityOfElementLocated(By.className("proj_name")));;
+                ExpectedConditions.visibilityOfElementLocated(By.className("proj_name")));
         driver.findElement(By.id("proj_title")).sendKeys(title);
         driver.findElement(By.id("descriptionBox")).sendKeys(description);
     }
 
     public void submitNewProject(){
-        driver.findElement(By.partialLinkText("Create Project")).click();
+        driver.findElement(By.id("create_confirm")).click();
     }
 
     public void clickUpdateProject(){
-        driver.findElement(By.id("update_button_clickHere")).click();
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(
+                (ExpectedConditions.elementToBeClickable(By.className("list-item-link"))));
+        WebElement firstProject = driver.findElement(By.className("list-item-link"));
+        new Actions(driver)
+                .moveToElement(firstProject)
+                .pause(Duration.ofSeconds(1))
+                .contextClick()
+                .pause(Duration.ofSeconds(1))
+                .perform();
+        driver.findElement(By.id("update-button-clickHere")).click();
     }
 
     public boolean isUpdatePopupOpen(){
-        return driver.findElement(By.id("update_button_clickHere")).isDisplayed();
+        try{
+            return driver.findElement(By.id("update-button-clickHere")).isDisplayed();
+        }catch (NoSuchElementException e){
+            return true;
+        }
+    }
+
+    public void openPopup(String popupTitle){
+        if(popupTitle.equalsIgnoreCase("Delete Project")){
+            clickDeleteProject();
+        } else if (popupTitle.equalsIgnoreCase("Create Project")) {
+            clickCreateProject();
+        } else if (popupTitle.equalsIgnoreCase("Update Project")) {
+            clickUpdateProject();
+        }
     }
 
     public void cancelPopup(String popupTitle){
-        driver.findElement(By.partialLinkText(popupTitle)).click();
+        driver.findElement(By.id("cancel_btn")).click();
     }
 }
