@@ -1,5 +1,6 @@
 package com.example.RevaIssue.E2E.fixtures;
 
+import com.example.RevaIssue.E2E.driver.ChromeDriverManager;
 import com.example.RevaIssue.E2E.poms.HubPage;
 import com.example.RevaIssue.E2E.poms.ProjectPage;
 import com.example.RevaIssue.E2E.poms.RegisterPage;
@@ -12,6 +13,7 @@ import com.example.RevaIssue.repository.UserRepository;
 import com.example.RevaIssue.service.UserService;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,6 +25,9 @@ public class FixtureResources {
     public static HubPage hubpage;
     public static RegisterPage registerPage;
     public static ProjectPage projectPage;
+
+    @Autowired
+    ChromeDriverManager driverManager;
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -41,6 +46,9 @@ public class FixtureResources {
     public void setup(){
         cleanDatabase();
         createProjectWithIssue();
+        hubpage = new HubPage(driverManager);
+        registerPage = new RegisterPage(driverManager);
+        projectPage = new ProjectPage(driverManager);
     }
 
     public void createProjectWithIssue() {
@@ -93,5 +101,10 @@ public class FixtureResources {
         dev.setPassword("dev");
         userService.createUser(dev);
 
+    }
+
+    @After
+    public void teardownDriver() {
+        driverManager.quit();
     }
 }
