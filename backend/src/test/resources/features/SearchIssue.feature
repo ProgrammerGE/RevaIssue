@@ -5,8 +5,7 @@ Feature: A user needs to search for issues
   project page.
 
   Scenario: A user is searching for an issue with the intent of going to its project page
-    Given The user is logged in
-    Then  The user can search for an issue
-#    And The user types text containing a keyword of their issue
-#    And The user clicks on the result
-#    Then The user gets redirected to the issues project page
+    Given The user is logged into the hubpage
+    When  The user searches for an issue
+    And   The user clicks on a result
+    Then  The user is sent to the issue's project page
