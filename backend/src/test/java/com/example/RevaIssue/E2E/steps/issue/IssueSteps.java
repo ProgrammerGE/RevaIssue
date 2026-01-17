@@ -1,5 +1,6 @@
 package com.example.RevaIssue.E2E.steps.issue;
 
+import com.example.RevaIssue.enums.UserRole;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -11,7 +12,7 @@ public class IssueSteps {
     // Background
     @Given("I open a project with issues")
     public void i_open_a_project_with_issues() {
-        projectPage.openProjectPage("admin");
+        projectPage.openProjectPage(UserRole.ADMIN);
     }
 
     // Scenario: View list of issues
