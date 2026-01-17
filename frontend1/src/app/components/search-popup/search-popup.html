@@ -1,6 +1,6 @@
 <app-popup-wrapper [(isPopupActive)]="isPopupActive">
   <div class="search-container">
-    <input #searchInput class="search-input" type="text" [placeholder]="placeholder()" (input)="onType($event)" />
+    <input id="issue-search-input" #searchInput class="search-input" type="text" [placeholder]="placeholder()" (input)="onType($event)" />
     <ng-content></ng-content>
     <div class="escape-tooltip" (click)="onCloseClick()">
       <span class="esc-key-icon">esc</span> to close
