@@ -1,13 +1,10 @@
 package com.example.RevaIssue.E2E.poms;
 
 import com.example.RevaIssue.E2E.driver.ChromeDriverManager;
-import com.example.RevaIssue.entity.Issue;
-import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.service.IssueService;
 import com.example.RevaIssue.service.ProjectService;
 import io.cucumber.spring.ScenarioScope;
 import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -62,38 +59,5 @@ public class LoginPage {
     public void clickLogin() {
         wait.until(d -> loginButton.isDisplayed() && loginButton.isEnabled());
         loginButton.click();
-    }
-
-    public boolean isAtDashboard() {
-        try {
-            wait.until(d -> d.findElement(By.className("hub-page")).isDisplayed());
-            return true;
-        } catch (TimeoutException e) {
-            return false;
-        }
-    }
-
-    //TODO: move to respective pom files
-    public void goToHubpage() {
-        driver.get("http://localhost:4200/hubpage");
-    }
-
-    public void createProject() {
-        Project project = new Project();
-        project.setProjectName("Test Project");
-        project.setProjectDescription("Test Description");
-        projectService.createProject(project);
-    }
-
-    public void createIssue() {
-        Issue issue = new Issue();
-        issue.setName("Test issue 1");
-        issue.setDescription("Description for test issue 1");
-        issue.setSeverity(1);
-        issue.setPriority(2);
-        issue.setStatus("open");
-        Project p = projectService.getProjectById(1);
-        issue.setProject(p);
-        issueService.createIssue(issue);
     }
 }
