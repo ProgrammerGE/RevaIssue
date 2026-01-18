@@ -46,6 +46,18 @@ public class ProjectPage {
     private Select severityInput;
     private Select priorityInput;
 
+    @FindBy(name = "filter_status")
+    private WebElement filterStatusDropdown;
+
+    @FindBy(name = "filter_severity")
+    private WebElement filterSeverityDropdown;
+
+    @FindBy(name = "filter_priority")
+    private WebElement filterPriorityDropdown;
+
+    @FindBy(className = "btn-filter")
+    private WebElement filterButton;
+
     @FindBy(id = "update_issue_btn")
     private WebElement updateIssueBtn;
 
@@ -145,6 +157,8 @@ public class ProjectPage {
     // =========================
 
     public void clickCreateIssue() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.elementToBeClickable(this.createIssueBtn));
         this.createIssueBtn.click();
     }
 
@@ -178,12 +192,14 @@ public class ProjectPage {
     public void submitUpdatedIssue(){
         this.confirmUpdateIssue.click();
     }
-    
+
     public boolean isCreateIssueOpen() {
         return this.createIssueBtn.isDisplayed();
     }
 
     public void clickUpdateIssue() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.elementToBeClickable(this.updateIssueBtn));
         this.updateIssueBtn.click();
     }
 
@@ -231,13 +247,30 @@ public class ProjectPage {
             }
     }
 
+    public void filterIssuesByStatusPriorityAndSeverity(String status, String priority, String severity) {
+
+        System.out.println("found filter issues header");
+        WebDriverWait waitMore = new WebDriverWait(driver, Duration.ofSeconds(5));
+        waitMore.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".filter_status")));
+        System.out.println("found filter status");
+        new Select(filterStatusDropdown).selectByVisibleText(status);
+        new Select(filterPriorityDropdown).selectByValue(priority);
+        new Select(filterSeverityDropdown).selectByValue(severity);
+    }
+
+    public void viewFilteredIssues() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".filter_btns")));
+        this.filterButton.click();
+    }
+
     // =========================
     // Project Actions
     // =========================
 
     public void addUserToProject() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".div3")));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("add_user_to_project_input")));
         driver.findElement(By.id("add_user_to_project_input")).sendKeys("tester");
         driver.findElement(By.id("add_usr_btn")).click();
     }

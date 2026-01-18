@@ -136,6 +136,8 @@ public class HubPage {
     }
 
     public void cancelPopup(String popupTitle){
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("cancel_btn")));
         driver.findElement(By.id("cancel_btn")).click();
     }
 }
