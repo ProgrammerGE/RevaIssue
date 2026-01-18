@@ -84,10 +84,8 @@ public class HubPage {
         driver.findElement(By.id("login-submit-btn")).click();
     }
 
-    public void openHubPage(){
-        login();
-    }
      public void openHubPage(){
+        driver.get(URLLogin);
          this.authHelper.authenticateUser(UserRole.ADMIN);
          driver.get(URL);
      }
