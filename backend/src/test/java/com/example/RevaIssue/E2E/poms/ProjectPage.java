@@ -35,8 +35,7 @@ public class ProjectPage {
     // Page Elements
     // =========================
 
-    @FindBy(className = "list-item-link")
-    private WebElement firstProject;
+    private By firstProject = By.className("list-item-link");
 
     @FindBy(className = "btn-create")
     private WebElement createIssueBtn;
@@ -100,18 +99,19 @@ public class ProjectPage {
     // =========================
 
     public void login(UserRole role) {
-        this.authHelper.authenticateUser(role);
+        driver.get(URLLogin);
+        authHelper.authenticateUser(role);
     }
 
     public void openProjectPage(UserRole role) {
         login(role);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        driver.get("http://localhost:4200/hubpage");
         wait.until(ExpectedConditions.elementToBeClickable(firstProject)).click();
     }
 
     public boolean isOnProjectPage() {
         try {
-            this.wait.until(ExpectedConditions.urlMatches(".*/projects.*"));
+            wait.until(ExpectedConditions.urlMatches(".*/projects.*"));
             return true;
         } catch (TimeoutException e) {
             return false;
@@ -133,8 +133,6 @@ public class ProjectPage {
 
     // just get the first issue on the page to avoid having to search through the issueList
     public void selectFirstIssue() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".issue-card")));
 
         issueList.getFirst().click();
@@ -149,7 +147,6 @@ public class ProjectPage {
     }
 
     public void filloutIssueInformation(String title, String desc, int severity, int priority){
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".issue_title")));
         this.issueTitleInput.sendKeys(title);
         this.issueDescInput.sendKeys(desc);
@@ -160,8 +157,6 @@ public class ProjectPage {
     }
 
     public void filloutUpdatedIssueInformation(String title, String desc, int severity, int priority){
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".issue_title")));
         this.updateTitleInput.sendKeys(title);
         this.updateDescInput.sendKeys(desc);
@@ -209,7 +204,6 @@ public class ProjectPage {
     public void updateStatusIssueAsTester(String status) {
         openProjectPage(UserRole.TESTER);
         selectFirstIssue();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".comments-section")));
 
         if (status.equalsIgnoreCase("Open")){
@@ -222,12 +216,11 @@ public class ProjectPage {
     public void updateStatusIssueAsDeveloper(String status) {
         openProjectPage(UserRole.DEVELOPER);
         selectFirstIssue();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".comments-section")));
             if (status.equalsIgnoreCase("In Progress")){
-                driver.findElement(By.id("in_progress_isu_btn")).click();
+                wait.until(ExpectedConditions.elementToBeClickable(By.id("in_progress_isu_btn"))).click();
             } else if (status.equalsIgnoreCase("Resolved")) {
-                driver.findElement(By.id("resolv_isu_btn")).click();
+                wait.until(ExpectedConditions.elementToBeClickable(By.id("resolv_isu_btn"))).click();
             }
     }
 
@@ -236,7 +229,6 @@ public class ProjectPage {
     // =========================
 
     public void addUserToProject() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".div3")));
         driver.findElement(By.id("add_user_to_project_input")).sendKeys("tester");
         driver.findElement(By.id("add_usr_btn")).click();
@@ -244,9 +236,6 @@ public class ProjectPage {
 
     public void viewUsersOnProject() {
         driver.navigate().refresh();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(1));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".user-item")));
     }
 }
-
-// TODO Use chromedriver wait on this page
