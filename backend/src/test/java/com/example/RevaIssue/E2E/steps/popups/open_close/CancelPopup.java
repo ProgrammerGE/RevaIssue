@@ -14,24 +14,24 @@ public class CancelPopup {
 
     @When("The admin clicks on the {string} project button")
     public void the_admin_clicks_on_the_project_button(String title) {
-        this.hubPage.openPopup(title);
+        hubPage.openPopup(title);
     }
 
     @When("The admin clicks on the cancel button on the {string} popup")
     public void the_admin_clicks_on_the_cancel_button_on_the_popup(String title) {
-        this.hubPage.cancelPopup(title);
+        hubPage.cancelPopup(title);
     }
 
     @Then("The {string} popup will disappear")
     public void the_popup_will_disappear(String title) {
         if(title.equals("Delete Project")){
-            Assertions.assertTrue(this.hubPage.isDeletePopupOpen());
+            Assertions.assertTrue(hubPage.isDeletePopupOpen());
         }
         else if(title.equals("Create Project")){
-            Assertions.assertTrue(this.hubPage.isCreatePopupOpen());
+            Assertions.assertTrue(hubPage.isCreatePopupOpen());
         }
         else if(title.equals("Update Project")){
-            Assertions.assertTrue(this.hubPage.isUpdatePopupOpen());
+            Assertions.assertTrue(hubPage.isUpdatePopupOpen());
         }
     }
 }

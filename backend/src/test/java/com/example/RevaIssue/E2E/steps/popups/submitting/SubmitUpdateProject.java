@@ -23,11 +23,11 @@ public class SubmitUpdateProject {
     }
     @When("clicks the submit update project button")
     public void clicks_the_submit_update_project_button(){
-        this.hubPage.submitUpdatedProject();
+        hubPage.submitUpdatedProject();
     }
 
     @Then("A project will be updated")
     public void a_project_will_be_updated() {
-        Assertions.assertTrue(this.hubPage.isUpdatePopupOpen());
+        Assertions.assertTrue(hubPage.isUpdatePopupOpen());
     }
 }
