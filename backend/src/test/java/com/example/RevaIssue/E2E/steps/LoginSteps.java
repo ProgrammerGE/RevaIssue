@@ -66,8 +66,8 @@ public class LoginSteps {
         }
     }
 
-    @Then("They remain on the login page")
-    public void theyRemainOnLoginPage () {
+    @Then("The login button is disabled because of invalid credentials")
+    public void loginButtonDisabledBecauseInvalidCredentials () {
         if(!this.hubPage.isOnHubpage()) {
             System.out.println("login failed as expected");
         } else {

@@ -21,8 +21,7 @@ Feature: Login to the application
     And     The user is on the login page
     When    They enter a username "<username>"
     And     They enter a password "<password>"
-    And     They click the login button
-    Then    They remain on the login page
+    Then    The login button is disabled because of invalid credentials
 
   Examples:
   | username      | password    |
