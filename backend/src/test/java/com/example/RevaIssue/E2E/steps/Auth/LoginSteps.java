@@ -1,4 +1,4 @@
-package com.example.RevaIssue.E2E.steps;
+package com.example.RevaIssue.E2E.steps.Auth;
 
 import com.example.RevaIssue.E2E.poms.HubPage;
 import com.example.RevaIssue.E2E.poms.LoginPage;
