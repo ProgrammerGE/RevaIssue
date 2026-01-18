@@ -1,12 +1,18 @@
 package com.example.RevaIssue.E2E.poms;
 
 import com.example.RevaIssue.E2E.driver.ChromeDriverManager;
+import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.Duration;
 
 public class RegisterPage {
 
@@ -60,5 +66,16 @@ public class RegisterPage {
 
     public void cancelRegistration(){
         this.cancelButton.click();
+    }
+
+    public void verifyOnLogin() {
+        Assertions.assertEquals("http://localhost:4200/login", driver.getCurrentUrl());
+
+    }
+
+    public void verifyUserRegistration() {
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(
+                ExpectedConditions.visibilityOfElementLocated(By.className("login-form")));
+        Assertions.assertEquals("http://localhost:4200/login", driver.getCurrentUrl());
     }
 }

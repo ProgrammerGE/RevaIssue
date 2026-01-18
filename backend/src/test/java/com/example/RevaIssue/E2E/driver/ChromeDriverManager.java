@@ -21,6 +21,14 @@ public class ChromeDriverManager {
         }
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--start-maximized");
+
+        // Disable the "Data Breach" and "Save Password" popups
+        java.util.Map<String, Object> prefs = new java.util.HashMap<>();
+        prefs.put("credentials_enable_service", false);
+        prefs.put("profile.password_manager_enabled", false);
+        prefs.put("profile.password_manager_leak_detection", false);
+
+        options.setExperimentalOption("prefs", prefs);
         driver = new ChromeDriver(options);
         return driver;
     }
