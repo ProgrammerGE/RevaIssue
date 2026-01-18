@@ -42,8 +42,6 @@ public class LoginPage {
 
     public void goToLogin() {
         driver.get(LOGIN_URL);
-        // DOES THIS EVEN DO ANYTHING ?
-        wait.until(d -> driver.findElement(By.tagName("app-login")));
     }
 
     public void enterUsername(String username) {
