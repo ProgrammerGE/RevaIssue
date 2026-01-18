@@ -1,13 +1,17 @@
 package com.example.RevaIssue.E2E.steps.issue;
 
+import com.example.RevaIssue.E2E.poms.ProjectPage;
 import com.example.RevaIssue.enums.UserRole;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import static com.example.RevaIssue.E2E.fixtures.FixtureResources.projectPage;
-
 public class IssueSteps {
+    private final ProjectPage projectPage;
+
+    public IssueSteps(ProjectPage projectPage) {
+        this.projectPage = projectPage;
+    }
 
     // Background
     @Given("I open a project with issues")
