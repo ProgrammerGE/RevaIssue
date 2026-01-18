@@ -14,7 +14,7 @@ public class SubmitUpdateProject {
 
     @When("The admin clicks on the update project button")
     public void the_admin_clicks_on_the_update_project_button(){
-        this.hubPage.clickUpdateProject();
+        hubPage.clickUpdateProject();
     }
 
     @When("inputs the updated project details")
