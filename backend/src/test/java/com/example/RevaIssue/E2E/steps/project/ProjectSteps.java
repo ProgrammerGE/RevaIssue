@@ -1,20 +1,26 @@
 package com.example.RevaIssue.E2E.steps.project;
 
+import com.example.RevaIssue.E2E.poms.ProjectPage;
+import com.example.RevaIssue.enums.UserRole;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import static com.example.RevaIssue.E2E.fixtures.FixtureResources.projectPage;
-
 public class ProjectSteps {
+    private final ProjectPage projectPage;
+
+    public ProjectSteps(ProjectPage projectPage) {
+        this.projectPage = projectPage;
+    }
+
     @Given("I am an admin")
     public void i_am_an_admin() {
-        projectPage.login("admin");
+        projectPage.login(UserRole.ADMIN);
     }
     @When("I open up a project")
     public void i_open_up_a_project() {
-        projectPage.openProjectPage("admin");
+        projectPage.openProjectPage(UserRole.ADMIN);
     }
     @When("I add  users to the project")
     public void i_add_users_to_the_project() {

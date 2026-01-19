@@ -1,10 +1,16 @@
 package com.example.RevaIssue.E2E.steps.registration;
 
+import com.example.RevaIssue.E2E.poms.RegisterPage;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import static com.example.RevaIssue.E2E.fixtures.FixtureResources.registerPage;
 
 public class RegistrationStep {
+    private final RegisterPage registerPage;
+
+    public RegistrationStep(RegisterPage registerPage) {
+        this.registerPage = registerPage;
+    }
+
     @When("The {string} enters their information")
     public void the_user_enters_their_information(String role) {
         registerPage.registerUserInfo(role, "password");

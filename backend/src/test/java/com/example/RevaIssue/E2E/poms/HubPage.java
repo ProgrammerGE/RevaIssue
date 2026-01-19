@@ -1,8 +1,12 @@
 package com.example.RevaIssue.E2E.poms;
 
 import com.example.RevaIssue.E2E.driver.ChromeDriverManager;
+import com.example.RevaIssue.E2E.helper.AuthHelper;
+import com.example.RevaIssue.enums.UserRole;
+import io.cucumber.spring.ScenarioScope;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -11,25 +15,64 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.time.Duration;
+import org.springframework.stereotype.Component;
 
 /**
  * This POM file represents the Hubpage
  */
+@Component
+@ScenarioScope
 public class HubPage {
 
     private final String URL = "http://localhost:4200/hubpage";
-
     private final String URLLogin = "http://localhost:4200/login";
 
     private final WebDriver driver;
   
     private WebElement deletedProject;
+    private  WebDriverWait wait;
+    private final AuthHelper authHelper;
+
+
+    @FindBy(id = "delete_button_clickHere")
+    private WebElement deleteButton;
+
+    @FindBy(id = "delete_confirm")
+    private WebElement deleteConfirm;
+
+    @FindBy(className = "add-button")
+    private WebElement createButton;
+
+    @FindBy(id = "create_confirm")
+    private WebElement confirmCreate;
+
+    @FindBy(id = "update_button_clickHere")
+    private WebElement updateButton;
+
+    @FindBy(id = "update_confirm")
+    private WebElement confirmUpdate;
+
+    @FindBy(id = "proj_title")
+    private WebElement projectTitleInput;
+
+    @FindBy(id = "descriptionBox")
+    private WebElement projectDescInput;
+
+    @FindBy(partialLinkText = "Create Project")
+    private WebElement submitBtn;
+
+    @FindBy(id = "searchbar")
+    private WebElement searchbar;
+
+    @FindBy(id = "issue-search-input")
+    private WebElement issueSearchInput;
 
     @Autowired
-    public HubPage(ChromeDriverManager chromeDriverManager){
+    public HubPage(ChromeDriverManager chromeDriverManager, AuthHelper authHelper){
         this.driver = chromeDriverManager.getDriver();
+        this.wait = chromeDriverManager.getWait();
+        this.authHelper = authHelper;
         PageFactory.initElements(driver, this);
     }
 
@@ -41,9 +84,11 @@ public class HubPage {
         driver.findElement(By.id("login-submit-btn")).click();
     }
 
-    public void openHubPage(){
-        login();
-    }
+     public void openHubPage(){
+        driver.get(URLLogin);
+         this.authHelper.authenticateUser(UserRole.ADMIN);
+         driver.get(URL);
+     }
 
     public void clickDeleteProject(){
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(
@@ -138,4 +183,30 @@ public class HubPage {
     public void cancelPopup(String popupTitle){
         driver.findElement(By.id("cancel_btn")).click();
     }
+
+    public void toggleSearchPopup() {
+        this.wait.until(ExpectedConditions.elementToBeClickable(this.searchbar));
+        this.searchbar.click();
+    }
+
+    public void searchForIssue() {
+        this.wait.until(ExpectedConditions.elementToBeClickable(this.issueSearchInput));
+        this.issueSearchInput.sendKeys("First Issue");
+    }
+
+    public void selectIssueSearchResult() {
+        WebElement searchResult = this.wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("a.search-result-item")));
+        searchResult.click();
+    }
+
+    public boolean isOnHubpage() {
+        try {
+            wait.until(d -> d.findElement(By.className("hub-page")).isDisplayed());
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
 }
+
+
