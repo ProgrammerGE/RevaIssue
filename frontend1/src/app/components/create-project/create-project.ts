@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { PopUpService } from '../../services/pop-up-service';
+import { PopupWrapper } from '../popup-wrapper/popup-wrapper';
 
 @Component({
   selector: 'app-create-project',
-  imports: [FormsModule],
+  imports: [FormsModule, PopupWrapper],
   templateUrl: './create-project.html',
   styleUrl: './create-project.css',
 })
