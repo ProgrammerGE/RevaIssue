@@ -1,14 +1,17 @@
 package com.example.RevaIssue.E2E.steps.popups.submitting;
 
-import io.cucumber.java.en.Given;
+import com.example.RevaIssue.E2E.poms.ProjectPage;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
 
-import static com.example.RevaIssue.E2E.fixtures.FixtureResources.hubpage;
-import static com.example.RevaIssue.E2E.fixtures.FixtureResources.projectPage;
-
 public class SubmitUpdateIssue {
+    private final ProjectPage projectPage;
+
+    public SubmitUpdateIssue(ProjectPage projectPage) {
+        this.projectPage = projectPage;
+    }
+
     @When("Users click the update issue button")
     public void users_click_the_update_issue_button() {
         projectPage.clickUpdateIssue();

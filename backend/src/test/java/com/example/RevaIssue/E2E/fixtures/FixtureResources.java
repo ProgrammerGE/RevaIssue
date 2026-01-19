@@ -1,9 +1,6 @@
 package com.example.RevaIssue.E2E.fixtures;
 
 import com.example.RevaIssue.E2E.driver.ChromeDriverManager;
-import com.example.RevaIssue.E2E.poms.HubPage;
-import com.example.RevaIssue.E2E.poms.ProjectPage;
-import com.example.RevaIssue.E2E.poms.RegisterPage;
 import com.example.RevaIssue.entity.Issue;
 import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.entity.User;
@@ -18,9 +15,6 @@ import java.time.LocalDateTime;
 import static com.example.RevaIssue.enums.UserRole.*;
 
 public class FixtureResources {
-    public static HubPage hubpage;
-    public static RegisterPage registerPage;
-    public static ProjectPage projectPage;
 
     @Autowired
     ChromeDriverManager driverManager;
@@ -45,10 +39,7 @@ public class FixtureResources {
     @Before
     public void setup(){
         cleanDatabase();
-        createProjectWithIssues();
-        hubpage = new HubPage(driverManager);
-        registerPage = new RegisterPage(driverManager);
-        projectPage = new ProjectPage(driverManager);
+        createProjectWithIssue();
     }
 
     public void createProjectWithIssues() {

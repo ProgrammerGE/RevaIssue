@@ -1,8 +1,13 @@
 package com.example.RevaIssue.E2E.poms;
 
 import com.example.RevaIssue.E2E.driver.ChromeDriverManager;
+import com.example.RevaIssue.E2E.helper.AuthHelper;
+import com.example.RevaIssue.entity.User;
+import com.example.RevaIssue.enums.UserRole;
+import io.cucumber.spring.ScenarioScope;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,22 +16,26 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.List;
 
+@Component
+@ScenarioScope
 public class ProjectPage {
 
     private final String URL = "http://localhost:4200/projects";
     private final String URLLogin = "http://localhost:4200/login";
     private final WebDriver driver;
+    private final WebDriverWait wait;
+    private final AuthHelper authHelper;
 
     // =========================
     // Page Elements
     // =========================
 
-    @FindBy(className = "list-item-link")
-    private WebElement firstProject;
+    private By firstProject = By.className("list-item-link");
 
     @FindBy(className = "btn-create")
     private WebElement createIssueBtn;
@@ -90,8 +99,10 @@ public class ProjectPage {
     // =========================
 
     @Autowired
-    public ProjectPage(ChromeDriverManager chromeDriverManager){
+    public ProjectPage(ChromeDriverManager chromeDriverManager, AuthHelper authHelper){
         this.driver = chromeDriverManager.getDriver();
+        this.wait = chromeDriverManager.getWait();
+        this.authHelper = authHelper;
         PageFactory.initElements(driver, this);
     }
 
@@ -99,43 +110,32 @@ public class ProjectPage {
     // Navigation / Setup
     // =========================
 
-    public void login(String role) {
+    public void login(UserRole role) {
         driver.get(URLLogin);
-        if(role.equalsIgnoreCase("admin")) {
-            driver.findElement(usernameInput).sendKeys("admin");
-            driver.findElement(passwordInput).sendKeys("admin");
-        } else if (role.equalsIgnoreCase("tester")) {
-            driver.findElement(usernameInput).sendKeys("tester");
-            driver.findElement(passwordInput).sendKeys("tester");
-        } else if (role.equalsIgnoreCase("developer")) {
-            driver.findElement(usernameInput).sendKeys("dev");
-            driver.findElement(passwordInput).sendKeys("dev");
-        }
-        driver.findElement(By.id("login-submit-btn")).click();
+        authHelper.authenticateUser(role);
     }
 
-    public void openProjectPage(String role) {
+    public void openProjectPage(UserRole role) {
         login(role);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        driver.get("http://localhost:4200/hubpage");
         wait.until(ExpectedConditions.elementToBeClickable(firstProject)).click();
+    }
+
+    public boolean isOnProjectPage() {
+        try {
+            wait.until(ExpectedConditions.urlMatches(".*/projects.*"));
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
     }
 
     public void goToProject(int projectId) {
         driver.get(URL +"/"+ projectId);
     }
 
-    public void openProjectPageAsRole(String role){
-        if (role.equalsIgnoreCase("tester")){
-            driver.get(URLLogin);
-            driver.findElement(By.id("login-username-input")).sendKeys("tester@email.com");
-            driver.findElement(By.id("login-password-input")).sendKeys("password");
-            driver.findElement(By.id("login-submit-btn")).click();
-        } else if (role.equalsIgnoreCase("developer")) {
-            driver.get(URLLogin);
-            driver.findElement(By.id("login-username-input")).sendKeys("developer@email.com");
-            driver.findElement(By.id("login-password-input")).sendKeys("password");
-            driver.findElement(By.id("login-submit-btn")).click();
-        }
+    public void openProjectPageAsRole(UserRole role){
+        login(role);
         goToProject(1);
     }
 
@@ -145,8 +145,6 @@ public class ProjectPage {
 
     // just get the first issue on the page to avoid having to search through the issueList
     public void selectFirstIssue() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".issue-card")));
 
         issueList.getFirst().click();
@@ -163,7 +161,6 @@ public class ProjectPage {
     }
 
     public void filloutIssueInformation(String title, String desc, int severity, int priority){
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".issue_title")));
         this.issueTitleInput.sendKeys(title);
         this.issueDescInput.sendKeys(desc);
@@ -174,8 +171,6 @@ public class ProjectPage {
     }
 
     public void filloutUpdatedIssueInformation(String title, String desc, int severity, int priority){
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".issue_title")));
         this.updateTitleInput.sendKeys(title);
         this.updateDescInput.sendKeys(desc);
@@ -223,9 +218,8 @@ public class ProjectPage {
     }
 
     public void updateStatusIssueAsTester(String status) {
-        openProjectPage("tester");
+        openProjectPage(UserRole.TESTER);
         selectFirstIssue();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".comments-section")));
 
         if (status.equalsIgnoreCase("Open")){
@@ -236,14 +230,13 @@ public class ProjectPage {
     }
 
     public void updateStatusIssueAsDeveloper(String status) {
-        openProjectPage("developer");
+        openProjectPage(UserRole.DEVELOPER);
         selectFirstIssue();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".comments-section")));
             if (status.equalsIgnoreCase("In Progress")){
-                driver.findElement(By.id("in_progress_isu_btn")).click();
+                wait.until(ExpectedConditions.elementToBeClickable(By.id("in_progress_isu_btn"))).click();
             } else if (status.equalsIgnoreCase("Resolved")) {
-                driver.findElement(By.id("resolv_isu_btn")).click();
+                wait.until(ExpectedConditions.elementToBeClickable(By.id("resolv_isu_btn"))).click();
             }
     }
 
@@ -269,15 +262,13 @@ public class ProjectPage {
     // =========================
 
     public void addUserToProject() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("add_user_to_project_input")));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".div3")));
         driver.findElement(By.id("add_user_to_project_input")).sendKeys("tester");
         driver.findElement(By.id("add_usr_btn")).click();
     }
 
     public void viewUsersOnProject() {
         driver.navigate().refresh();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(1));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".user-item")));
     }
 }
