@@ -31,4 +31,12 @@ public class ProjectSteps {
         projectPage.viewUsersOnProject();
     }
 
+    @When("an issues {string} {string} and {string} are entered")
+    public void an_issues_and_are_entered(String status, String priority, String severity) {
+        projectPage.filterIssuesByStatusPriorityAndSeverity(status,priority,severity);
+    }
+    @Then("I can see all the filtered issues")
+    public void i_can_see_all_the_filtered_issues() {
+        projectPage.viewFilteredIssues();
+    }
 }
