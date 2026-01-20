@@ -1,6 +1,7 @@
 package com.example.RevaIssue.E2E.poms;
 
 import com.example.RevaIssue.E2E.driver.ChromeDriverManager;
+import io.cucumber.spring.ScenarioScope;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -11,9 +12,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 
+@Component
+@ScenarioScope
 public class RegisterPage {
 
     private final String URL = "http://localhost:4200/register";

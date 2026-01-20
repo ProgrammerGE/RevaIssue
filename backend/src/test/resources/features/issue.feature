@@ -16,11 +16,12 @@ Feature: Issue Management
     Then    I can see the comments describing the history
 
   Scenario Outline: Change Issue Status
-    When  "<user>" sets status to "<status>"
+    Given I am logged in as "<user>"
+    When  I set the issue status to "<status>"
     Then the issue status is now "<status>"
     Examples:
       |user|status|
-      |Developer|In Progress|
-      |Developer|Resolved|
-      |Tester|Close|
-      |Tester|Open|
+      |DEVELOPER|In Progress|
+      |DEVELOPER|Resolved|
+      |TESTER|Close|
+      |TESTER|Open|

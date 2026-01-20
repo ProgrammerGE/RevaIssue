@@ -2,12 +2,14 @@ package com.example.RevaIssue.E2E.steps.issue;
 
 import com.example.RevaIssue.E2E.poms.ProjectPage;
 import com.example.RevaIssue.enums.UserRole;
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class IssueSteps {
     private final ProjectPage projectPage;
+    private UserRole currentRole;
 
     public IssueSteps(ProjectPage projectPage) {
         this.projectPage = projectPage;
@@ -16,14 +18,15 @@ public class IssueSteps {
     // Background
     @Given("I open a project with issues")
     public void i_open_a_project_with_issues() {
-        projectPage.openProjectPage(UserRole.ADMIN);
+//        projectPage.logout();projectPage
+        projectPage.login(UserRole.ADMIN);
+        projectPage.openProjectPage();
     }
 
     // Scenario: View list of issues
     @Then("I will see a list of issues for that project")
     public void i_will_see_a_list_of_issues_for_that_project() {
         projectPage.goToProject(1);
-
     }
 
     // Scenario: Update an issue
@@ -51,17 +54,23 @@ public class IssueSteps {
     }
 
 //     Scenario Outline: Change Issue Status
-    @When("{string} sets status to {string}")
-    public void sets_status_to(String role, String status){
-        if (role.equalsIgnoreCase("tester")){
-            System.out.println("Current role: "+role);
-        projectPage.updateStatusIssueAsTester(status);
-        } else if (role.equalsIgnoreCase("developer")) {
-            System.out.println("Current role: "+role);
-        projectPage.updateStatusIssueAsDeveloper(status);
+@Given("I am logged in as {string}")
+public void iAmLoggedInAs(String role) {
+    currentRole = UserRole.valueOf(role.toUpperCase());
+    projectPage.logout();
+    projectPage.login(currentRole);
+}
+
+    @When("I set the issue status to {string}")
+    public void i_set_the_issue_status_to(String status){
+        if (currentRole == UserRole.TESTER){
+            projectPage.updateStatusIssueAsTester(status);
+        } else if (currentRole == UserRole.DEVELOPER) {
+            projectPage.updateStatusIssueAsDeveloper(status);
         }
     }
-    @When("the issue status is now {string}")
+
+    @Then("the issue status is now {string}")
     public void the_issue_status_is_now(String status){
         projectPage.selectFirstIssue();
     }

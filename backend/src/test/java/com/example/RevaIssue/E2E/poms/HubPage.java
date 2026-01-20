@@ -96,9 +96,9 @@ public class HubPage {
         this.deletedProject = driver.findElement(By.className("list-item-link"));
         new Actions(driver)
                 .moveToElement(deletedProject)
-                .pause(Duration.ofSeconds(5))
+                .pause(Duration.ofMillis(500))
                 .contextClick()
-                .pause(Duration.ofSeconds(5))
+                .pause(Duration.ofMillis(500))
                 .perform();
         driver.findElement(By.id("delete-button-clickHere")).click();
     }
@@ -155,9 +155,9 @@ public class HubPage {
         WebElement firstProject = driver.findElement(By.className("list-item-link"));
         new Actions(driver)
                 .moveToElement(firstProject)
-                .pause(Duration.ofSeconds(1))
+                .pause(Duration.ofMillis(500))
                 .contextClick()
-                .pause(Duration.ofSeconds(1))
+                .pause(Duration.ofMillis(500))
                 .perform();
         driver.findElement(By.id("update-button-clickHere")).click();
     }
@@ -193,7 +193,7 @@ public class HubPage {
 
     public void searchForIssue() {
         this.wait.until(ExpectedConditions.elementToBeClickable(this.issueSearchInput));
-        this.issueSearchInput.sendKeys("First Issue");
+        this.issueSearchInput.sendKeys("1ST P1-S1");
     }
 
     public void selectIssueSearchResult() {

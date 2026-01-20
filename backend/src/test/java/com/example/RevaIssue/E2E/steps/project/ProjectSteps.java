@@ -20,7 +20,7 @@ public class ProjectSteps {
     }
     @When("I open up a project")
     public void i_open_up_a_project() {
-        projectPage.openProjectPage(UserRole.ADMIN);
+        projectPage.openProjectPage();
     }
     @When("I add  users to the project")
     public void i_add_users_to_the_project() {

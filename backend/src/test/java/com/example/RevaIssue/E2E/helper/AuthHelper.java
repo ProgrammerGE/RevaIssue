@@ -29,20 +29,39 @@ public class AuthHelper {
         this.authService = authService;
     }
 
+//    public void authenticateUser(UserRole role) {
+//        //since there is a base username and you look up by username it never creates a new user unless the db is already empty
+//        String username = "user@mail.com";
+//        User user;
+//        try {
+//            user = userService.getUserByUsername(username);
+//        } catch (ResponseStatusException e) {
+//            user = new User();
+//            user.setUsername(username);
+//            user.setPassword("#@!user-strong-password!@#");
+//            user.setUserRole(role);
+//            userService.createUser(user);
+//        }
+//        LoginRequest request = new LoginRequest(user.getUsername(), user.getPassword());
+//        String token = authService.login(request);
+//        ((JavascriptExecutor) driver).executeScript(
+//                "window.localStorage.setItem('REVAISSUE_TOKEN', arguments[0]);",
+//                token
+//        );
+//    }
+
     public void authenticateUser(UserRole role) {
-        String username = "user@mail.com";
-        User user;
-        try {
-            user = userService.getUserByUsername(username);
-        } catch (ResponseStatusException e) {
-            user = new User();
-            user.setUsername(username);
-            user.setPassword("#@!user-strong-password!@#");
-            user.setUserRole(role);
-            userService.createUser(user);
-        }
+        String username = switch (role) {
+            case ADMIN -> "admin";
+            case TESTER -> "tester";
+            case DEVELOPER -> "dev";
+        };
+
+        User user = userService.getUserByUsername(username);
+
         LoginRequest request = new LoginRequest(user.getUsername(), user.getPassword());
         String token = authService.login(request);
+
         ((JavascriptExecutor) driver).executeScript(
                 "window.localStorage.setItem('REVAISSUE_TOKEN', arguments[0]);",
                 token

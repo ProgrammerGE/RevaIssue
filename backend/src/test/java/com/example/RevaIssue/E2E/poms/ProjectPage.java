@@ -35,7 +35,7 @@ public class ProjectPage {
     // Page Elements
     // =========================
 
-    private By firstProject = By.className("list-item-link");
+    private final By firstProject = By.className("list-item-link");
 
     @FindBy(className = "btn-create")
     private WebElement createIssueBtn;
@@ -112,13 +112,15 @@ public class ProjectPage {
 
     public void login(UserRole role) {
         driver.get(URLLogin);
-        authHelper.authenticateUser(role);
+
+//        driver.findElement(By.id("login-submit-btn")).click();
+        this.authHelper.authenticateUser(role);
     }
 
-    public void openProjectPage(UserRole role) {
-        login(role);
+    public void openProjectPage() {
         driver.get("http://localhost:4200/hubpage");
-        wait.until(ExpectedConditions.elementToBeClickable(firstProject)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(firstProject));
+        driver.findElement(firstProject).click();
     }
 
     public boolean isOnProjectPage() {
@@ -134,10 +136,10 @@ public class ProjectPage {
         driver.get(URL +"/"+ projectId);
     }
 
-    public void openProjectPageAsRole(UserRole role){
-        login(role);
-        goToProject(1);
-    }
+//    public void openProjectPageAsRole(UserRole role){
+//        login(role);
+//        goToProject(1);
+//    }
 
     // =========================
     // Issue Selection Helpers
@@ -146,7 +148,6 @@ public class ProjectPage {
     // just get the first issue on the page to avoid having to search through the issueList
     public void selectFirstIssue() {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".issue-card")));
-
         issueList.getFirst().click();
     }
 
@@ -193,7 +194,6 @@ public class ProjectPage {
     }
 
     public void clickUpdateIssue() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         wait.until(ExpectedConditions.elementToBeClickable(this.updateIssueBtn));
         this.updateIssueBtn.click();
     }
@@ -209,16 +209,13 @@ public class ProjectPage {
     public void updateIssue(String title, String description, int severity, int priority) {
         // just get the first issue on the page to avoid having to search through the issueList
         selectFirstIssue();
-
         clickUpdateIssue();
-
         filloutUpdatedIssueInformation(title,description,severity,priority);
-
         submitUpdatedIssue();
     }
 
     public void updateStatusIssueAsTester(String status) {
-        openProjectPage(UserRole.TESTER);
+        openProjectPage();
         selectFirstIssue();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".comments-section")));
 
@@ -230,7 +227,7 @@ public class ProjectPage {
     }
 
     public void updateStatusIssueAsDeveloper(String status) {
-        openProjectPage(UserRole.DEVELOPER);
+        openProjectPage();
         selectFirstIssue();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".comments-section")));
             if (status.equalsIgnoreCase("In Progress")){
@@ -270,5 +267,10 @@ public class ProjectPage {
     public void viewUsersOnProject() {
         driver.navigate().refresh();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".user-item")));
+    }
+
+    public void logout() {
+        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("#signout-btn")));
+        driver.findElement(By.cssSelector("#signout-btn")).click();
     }
 }
