@@ -38,8 +38,6 @@ public class ProjectAPITest {
     public static void setup() {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = 8080;
-        // The controller maps /admin, and methods add /projects.
-        // Setting basePath to /admin makes the given() paths cleaner.
         RestAssured.basePath = "/admin";
     }
 
@@ -49,17 +47,17 @@ public class ProjectAPITest {
         projectRepository.deleteAll();
         userRepository.deleteAll();
 
-        // 1. Generate a valid Admin Token
+        // generate a valid Admin Token
         adminToken = "Bearer " + jwtUtility.generateAccessToken("adminUser", UserRole.ADMIN);
 
-        // 2. Create a test user
+        // create a test user to be added
         User user = new User();
         user.setUsername(TEST_USER);
         user.setPassword("password");
         user.setUserRole(UserRole.DEVELOPER);
         userRepository.save(user);
 
-        // 3. Create a test project and capture the dynamic ID
+        // create a test project and get the ID
         Project project = new Project();
         project.setProjectName("Initial Project");
         project.setProjectDescription("Initial Description");
@@ -90,8 +88,8 @@ public class ProjectAPITest {
                 .delete("/projects/{projectId}/revoke/{userName}")
                 .then()
                 .statusCode(200)
-                .body(is(notNullValue())) // Check that it exists
-                .extract().asString().equals("true"); // Explicitly check string value
+                .body(is(notNullValue())) // check that it exists
+                .extract().asString().equals("true"); // check string value explicitly
     }
 
     @Test
@@ -136,6 +134,6 @@ public class ProjectAPITest {
                 .delete("/projects/{projectId}")
                 .then()
                 .statusCode(200)
-                .body(equalTo("true")); // Matches the raw text response "true"
+                .body(equalTo("true")); // matches the raw text response "true"
     }
 }
