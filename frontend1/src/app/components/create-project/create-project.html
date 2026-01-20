@@ -2,7 +2,8 @@
    <img src="assets/icons/plus.svg" />
 </button>
 @if (isPoppedUp){
-<div class="parent">
+  <app-popup-wrapper>
+    <div class="parent">
   <div class="proj_name">
     @if (titleMissing) {
     <h4 style="color: red">Enter a title name for the project</h4>
@@ -26,5 +27,5 @@
     <button id="cancel_btn" (click)="cancelCreation()">{{ buttonCancel }}</button>
   </div>
 </div>
-
+  </app-popup-wrapper>
 }

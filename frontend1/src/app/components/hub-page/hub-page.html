@@ -52,7 +52,6 @@
       [items]="issuesList()"
       [hasButton]="false"
       [itemClicked]="goToProject"
-      (contextMenuRequested)="contextEvent($event)"
     ></app-list-container>
   </section>
   @if(isAdmin()){

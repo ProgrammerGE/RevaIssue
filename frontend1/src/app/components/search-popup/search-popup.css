@@ -1,6 +1,8 @@
 .search-container {
-  position: absolute;
-  top: 10%;
+  position: fixed;
+  top: 10vh;
+  left: 50%;
+  transform: translateX(-50%);
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -11,8 +13,6 @@
   max-width: 90vw;
   box-sizing: border-box;
   overflow: hidden;
-  z-index: 9999;
-  align-items: center;
   border-radius: 4px;
   border: 1px solid black;
 }
