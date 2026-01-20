@@ -12,9 +12,9 @@ import static io.cucumber.junit.platform.engine.Constants.PLUGIN_PROPERTY_NAME;
 
 @Suite
 @IncludeEngines("cucumber")
-@SelectPackages({"com.example.RevaIssue.E2E", "features"})
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.example.RevaIssue.E2E")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty, html:target/cucumber-report.html")
+@ConfigurationParameter(key = "cucumber.features", value = "src/test/resources/features")
 public class CucumberRunner {
 
 }
