@@ -59,7 +59,7 @@ public class IssueAPITest {
         projectRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
 
-        // create admin token
+        // create user tokens
         TesterToken = "Bearer " + jwtUtility.generateAccessToken("tester", UserRole.TESTER);
         DeveloperToken = "Bearer " + jwtUtility.generateAccessToken("dev", UserRole.DEVELOPER);
 
@@ -67,14 +67,14 @@ public class IssueAPITest {
         tester.setUsername("tester");
         tester.setPassword("tester");
         tester.setUserRole(UserRole.TESTER);
-        tester = userRepository.save(tester);
+        userRepository.save(tester);
 
 
         User developer = new User();
         developer.setUsername("dev");
         developer.setPassword("dev");
         developer.setUserRole(UserRole.DEVELOPER);
-        developer = userRepository.save(developer);
+        userRepository.save(developer);
 
         Project project = new Project();
         project.setProjectName("Initial Project");
@@ -100,6 +100,7 @@ public class IssueAPITest {
     public void issueSetup(){
         RestAssured.basePath = "/{role}";
     }
+
     // =========================
     // Create Issue Tests
     // =========================
@@ -124,15 +125,15 @@ public class IssueAPITest {
     @DisplayName("FAILED: testerController doesn't check the user role")
     public void createIssueNegativeTest() {
         given()
-                .pathParam("role", "tester")
-                .pathParam("project_id", testProjectId)
-                .header("Authorization", DeveloperToken)
-                .contentType(ContentType.JSON)
-                .body(newIssue)
-                .when()
-                .post("/project/{project_id}/issues")
-                .then()
-                .statusCode(403);
+            .pathParam("role", "tester")
+            .pathParam("project_id", testProjectId)
+            .header("Authorization", DeveloperToken)
+            .contentType(ContentType.JSON)
+            .body(newIssue)
+        .when()
+            .post("/project/{project_id}/issues")
+        .then()
+            .statusCode(403);
     }
 
     // =========================
@@ -184,14 +185,14 @@ public class IssueAPITest {
     @Test
     public void closeIssueNegativeTest() {
         given()
-                .pathParam("role", "tester")
-                .pathParam("issueId", testIssueId)
-                .header("Authorization", DeveloperToken)
-                .contentType(ContentType.JSON)
-                .when()
-                .patch("/project/issues/{issueId}/close")
-                .then()
-                .statusCode(403);
+            .pathParam("role", "tester")
+            .pathParam("issueId", testIssueId)
+            .header("Authorization", DeveloperToken)
+            .contentType(ContentType.JSON)
+        .when()
+            .patch("/project/issues/{issueId}/close")
+        .then()
+            .statusCode(403);
     }
 
     // =========================
