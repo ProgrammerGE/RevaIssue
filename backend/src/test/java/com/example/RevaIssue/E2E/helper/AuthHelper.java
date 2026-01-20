@@ -30,19 +30,17 @@ public class AuthHelper {
     }
 
     public void authenticateUser(UserRole role) {
-        String username = "user@mail.com";
-        User user;
-        try {
-            user = userService.getUserByUsername(username);
-        } catch (ResponseStatusException e) {
-            user = new User();
-            user.setUsername(username);
-            user.setPassword("#@!user-strong-password!@#");
-            user.setUserRole(role);
-            userService.createUser(user);
-        }
+        String username = switch (role) {
+            case ADMIN -> "admin";
+            case TESTER -> "tester";
+            case DEVELOPER -> "dev";
+        };
+
+        User user = userService.getUserByUsername(username);
+
         LoginRequest request = new LoginRequest(user.getUsername(), user.getPassword());
         String token = authService.login(request);
+
         ((JavascriptExecutor) driver).executeScript(
                 "window.localStorage.setItem('REVAISSUE_TOKEN', arguments[0]);",
                 token

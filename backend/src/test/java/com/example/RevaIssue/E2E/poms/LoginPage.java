@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component;
 @Component
 @ScenarioScope
 public class LoginPage {
-    private WebDriver driver;
-    private WebDriverWait wait;
+    private final WebDriver driver;
+    private final WebDriverWait wait;
     private final String LOGIN_URL = "http://localhost:4200/login";
     private ProjectService projectService;
     private IssueService issueService;

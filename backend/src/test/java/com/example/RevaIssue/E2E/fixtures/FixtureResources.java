@@ -39,7 +39,7 @@ public class FixtureResources {
     @Before
     public void setup(){
         cleanDatabase();
-        createProjectWithIssue();
+        createProjectWithIssues();
     }
 
     public void createProjectWithIssues() {
