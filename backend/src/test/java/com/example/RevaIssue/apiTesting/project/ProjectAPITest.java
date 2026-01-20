@@ -2,107 +2,138 @@ package com.example.RevaIssue.apiTesting.project;
 
 import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.entity.User;
+import com.example.RevaIssue.entity.User_Projects;
+import com.example.RevaIssue.enums.UserRole;
+import com.example.RevaIssue.repository.ProjectRepository;
+import com.example.RevaIssue.repository.UserRepository;
+import com.example.RevaIssue.repository.User_ProjectsRepository;
+import com.example.RevaIssue.service.ProjectService;
+import com.example.RevaIssue.service.UserService;
+import com.example.RevaIssue.util.JwtUtility;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class ProjectAPITest {
 
+    @Autowired ProjectRepository projectRepository;
+    @Autowired UserRepository userRepository;
+    @Autowired User_ProjectsRepository user_ProjectsRepository;
+    @Autowired JwtUtility jwtUtility;
+
+    private String adminToken;
+    private int testProjectId;
+    private final String TEST_USER = "tester";
+
     @BeforeAll
-    public static void setup(){
+    public static void setup() {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = 8080;
+        RestAssured.basePath = "/admin";
     }
 
     @BeforeEach
-    public void projectSetup(){
-        RestAssured.basePath = "/admin/projects";
+    public void seedData() {
+        user_ProjectsRepository.deleteAll();
+        projectRepository.deleteAll();
+        userRepository.deleteAll();
+
+        // generate a valid Admin Token
+        adminToken = "Bearer " + jwtUtility.generateAccessToken("adminUser", UserRole.ADMIN);
+
+        // create a test user to be added
+        User user = new User();
+        user.setUsername(TEST_USER);
+        user.setPassword("password");
+        user.setUserRole(UserRole.DEVELOPER);
+        userRepository.save(user);
+
+        // create a test project and get the ID
+        Project project = new Project();
+        project.setProjectName("Initial Project");
+        project.setProjectDescription("Initial Description");
+        project = projectRepository.save(project);
+        testProjectId = project.getProjectID();
     }
 
     @Test
-    public void addUserToProjectPositiveTest(){
-        User credentials = new User();
-        credentials.setUsername("tester");
-        credentials.setPassword("password");
+    public void addUserToProjectPositiveTest() {
         given()
-                .pathParam("projectId", "1")
-                .pathParam("userName", "tester")
-                .contentType(ContentType.JSON)
-                .body(credentials)
-                .header("Authorization", "token goes here")
+                .pathParam("projectId", testProjectId)
+                .pathParam("userName", TEST_USER)
+                .header("Authorization", adminToken)
                 .when()
-                .post("/{projectId}/assign/{userName}")
+                .post("/projects/{projectId}/assign/{userName}")
                 .then()
                 .statusCode(200)
-                .body(is(true));
+                .body("user.username", is(TEST_USER));
     }
 
     @Test
     public void removeUserFromProjectPositiveTest(){
         given()
-                .pathParam("projectId", "1")
-                .pathParam("userName", "tester")
-                .contentType(ContentType.JSON)
-                .header("Authorization", "token goes here")
+                .pathParam("projectId", testProjectId)
+                .pathParam("userName", TEST_USER)
+                .header("Authorization", adminToken)
                 .when()
-                .delete("/{projectId}/assign/{userName}")
+                .delete("/projects/{projectId}/revoke/{userName}")
                 .then()
                 .statusCode(200)
-                .body(is(true));
+                .body(is(notNullValue())) // check that it exists
+                .extract().asString().equals("true"); // check string value explicitly
     }
 
     @Test
-    public void updateProjectPositiveTest(){
-        Project updatedProject = new Project();
-        updatedProject.setProjectID(1);
-        updatedProject.setProjectName("Updated Project Name");
-        updatedProject.setProjectDescription("Updated Description");
+    public void updateProjectPositiveTest() {
+        Project updateReq = new Project();
+        updateReq.setProjectName("Updated Name");
+        updateReq.setProjectDescription("Updated Desc");
+
         given()
-                .pathParam("projectId", "1")
+                .pathParam("projectId", testProjectId)
                 .contentType(ContentType.JSON)
-                .body(updatedProject)
-                .header("Authorization", "token goes here")
-                .patch("/{projectId}")
+                .body(updateReq)
+                .header("Authorization", adminToken)
+                .patch("/projects/{projectId}")
                 .then()
                 .statusCode(200)
-                .body("project", notNullValue());
-
+                .body("projectName", is("Updated Name"));
     }
 
     @Test
-    public void createProjectPositiveTest(){
+    public void createProjectPositiveTest() {
         Project newProject = new Project();
-        newProject.setProjectID(1);
-        newProject.setProjectName("Project Name");
-        newProject.setProjectDescription("Description");
+        newProject.setProjectName("Brand New Project");
+        newProject.setProjectDescription("New Desc");
+
         given()
                 .contentType(ContentType.JSON)
                 .body(newProject)
-                .header("Authorization", "token goes here")
-                .post("/new")
+                .header("Authorization", adminToken)
+                .post("/projects/new")
                 .then()
                 .statusCode(200)
-                .body("project", notNullValue());
+                .body("projectName", is("Brand New Project"));
     }
 
     @Test
     public void deleteProjectByIDPositiveTest(){
         given()
-                .pathParam("projectId", "1")
-                .contentType(ContentType.JSON)
-                .header("Authorization", "token goes here")
-                .delete("/{projectId}")
+                .pathParam("projectId", testProjectId)
+                .header("Authorization", adminToken)
+                .when()
+                .delete("/projects/{projectId}")
                 .then()
                 .statusCode(200)
-                .body("project", notNullValue());
+                .body(equalTo("true")); // matches the raw text response "true"
     }
 }
