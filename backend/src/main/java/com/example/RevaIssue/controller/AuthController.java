@@ -33,7 +33,7 @@ public class AuthController {
     }
 
     @GetMapping("/user") //We are checking if the user is logged in as either an admin, tester, or developer
-    public  ResponseEntity<Void> validateUserToken(@RequestHeader String authorization){
+    public  ResponseEntity<Void> validateUserToken(@RequestHeader("Authorization") String authorization){
         boolean isAuthorized = authService.checkUserToken(authorization);
         if(isAuthorized){
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
