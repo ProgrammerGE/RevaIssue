@@ -56,4 +56,54 @@ public class AdminLoginAPITest {
                 .statusCode(200);
     }
 
+    @Test
+    public void adminLoginWrongPasswordTest(){
+        User credentials = new User();
+        credentials.setUsername("admin");
+        credentials.setPassword("wrong_password");
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(credentials)
+                .when()
+                .post("login")
+                .then()
+                .statusCode(401); // unauthorized
+    }
+
+    /**
+     * This could be throwing a 403 or 401 but 404 makes sense as well
+     */
+    @Test
+    public void adminLoginUserNotFoundTest(){
+        User credentials = new User();
+        credentials.setUsername("ghost_user");
+        credentials.setPassword("password");
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(credentials)
+                .when()
+                .post("login")
+                .then()
+                .statusCode(404);
+    }
+
+    /**
+     * Fails because it returns a 500 error, but should be returning a 400 bad request due to missing data
+     */
+    @Test
+    public void adminLoginMissingUsernameTest(){
+        User credentials = new User();
+        credentials.setPassword("password");
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(credentials)
+                .when()
+                .post("login")
+                .then()
+                .statusCode(400);
+    }
+
 }
