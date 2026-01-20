@@ -27,13 +27,24 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<JwtTransport> registerUser (@RequestBody RegisterRequest request){
+        if (request == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+        else if (request.username() == null
+                || request.password() == null
+                || request.role() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
         String token = authService.register(request);
+        if (token == null)
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         JwtTransport response = new JwtTransport(token);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/user") //We are checking if the user is logged in as either an admin, tester, or developer
-    public  ResponseEntity<Void> validateUserToken(@RequestHeader String authorization){
+    public  ResponseEntity<Void> validateUserToken(@RequestHeader("Authorization") String authorization){
         boolean isAuthorized = authService.checkUserToken(authorization);
         if(isAuthorized){
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);

@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.lang.reflect.InvocationTargetException;
+
 @Service
 public class AuthService {
 
@@ -29,6 +31,13 @@ public class AuthService {
     }
 
     public String register(RegisterRequest request){
+        try{
+            User existingUser = userService.getUserByUsername(request.username().toLowerCase());
+            if (existingUser != null)
+                return null;
+        }catch(Exception ignored){
+        }
+
         User newUser = new User();
         newUser.setUsername(request.username().toLowerCase());
         newUser.setPassword(request.password());

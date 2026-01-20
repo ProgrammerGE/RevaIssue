@@ -27,6 +27,7 @@ public class AuditLogAPITest {
     public void getAllAuditLogsPositiveTest(){
         given()
                 .contentType(ContentType.JSON)
+                .when()
                 .get("/audits")
                 .then()
                 .statusCode(200)
