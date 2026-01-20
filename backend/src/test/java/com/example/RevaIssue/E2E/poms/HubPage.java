@@ -84,11 +84,19 @@ public class HubPage {
         driver.findElement(By.id("login-submit-btn")).click();
     }
 
+
+
      public void openHubPage(){
         driver.get(URLLogin);
          this.authHelper.authenticateUser(UserRole.ADMIN);
          driver.get(URL);
      }
+
+    public void openHubPageNonAdmin(UserRole role){
+        driver.get(URLLogin);
+        this.authHelper.authenticateUser(role);
+        driver.get(URL);
+    }
 
     public void clickDeleteProject(){
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(
@@ -206,6 +214,15 @@ public class HubPage {
             wait.until(d -> d.findElement(By.className("hub-page")).isDisplayed());
             return true;
         } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
+    public boolean searchForAuditSection(){
+        try{
+            wait.until(d -> d.findElement(By.className("audit-logs")).isDisplayed());
+            return true;
+        }catch (TimeoutException e){
             return false;
         }
     }
