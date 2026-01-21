@@ -1,6 +1,8 @@
 # we use SPRING_PROFILES_ACTIVE docker so that we can keep using sqlite for development,
 # but when we run it in docker, it will use PostgreSQL
 
+# be wary of the difference between the frontend1 folder name and the frontend keyword
+
 services:
   db:
     image: postgres:15
