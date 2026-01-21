@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { UserData } from '../interfaces/user-data';
 import { HttpClient } from '@angular/common/http';
 import { JwtTokenStorage } from './jwt-token-storage';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +22,8 @@ export class UserService {
   // use this for the admin when they add users to projects
   private listUserSubject = new BehaviorSubject<UserData[]>([]);
 
-  private baseUrl = 'http://localhost:8080';
+  // private baseUrl = 'http://localhost:8080';
+  private baseUrl = environment.apiUrl;
 
   constructor(private httpClient: HttpClient, private tokenStorage: JwtTokenStorage) {}
 
