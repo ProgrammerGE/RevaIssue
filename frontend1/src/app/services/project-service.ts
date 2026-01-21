@@ -4,6 +4,7 @@ import { ProjectData } from '../interfaces/project-data';
 import { HttpClient } from '@angular/common/http';
 import { JwtTokenStorage } from './jwt-token-storage';
 import { UserAssignment } from '../interfaces/user-assignment';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,8 @@ export class ProjectService {
   });
   private projectsListSubject = new BehaviorSubject<ProjectData[]>([]);
 
-  private baseUrl = 'http://localhost:8080';
+  // private baseUrl = 'http://localhost:8080';
+  private baseUrl = environment.apiUrl;
 
   constructor(private httpClient: HttpClient, private tokenStorage: JwtTokenStorage) {}
 

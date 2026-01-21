@@ -3,13 +3,15 @@ import { BehaviorSubject } from 'rxjs';
 import { CommentData } from '../interfaces/comment-data';
 import { HttpClient } from '@angular/common/http';
 import { JwtTokenStorage } from './jwt-token-storage';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommentService {
   private commentsSubject = new BehaviorSubject<CommentData[]>([]);
-  private baseUrl = 'http://localhost:8080';
+  // private baseUrl = 'http://localhost:8080';
+  private baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient, private tokenStorage: JwtTokenStorage) {}
 

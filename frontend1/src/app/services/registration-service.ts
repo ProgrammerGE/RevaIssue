@@ -5,18 +5,21 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { JwtTokenStorage } from './jwt-token-storage';
 import { TokenData } from '../interfaces/token-data';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RegistrationService {
 
+  private baseUrl = environment.apiUrl;
+
   constructor(private httpClient:HttpClient,
     private jwtTokenStorage: JwtTokenStorage,
     private router: Router){}
 
   registerUser(userData : string, passwordData: string, roleData: string){
-    this.httpClient.post<TokenData>(`http://localhost:8080/auth/register`,
+    this.httpClient.post<TokenData>(`${this.baseUrl}/auth/register`,
       {
         username: userData,
         password: passwordData,

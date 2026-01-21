@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { IssueData } from '../interfaces/issue-data';
 import { HttpClient } from '@angular/common/http';
 import { JwtTokenStorage } from './jwt-token-storage';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,8 @@ export class IssueService {
   });
   private issueListSubject = new BehaviorSubject<IssueData[]>([]);
 
-  private baseUrl = 'http://localhost:8080';
+  // private baseUrl = 'http://localhost:8080';
+  private baseUrl = environment.apiUrl;
 
   statusMap: Record<string, string> = {
     OPEN: 'open',

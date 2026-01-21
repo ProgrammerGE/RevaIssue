@@ -6,6 +6,7 @@ import { JwtTokenStorage } from '../../services/jwt-token-storage';
 import { TokenData } from '../../interfaces/token-data';
 import { UserService } from '../../services/user-service';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,7 @@ export class Login {
   jwtStorage = inject(JwtTokenStorage);
   userService = inject(UserService)
   private formBuilder = inject(FormBuilder);
-  
+
 
   loginForm = this.formBuilder.group({
     username: ['', Validators.required],
@@ -28,7 +29,7 @@ export class Login {
 
   onSubmit() {
     this.httpClient
-      .post<TokenData>('http://localhost:8080/auth/login', this.loginForm.value, {
+      .post<TokenData>(`${environment.apiUrl}/auth/login`, this.loginForm.value, {
         observe: 'response',
       })
       .subscribe({
