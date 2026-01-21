@@ -1,3 +1,6 @@
+# we use SPRING_PROFILES_ACTIVE docker so that we can keep using sqlite for development,
+# but when we run it in docker, it will use PostgreSQL
+
 services:
   db:
     image: postgres:15
