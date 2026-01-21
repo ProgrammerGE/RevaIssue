@@ -2,13 +2,25 @@
 
 <form (ngSubmit)="onSubmit()" class="login-form" method="post" [formGroup]="loginForm">
     <div class="input-container">
-        <input id="login-username-input" name="username" placeholder=" " type="text" formControlName="username" autocomplete="on"/>
+        <input id="login-username-input" name="username" placeholder=" " type="text" formControlName="username"
+            autocomplete="on" />
         <label for="login-username-input">Username</label>
     </div>
+    @if(loginForm.get('username')?.invalid && loginForm.get('username')?.touched) {
+    <ul class="error-list">
+        <li>username is required</li>
+    </ul>
+    }
     <div class="input-container">
-        <input type="password" placeholder=" " name="password" id="login-password-input" formControlName="password" autocomplete="on"/>
+        <input type="password" placeholder=" " name="password" id="login-password-input" formControlName="password"
+            autocomplete="on" />
         <label for="login-password-input">Password</label>
     </div>
+    @if(loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+    <ul class="error-list">
+        <li>password is required</li>
+    </ul>
+    }
     <button id="login-submit-btn" type="submit" [disabled]="!loginForm.valid">Login</button>
 </form>
 

@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormControl, FormGroup, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { JwtTokenStorage } from '../../services/jwt-token-storage';
@@ -46,4 +46,5 @@ export class Login {
         },
       });
   }
+
 }
