@@ -2,12 +2,21 @@ package com.example.RevaIssue.apiTesting.common;
 
 import com.example.RevaIssue.entity.Issue;
 import com.example.RevaIssue.entity.Project;
+import com.example.RevaIssue.entity.User;
+import com.example.RevaIssue.enums.UserRole;
 import com.example.RevaIssue.helper.Comment;
+import com.example.RevaIssue.repository.*;
+import com.example.RevaIssue.service.IssueService;
+import com.example.RevaIssue.service.ProjectService;
+import com.example.RevaIssue.service.UserService;
+import com.example.RevaIssue.util.JwtUtility;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
@@ -20,6 +29,19 @@ import static org.hamcrest.Matchers.notNullValue;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class CommonAPITest {
+    @Autowired
+    private JwtUtility jwtUtility;
+    @Autowired
+    private ProjectRepository projectRepository;
+    @Autowired
+    private ProjectService projectService;
+    @Autowired
+    private IssueRepository issueRepository;
+    @Autowired
+    private IssueService issueService;
+    @Autowired
+    private User_ProjectsRepository user_projectsRepository;
+
     @BeforeAll
     public static void setup(){
         RestAssured.baseURI = "http://localhost";
@@ -29,6 +51,33 @@ public class CommonAPITest {
     @BeforeEach
     public void commonSetup(){
         RestAssured.basePath = "/common";
+
+        //Following Chris and Elijah's example from RegisterAPITest and IssueAPITest
+
+        issueRepository.deleteAllInBatch();
+        projectRepository.deleteAllInBatch();
+        user_projectsRepository.deleteAllInBatch();
+
+        Project newProject = new Project();
+        newProject.setProjectName("Project Name");
+        newProject.setProjectDescription("Description");
+        projectService.createProject(newProject);
+
+        Issue newIssue = new Issue();
+        newIssue.setName("New Issue");
+        newIssue.setDescription("New Description");
+        newIssue.setStatus("Open");
+        newIssue.setSeverity(1);
+        newIssue.setPriority(1);
+        newIssue.setDateCreated(LocalDateTime.now());
+        newIssue.setProject(newProject);
+        issueService.createIssue(newIssue);
+    }
+
+    @AfterEach
+    public void cleanData(){ //Following Chris's example from RegisterAPITest
+        projectRepository.deleteAllInBatch();
+        issueRepository.deleteAllInBatch();
     }
 
     /**
@@ -38,8 +87,8 @@ public class CommonAPITest {
      */
     @Test
     public void updateIssuesPositiveTest(){
+        String token = "Bearer " + jwtUtility.generateAccessToken("newUser", UserRole.DEVELOPER);
         Project newProject = new Project();
-        newProject.setProjectID(1);
         newProject.setProjectName("Project Name");
         newProject.setProjectDescription("Description");
 
@@ -57,11 +106,15 @@ public class CommonAPITest {
                 .pathParam("issueId", "1")
                 .contentType(ContentType.JSON)
                 .body(updatedIssue)
-                .header("Authorization", "token goes here")
+                .header("Authorization", token)
+                .when()
                 .patch("/issues/{issueId}")
                 .then()
                 .statusCode(200)
-                .body("issue", notNullValue());
+                .body("name", notNullValue())
+                .body("description", notNullValue())
+                .body("severity", notNullValue())
+                .body("priority", notNullValue());
     }
 
     @Test
@@ -71,6 +124,7 @@ public class CommonAPITest {
                 .pathParam("severity", "1")
                 .pathParam("priority", "1")
                 .contentType(ContentType.JSON)
+                .when()
                 .get("/issues/filter/{status}/{severity}/{priority}")
                 .then()
                 .statusCode(200)
@@ -81,6 +135,7 @@ public class CommonAPITest {
     public void getMostRecentIssuesPositiveTest(){
         given()
                 .contentType(ContentType.JSON)
+                .when()
                 .get("/issues/latest")
                 .then()
                 .statusCode(200)
@@ -92,6 +147,7 @@ public class CommonAPITest {
         given()
                 .pathParam("keyword", "findMe")
                 .contentType(ContentType.JSON)
+                .when()
                 .get("/issues/search?keyword={keyword}")
                 .then()
                 .statusCode(200)
@@ -107,6 +163,7 @@ public class CommonAPITest {
     public void viewAllProjectsPositiveTest(){
         given()
                 .contentType(ContentType.JSON)
+                .when()
                 .get("/projects")
                 .then()
                 .statusCode(200)
@@ -118,10 +175,12 @@ public class CommonAPITest {
         given()
                 .pathParam("projectId", "1")
                 .contentType(ContentType.JSON)
+                .when()
                 .get("/projects/{projectId}")
                 .then()
                 .statusCode(200)
-                .body("project", notNullValue());
+                .body("projectName", notNullValue())
+                .body("projectDescription", notNullValue());
     }
 
     @Test
@@ -129,6 +188,7 @@ public class CommonAPITest {
         given()
                 .pathParam("keyword", "findMe")
                 .contentType(ContentType.JSON)
+                .when()
                 .get("/projects/search?keyword={keyword}")
                 .then()
                 .statusCode(200)
@@ -144,13 +204,15 @@ public class CommonAPITest {
     @Test
     public void fetchUsersPositiveTest(){
         given()
-                .pathParam("pId", "1")
+                .pathParam("id", "1")
                 .contentType(ContentType.JSON)
                 .header("Authorization", "token goes here")
-                .get("/projects/${pId}/users")
+                .when()
+                .get("/projects/{id}/users")
                 .then()
                 .statusCode(200)
-                .body("user", notNullValue());
+                .body("username", notNullValue())
+                .body("role", notNullValue());
     }
 
     /**
@@ -187,10 +249,13 @@ public class CommonAPITest {
                 .contentType(ContentType.JSON)
                 .body(comment)
                 .header("Authorization", "token goes here")
+                .when()
                 .post("/issues/{issueId}/comments")
                 .then()
                 .statusCode(200)
-                .body("comment", notNullValue());
+                .body("comment_id", notNullValue())
+                .body("text", notNullValue())
+                .body("timeLogged", notNullValue());
     }
 
     @Test
@@ -198,6 +263,7 @@ public class CommonAPITest {
         given()
                 .pathParam("issueId", "1")
                 .contentType(ContentType.JSON)
+                .when()
                 .get("/issues/{issueId}/comments")
                 .then()
                 .statusCode(200)
