@@ -53,7 +53,7 @@ export class UserService {
 
   getUserInfo() {
     const token = this.tokenStorage.getToken();
-
+    if (!token) return;
     this.httpClient
       .get<UserData>(`${this.baseUrl}/auth/userInfo`, {
         headers: {
