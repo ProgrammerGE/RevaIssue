@@ -54,26 +54,6 @@ button {
   color: gray;
 }
 
-/* .add-button {
-  padding: 8px;
-  display: flex;
-  gap: 2px;
-  align-items: center;
-  cursor: pointer;
-}
-
-.add-button > img {
-  height: 1.1rem;
-}
-
-.add-button:hover {
-  background-color: var(--dust-grey);
-}
-
-.add-button:active {
-  opacity: 0.5;
-} */
-
 hr {
   border: 1px solid var(--dust-grey);
 }
@@ -90,8 +70,8 @@ hr {
 }
 
 .list-item:hover {
-  color: var(--carbon-black);
-  background-color: rgb(233, 233, 233);
+  color: white;
+  background-color: var(--carbon-black);
 }
 
 input[type='checkbox']:checked {
