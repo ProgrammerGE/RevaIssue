@@ -1,11 +1,9 @@
 package com.example.RevaIssue.controller;
 
 import com.example.RevaIssue.dto.CommentRequest;
-import com.example.RevaIssue.dto.RegisterRequest;
 import com.example.RevaIssue.entity.AuditLog;
 import com.example.RevaIssue.entity.Issue;
 import com.example.RevaIssue.entity.Project;
-import com.example.RevaIssue.entity.User;
 import com.example.RevaIssue.helper.Comment;
 import com.example.RevaIssue.service.*;
 import com.example.RevaIssue.util.JwtUtility;
