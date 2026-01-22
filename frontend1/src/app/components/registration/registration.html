@@ -1,36 +1,38 @@
 <div class="parent">
     <div class="div1">        
-        <h3>Please enter your credentials here</h3>
-        <h3>Email Address</h3>
-        @if (usernameMissing) {            
-            <h4 style="color: red;">Enter your email address</h4>
-        }
-        <input id="user_input" type="text" placeholder="your@email.com" [(ngModel)]="usernameInput">  
+        <h1>Sign Up</h1>
+        <label for="user_input">Username</label>
+        <input id="user_input" type="text" placeholder="your@email.com" [(ngModel)]="usernameInput" required>  
 
-        <h3>Password</h3>
-        @if (passwordMissing) {            
-            <h4 style="color: red;">Enter your password</h4>
-        }
-        <input id="password_input" type="password" placeholder="password" [(ngModel)]="passwordInput">
+        <label for="password_input">Password</label>
+        <input id="password_input" type="password" placeholder="password" [(ngModel)]="passwordInput" required>
 
-        <h3>Confirm Password</h3>
-        @if (passwordMismatch) {            
-            <h4 style="color: red;">Password must match</h4>
-        }
-        <input id="confirm_password" type="password" placeholder="password" [(ngModel)]="confirmPasswordInput">
-        <br>
-        <h3>Choose your role</h3>
-        @if (roleMissing) {            
-            <h4 style="color: red;">You must select a role</h4>
-        }
-        <select name="role" [(ngModel)]="roleInput">
+        <label for="confirm_password">Confirm Password</label>
+        <input id="confirm_password" type="password" placeholder="password" [(ngModel)]="confirmPasswordInput" required>
+        <label for="select-role">Role</label>
+        <select id="select-role" name="role" [(ngModel)]="roleInput">
             <option value="ADMIN">admin</option>
-            <option value="TESTER">tester</option>
+            <option value="TESTER" selected>tester</option>
             <option value="DEVELOPER">developer</option>
         </select>
-        <br>
-        <button id="register_accnt_button" (click)="registerUser()">{{ buttonRegistration}}</button>
-        <button id="cancel_register_btn" (click)="cancelRegister()">{{ buttonCancel}}</button>
+        <ul class="error-list">
+            @if (usernameMissing) {
+            <li style="color: red;">Email is required</li>
+            }
+            @if (passwordMissing) {
+            <li style="color: red;">Password is required</li>
+            }
+            @if (passwordMismatch) {
+            <li style="color: red;">Password does not match</li>
+            }
+            @if (roleMissing) {
+            <li style="color: red;">Role is required</li>
+            }
+        </ul>
+        <div>
+            <button id="register_accnt_button" (click)="registerUser()">{{ buttonRegistration}}</button>
+            <button id="cancel_register_btn" (click)="cancelRegister()">{{ buttonCancel}}</button>
+        </div>
     </div>
 </div>
     
