@@ -4,12 +4,10 @@ import com.example.RevaIssue.dto.LoginRequest;
 import com.example.RevaIssue.dto.RegisterRequest;
 import com.example.RevaIssue.entity.User;
 import com.example.RevaIssue.util.JwtUtility;
-import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.lang.reflect.InvocationTargetException;
 
 @Service
 public class AuthService {

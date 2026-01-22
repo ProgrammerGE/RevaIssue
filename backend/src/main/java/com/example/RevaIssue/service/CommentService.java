@@ -1,17 +1,14 @@
 package com.example.RevaIssue.service;
 
 import com.example.RevaIssue.entity.Issue;
-import com.example.RevaIssue.entity.User;
 import com.example.RevaIssue.helper.Comment;
 import com.example.RevaIssue.repository.CommentRepository;
 import com.example.RevaIssue.repository.IssueRepository;
-import com.example.RevaIssue.repository.UserRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @Transactional
