@@ -9,7 +9,7 @@
   }
 
   @if(isDeleteProjectPopupActive()) {
-  @if (contextInfo()?.item?.id) {
+  @if (contextInfo().item?.id) {
   <app-delete-project [projectID]="contextInfo()!.item!.id" (deleteEvent)="confirmDeletion()"
     [(isPopupActive)]="isDeleteProjectPopupActive">
   </app-delete-project>

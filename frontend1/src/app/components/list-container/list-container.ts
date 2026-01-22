@@ -2,14 +2,12 @@ import { Component, input, InputSignal, signal, computed, Input, Signal, model, 
 import { CommonModule } from '@angular/common';
 import { hubListItem } from '../../interfaces/hubpage-list-item';
 import { CapitalizeFirst } from '../../pipes/capitalize-first.pipe';
-import { DeleteProject } from '../delete-project/delete-project';
-import { UpdateProject } from '../update-project/update-project';
 import { CreateProject } from "../create-project/create-project";
 import { HubMenuContext } from '../../interfaces/hub-menu-context';
 
 @Component({
   selector: 'app-list-container',
-  imports: [CommonModule, CapitalizeFirst, DeleteProject, UpdateProject, CreateProject],
+  imports: [CommonModule, CapitalizeFirst, CreateProject],
   templateUrl: './list-container.html',
   styleUrl: './list-container.css',
 })

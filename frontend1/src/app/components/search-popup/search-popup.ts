@@ -8,11 +8,10 @@ import {
   viewChild,
 } from '@angular/core';
 import { PopupWrapper } from '../popup-wrapper/popup-wrapper';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-search-popup',
-  imports: [PopupWrapper, RouterLink],
+  imports: [PopupWrapper],
   templateUrl: './search-popup.html',
   styleUrl: './search-popup.css',
 })
