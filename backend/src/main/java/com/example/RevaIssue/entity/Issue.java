@@ -1,6 +1,5 @@
 package com.example.RevaIssue.entity;
 
-import com.example.RevaIssue.helper.Comment;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
