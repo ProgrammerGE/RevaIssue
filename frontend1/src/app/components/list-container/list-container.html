@@ -9,7 +9,7 @@
         <span class="item-count">{{ itemCount() }}</span>
       </div>
     </div>
-    @if(hasButton()){
+    @if(hasButton() && isAdmin()){
     <div class="popup">
       <app-create-project [isPoppedUp]="false"></app-create-project>
     </div>
