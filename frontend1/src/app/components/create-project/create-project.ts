@@ -1,4 +1,4 @@
-import { Component, Input, isWritableSignal, signal, WritableSignal } from '@angular/core';
+import { Component, Input, isWritableSignal, model, signal, WritableSignal } from '@angular/core';
 import { ProjectService } from '../../services/project-service';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -17,7 +17,7 @@ export class CreateProject {
   projectDesc: string = '';
   buttonText = 'Create Project';
   buttonCancel = 'Cancel';
-  @Input() isPoppedUp: boolean = false;
+  isPoppedUp = model(false);
 
   titleMissing: boolean = false;
   descriptionMissing: boolean = false;
@@ -30,7 +30,9 @@ export class CreateProject {
 
   
   addPopup() {
-      this.isPoppedUp = true;
+      this.projectTitle = '';
+      this.projectDesc = '';
+      this.isPoppedUp.set(true);
   }
 
   createProject() {
@@ -43,9 +45,7 @@ export class CreateProject {
         projectName: this.projectTitle,
         projectDescription: this.projectDesc,
       });
-      this.isPoppedUp = false;
-      this.projectTitle = '';
-      this.projectDesc = '';
+      this.isPoppedUp.set(false);
       window.location.reload();
     }
 
@@ -59,9 +59,7 @@ export class CreateProject {
   }
 
   cancelCreation() {
-    this.isPoppedUp = false;
-    this.projectTitle = '';
-    this.projectDesc = '';
+    this.isPoppedUp.set(false);
     window.location.reload();
   }
 }
