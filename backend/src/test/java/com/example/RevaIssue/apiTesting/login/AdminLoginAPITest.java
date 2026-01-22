@@ -7,6 +7,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -47,12 +48,12 @@ public class AdminLoginAPITest {
         credentials.setPassword("password");
 
         given()
-                .contentType(ContentType.JSON)
-                .body(credentials)
-                .when()
-                .post("login")
-                .then()
-                .statusCode(200);
+            .contentType(ContentType.JSON)
+            .body(credentials)
+        .when()
+            .post("login")
+        .then()
+            .statusCode(200);
     }
 
     @Test
@@ -62,12 +63,12 @@ public class AdminLoginAPITest {
         credentials.setPassword("wrong_password");
 
         given()
-                .contentType(ContentType.JSON)
-                .body(credentials)
-                .when()
-                .post("login")
-                .then()
-                .statusCode(401); // unauthorized
+            .contentType(ContentType.JSON)
+            .body(credentials)
+        .when()
+            .post("login")
+        .then()
+            .statusCode(401); // unauthorized
     }
 
     /**
@@ -80,29 +81,38 @@ public class AdminLoginAPITest {
         credentials.setPassword("password");
 
         given()
-                .contentType(ContentType.JSON)
-                .body(credentials)
-                .when()
-                .post("login")
-                .then()
-                .statusCode(404);
+            .contentType(ContentType.JSON)
+            .body(credentials)
+        .when()
+            .post("login")
+        .then()
+            .statusCode(404);
     }
 
     /**
-     * Fails because it returns a 500 error, but should be returning a 400 bad request due to missing data
-     */
+     * Missing username should result in 400 Bad Request,
+     * but the login endpoint currently returns 500.
+     * */
     @Test
+    @DisplayName("FAILED: admin login throws 500 for missing username (should be 400 Bad Request)")
     public void adminLoginMissingUsernameTest(){
+        System.out.println(
+                "============================================================\n" +
+                "Login endpoint does not validate request input.\n" +
+                "Missing username causes 500 instead of 400 Bad Request.\n" +
+                "============================================================"
+        );
+
         User credentials = new User();
         credentials.setPassword("password");
 
         given()
-                .contentType(ContentType.JSON)
-                .body(credentials)
-                .when()
-                .post("login")
-                .then()
-                .statusCode(400);
+            .contentType(ContentType.JSON)
+            .body(credentials)
+        .when()
+            .post("login")
+        .then()
+            .statusCode(400);
     }
 
 }

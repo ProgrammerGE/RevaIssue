@@ -12,6 +12,7 @@ import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -135,11 +136,21 @@ public class ProjectAPITest {
     }
 
     /**
-     * Fails because it returns a status code of 200 instead of 403, which can be updated in the service.
-     * It's better to explicitly return 403.
+     * A non-admin user can create a project and receives 200 OK.
+     * Correct behavior is to explicitly return 403 Forbidden
+     * when the ADMIN role is missing.
      */
     @Test
+    @DisplayName("FAILED: backend does not enforce ADMIN role for project creation")
     public void createProjectFail_NonAdminRole(){
+        System.out.println(
+                "============================================================\n" +
+                "A non-admin user can create a project and receives 200 OK.\n" +
+                "Correct behavior is to explicitly return 403 Forbidden \n" +
+                "when the ADMIN role is missing.\n"+
+                "============================================================"
+        );
+
         // generate a token for a DEVELOPER instead of an ADMIN
         String devToken = "Bearer " + jwtUtility.generateAccessToken("devUser", UserRole.DEVELOPER);
 

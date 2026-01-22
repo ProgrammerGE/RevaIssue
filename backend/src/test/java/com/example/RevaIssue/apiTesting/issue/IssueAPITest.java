@@ -119,11 +119,24 @@ public class IssueAPITest {
             .body("issueID", notNullValue())
             .body("name", equalTo("issue name"));
     }
-    // FAILED TEST:
-    // Returns 200 rather than 403 testerController doesn't check the user role. It's only blocked in the front end
+    /**
+     * Only users with the TESTER role should be able to create issues.
+     * The createIssue endpoint in TesterController does not enforce this check on the backend.
+     * Authorization is currently enforced only in the front end.
+     * Other testerController endpoints behave correctly
+     */
     @Test
-    @DisplayName("FAILED: testerController doesn't check the user role")
+    @DisplayName("FAILED: create issue endpoint does not enforce TESTER role")
     public void createIssueNegativeTest() {
+        System.out.println(
+                """
+                        ============================================================\s
+                        """ +
+                "The createIssue endpoint in TesterController does not enforce TESTER role when creating an issues.\n" +
+                "Role check is only in the front end.\n" +
+                "============================================================"
+        );
+
         given()
             .pathParam("role", "tester")
             .pathParam("project_id", testProjectId)
