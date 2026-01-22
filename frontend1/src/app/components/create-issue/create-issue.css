@@ -53,3 +53,15 @@
   width: 100%;
   resize: vertical;
 }
+
+.btn-create {
+  border: none;
+  padding: 8px;
+  width: 100%;
+  color: white;
+  background-color: var(--carbon-black);
+}
+
+.btn-create:active {
+  transform: scale(0.97);
+}
