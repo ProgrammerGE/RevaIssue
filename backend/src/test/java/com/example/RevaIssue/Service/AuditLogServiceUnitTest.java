@@ -1,17 +1,14 @@
 package com.example.RevaIssue.Service;
 
 import com.example.RevaIssue.entity.AuditLog;
-import com.example.RevaIssue.enums.UserRole;
 import com.example.RevaIssue.repository.AuditLogRepository;
 import com.example.RevaIssue.service.AuditLogService;
-import com.example.RevaIssue.service.AuthService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
