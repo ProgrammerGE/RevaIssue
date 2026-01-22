@@ -4,8 +4,6 @@ import { hubListItem } from '../../interfaces/hubpage-list-item';
 import { ProjectService } from '../../services/project-service';
 import { RevaIssueSubscriber } from '../../classes/reva-issue-subscriber';
 import { UserService } from '../../services/user-service';
-import { CreateProject } from '../create-project/create-project';
-import { CreateIssue } from '../create-issue/create-issue';
 import { FormsModule } from '@angular/forms';
 import { AuditLogService } from '../../services/audit-log-service';
 import { AuditLogData } from '../../interfaces/audit-log-data';
@@ -15,7 +13,6 @@ import { IssueData } from '../../interfaces/issue-data';
 import { NavBar } from '../nav-bar/nav-bar';
 import { CapitalizeFirst } from '../../pipes/capitalize-first.pipe';
 import { Router, RouterLink } from '@angular/router';
-import { PopupWrapper } from '../popup-wrapper/popup-wrapper';
 import { SearchBar } from '../search-bar/search-bar';
 import { SearchPopup } from '../search-popup/search-popup';
 import { DeleteProject } from '../delete-project/delete-project';
@@ -27,11 +24,9 @@ import { HubMenuContext } from '../../interfaces/hub-menu-context';
   selector: 'app-hub-page',
   imports: [
     ListContainer,
-    CreateProject,
     FormsModule,
     NavBar,
     CapitalizeFirst,
-    PopupWrapper,
     SearchBar,
     RouterLink,
     SearchPopup,
