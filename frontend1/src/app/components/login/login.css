@@ -60,7 +60,7 @@
 }
 
 #login-submit-btn:active {
-  opacity: 0.9;
+  transform: scale(0.97);
 }
 
 #login-submit-btn:disabled {
