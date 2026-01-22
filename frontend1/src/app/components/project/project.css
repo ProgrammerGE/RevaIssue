@@ -327,3 +327,22 @@
   line-height: 1;
   margin-top: 4px;
 }
+
+#add_usr_btn {
+  background-color: var(--carbon-black);
+  color: white;
+  border: none;
+  padding: 8px;
+  width: 100%;
+}
+
+#add_usr_btn:active {
+  transform: scale(0.97);
+}
+
+#add_user_to_project_input {
+  padding: 8px;
+  width: 100%;
+  margin-bottom: 4px;
+  box-sizing: border-box;
+}

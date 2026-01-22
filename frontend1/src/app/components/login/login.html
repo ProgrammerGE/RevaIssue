@@ -22,6 +22,11 @@
     </ul>
     }
     <button id="login-submit-btn" type="submit" [disabled]="!loginForm.valid">Login</button>
+    @if(invalidLogin()){
+        <ul class="error-list">
+            <li>Invalid username or password. Please try again.</li>
+        </ul>
+    }
 </form>
 
 <a routerLink="/register">register a new account</a>
