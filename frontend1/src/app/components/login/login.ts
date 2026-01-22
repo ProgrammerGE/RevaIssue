@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -18,14 +18,14 @@ export class Login {
   httpClient = inject(HttpClient);
   router = inject(Router);
   jwtStorage = inject(JwtTokenStorage);
-  userService = inject(UserService)
+  userService = inject(UserService);
   private formBuilder = inject(FormBuilder);
-
 
   loginForm = this.formBuilder.group({
     username: ['', Validators.required],
     password: ['', Validators.required],
   });
+  invalidLogin = signal(false);
 
   onSubmit() {
     this.httpClient
@@ -42,8 +42,10 @@ export class Login {
           }
         },
         error: (err) => {
-          console.error(err);
-        },
+          if(err.status === 404){
+            this.invalidLogin.set(true);
+          }
+        }
       });
   }
 
