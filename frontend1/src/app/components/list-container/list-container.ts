@@ -21,7 +21,6 @@ export class ListContainer {
   ]);
   itemCount = computed(() => this.items().length);
   hasButton: InputSignal<boolean> = input(true);
-  // showContext = model(false);
   contextMenuRequested = output<HubMenuContext>();
   @Input() listItems: hubListItem[] = [];
   @Input() itemClicked?: (item: hubListItem) => void;
