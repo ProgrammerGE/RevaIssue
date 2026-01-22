@@ -24,8 +24,8 @@ export class ListContainer {
   contextMenuRequested = output<HubMenuContext>();
   @Input() listItems: hubListItem[] = [];
   @Input() itemClicked?: (item: hubListItem) => void;
-  @Input() userRole: string = '';
-  isAdmin: Signal<boolean> = computed(() => this.userRole.toLowerCase() === 'admin'); // Following example in hub-page.ts
+  userRole = input("");
+  isAdmin: Signal<boolean> = computed(() => this.userRole().toLowerCase() === 'admin'); // Following example in hub-page.ts
 
   constructor() {}
 
