@@ -2,7 +2,6 @@ package com.example.RevaIssue.E2E.steps.project;
 
 import com.example.RevaIssue.E2E.poms.ProjectPage;
 import com.example.RevaIssue.enums.UserRole;
-import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
