@@ -9,14 +9,12 @@ import com.example.RevaIssue.repository.UserRepository;
 import com.example.RevaIssue.repository.User_ProjectsRepository;
 import com.example.RevaIssue.util.UserDTO;
 import com.example.RevaIssue.util.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service

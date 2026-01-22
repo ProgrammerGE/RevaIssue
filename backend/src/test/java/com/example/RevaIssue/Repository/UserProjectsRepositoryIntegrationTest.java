@@ -1,7 +1,6 @@
 package com.example.RevaIssue.Repository;
 
 
-import com.example.RevaIssue.entity.Issue;
 import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.entity.User;
 import com.example.RevaIssue.entity.User_Projects;

@@ -2,7 +2,6 @@ package com.example.RevaIssue.E2E.poms;
 
 import com.example.RevaIssue.E2E.driver.ChromeDriverManager;
 import com.example.RevaIssue.E2E.helper.AuthHelper;
-import com.example.RevaIssue.entity.User;
 import com.example.RevaIssue.enums.UserRole;
 import io.cucumber.spring.ScenarioScope;
 import org.openqa.selenium.By;

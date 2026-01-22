@@ -1,18 +1,16 @@
 package com.example.RevaIssue.controller;
 
-import com.example.RevaIssue.entity.*;
-import com.example.RevaIssue.repository.IssueRepository;
-import com.example.RevaIssue.repository.ProjectRepository;
-import com.example.RevaIssue.repository.UserRepository;
+import com.example.RevaIssue.entity.AuditLog;
+import com.example.RevaIssue.entity.Issue;
+import com.example.RevaIssue.entity.Project;
+import com.example.RevaIssue.entity.User_Projects;
 import com.example.RevaIssue.service.*;
 import com.example.RevaIssue.util.JwtUtility;
 import com.example.RevaIssue.util.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.expression.spel.ast.Assign;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 //@CrossOrigin // used for Angular

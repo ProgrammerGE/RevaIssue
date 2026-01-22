@@ -1,6 +1,5 @@
 package com.example.RevaIssue.helper;
 
-import com.example.RevaIssue.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;

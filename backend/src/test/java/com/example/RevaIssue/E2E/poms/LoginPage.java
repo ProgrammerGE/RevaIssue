@@ -4,7 +4,6 @@ import com.example.RevaIssue.E2E.driver.ChromeDriverManager;
 import com.example.RevaIssue.service.IssueService;
 import com.example.RevaIssue.service.ProjectService;
 import io.cucumber.spring.ScenarioScope;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

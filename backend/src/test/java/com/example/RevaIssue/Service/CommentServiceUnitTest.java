@@ -1,7 +1,6 @@
 package com.example.RevaIssue.Service;
 
 import com.example.RevaIssue.entity.Issue;
-import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.helper.Comment;
 import com.example.RevaIssue.repository.CommentRepository;
 import com.example.RevaIssue.repository.IssueRepository;
@@ -12,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

@@ -1,17 +1,13 @@
 package com.example.RevaIssue.service;
 
-import com.example.RevaIssue.entity.AuditLog;
 import com.example.RevaIssue.entity.Issue;
-import com.example.RevaIssue.entity.Project;
-import com.example.RevaIssue.helper.Comment;
-import com.example.RevaIssue.repository.AuditLogRepository;
 import com.example.RevaIssue.repository.IssueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 @Transactional
