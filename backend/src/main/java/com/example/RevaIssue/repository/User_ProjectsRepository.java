@@ -1,6 +1,5 @@
 package com.example.RevaIssue.repository;
 
-import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.RevaIssue.entity.User_Projects;
