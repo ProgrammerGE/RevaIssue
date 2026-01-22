@@ -2,18 +2,14 @@ package com.example.RevaIssue.apiTesting.project;
 
 import com.example.RevaIssue.entity.Project;
 import com.example.RevaIssue.entity.User;
-import com.example.RevaIssue.entity.User_Projects;
 import com.example.RevaIssue.enums.UserRole;
 import com.example.RevaIssue.repository.ProjectRepository;
 import com.example.RevaIssue.repository.UserRepository;
 import com.example.RevaIssue.repository.User_ProjectsRepository;
-import com.example.RevaIssue.service.ProjectService;
-import com.example.RevaIssue.service.UserService;
 import com.example.RevaIssue.util.JwtUtility;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

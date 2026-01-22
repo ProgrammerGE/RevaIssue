@@ -2,13 +2,13 @@ package com.example.RevaIssue.apiTesting.common;
 
 import com.example.RevaIssue.entity.Issue;
 import com.example.RevaIssue.entity.Project;
-import com.example.RevaIssue.entity.User;
 import com.example.RevaIssue.enums.UserRole;
 import com.example.RevaIssue.helper.Comment;
-import com.example.RevaIssue.repository.*;
+import com.example.RevaIssue.repository.IssueRepository;
+import com.example.RevaIssue.repository.ProjectRepository;
+import com.example.RevaIssue.repository.User_ProjectsRepository;
 import com.example.RevaIssue.service.IssueService;
 import com.example.RevaIssue.service.ProjectService;
-import com.example.RevaIssue.service.UserService;
 import com.example.RevaIssue.util.JwtUtility;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
