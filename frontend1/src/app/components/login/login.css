@@ -68,3 +68,16 @@
   color: black;
   opacity: 0.4;
 }
+
+.error-list {
+  width: 100%;
+  list-style-position: inside;
+  font-size: 0.9rem;
+  color: red;
+  margin: 0;
+  padding: 0;
+}
+
+input:invalid {
+  background-color: red;
+}
